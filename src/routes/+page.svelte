@@ -18,10 +18,16 @@
 
 <dev>
     {#if !userName || !animes}
-        <dev class="search-container">
+        <form
+            class="search-container"
+            onsubmit={async (e) => {
+                e.preventDefault();
+                await searchId();
+            }}
+        >
             <input bind:value={id} placeholder="Enter id" />
             <button onclick={async () => await searchId()}>Search</button>
-        </dev>
+        </form>
     {:else}
         <p>{userName}</p>
         <table>
@@ -90,9 +96,10 @@
     }
 
     .search-container {
-        width: 70%;
+        width: 60%;
         display: flex;
         flex-direction: column;
+        align-items: center;
         gap: 1rem;
     }
 
@@ -103,6 +110,7 @@
         height: 2rem;
         padding: 0.5rem 2rem;
         border: none;
+        outline: none;
     }
 
     .search-container > button {

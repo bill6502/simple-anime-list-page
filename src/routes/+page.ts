@@ -9,13 +9,13 @@ import { error } from '@sveltejs/kit';
 
 export const load: PageLoad = async ({ url, fetch }) => {
   if (!browser) {
-    return { collection: null };
+    return { animes: [], userName: '' };
   }
 
   const id = url.searchParams.get('id');
 
   if (!id) {
-    return { animes: null };
+    return { animes: [], userName: '' };
   }
 
   const response = await fetch(
@@ -36,7 +36,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
   const data = await response.json();
 
   return {
-    animes: data.value.animes,
-    userName: data.value.userName,
+    animes: data.value?.animes ?? [],
+    userName: data.value?.userName ?? '',
   };
 };
