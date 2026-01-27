@@ -24,7 +24,7 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
-          deno-version: v1.x # 安裝 Deno 環境
+          deno-version: v2.x # 安裝 Deno 環境
 
       - name: Build SvelteKit
         run: |
