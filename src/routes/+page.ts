@@ -3,10 +3,15 @@
 export const prerender = true;
 export const trailingSlash = 'always';
 
+import { browser } from '$app/environment';
 import type { PageLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
 export const load: PageLoad = async ({ url, fetch }) => {
+  if (!browser) {
+    return { collection: null };
+  }
+
   const id = url.searchParams.get('id');
 
   if (!id) {
