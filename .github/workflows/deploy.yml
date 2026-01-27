@@ -1,16 +1,21 @@
-name: Deploy to GitHub Pages
+name: Deploy SvelteKit to Pages
 
 on:
   push:
-    branches: ['master']
+    branches: ['master'] # 確保這跟你使用的分支名稱一致 (master 或 main)
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
 jobs:
-  build_site:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,24 +24,24 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
-          deno-version: v1.x
+          deno-version: v1.x # 安裝 Deno 環境
 
-      - name: Build
+      - name: Build SvelteKit
         run: |
-          deno task build
+          deno task build # 執行你在 deno.json 裡的 build 指令 (產生 build/ 資料夾)
 
-      - name: Upload Artifacts
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'build/'
+          path: 'build/' # 告訴 GitHub 要上傳編譯好的 build 資料夾，而不是根目錄
 
   deploy:
-    needs: build_site
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
