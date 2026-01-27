@@ -81,18 +81,18 @@
     }
 
     thead > tr {
-        background-color: #94d7f2;
+        background-color: #abd0ce;
         color: #333;
     }
 
     tbody > tr:nth-child(2n + 1) * {
-        background-color: #f2f2f2;
-        color: #333;
+        background-color: #d9d4cf;
+        color: #7c7877;
     }
 
     tbody > tr:nth-child(2n + 2) * {
-        background-color: #333;
-        color: #f2f2f2;
+        background-color: #7c7877;
+        color: #d9d4cf;
     }
 
     .search-container {
