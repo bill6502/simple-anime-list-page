@@ -3,7 +3,8 @@
 // export const prerender = true;
 // export const trailingSlash = 'always';
 
-import { browser, dev } from '$app/environment';
+import { browser } from '$app/environment';
+import { base } from '$app/paths';
 import type { PageLoad } from '../$types';
 import { redirect } from '@sveltejs/kit';
 
@@ -11,8 +12,6 @@ export const load: PageLoad = async ({ fetch, params }) => {
   if (!browser) {
     return { animes: [], userName: '' };
   }
-
-  const homepage = dev ? '/' : '/simple-anime-list-page/';
 
   const { id } = params;
 
@@ -32,13 +31,13 @@ export const load: PageLoad = async ({ fetch, params }) => {
   );
 
   if (!response.ok) {
-    redirect(302, homepage);
+    redirect(302, base);
   }
 
   const data = await response.json();
 
   if (!data.value) {
-    redirect(302, homepage);
+    redirect(302, base);
   }
 
   return {
