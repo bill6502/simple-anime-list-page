@@ -11,7 +11,10 @@
             url = '/simple-anime-list-page' + url;
         }
         await goto(url, { invalidateAll: true });
-        message = '清單不存在';
+
+        setTimeout(() => {
+            message = '清單不存在';
+        }, 5000);
     };
 </script>
 
