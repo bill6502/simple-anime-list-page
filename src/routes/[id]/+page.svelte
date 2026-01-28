@@ -14,15 +14,17 @@
     <table>
         <thead class="thtitle">
             <tr>
-                <th>Name</th>
-                <th>URL</th>
+                <th class="tdName">Name</th>
+                <th class="tdURL">URL</th>
             </tr>
         </thead>
         <tbody>
             {#each animes as anime}
                 <tr>
-                    <td>{anime.name}</td>
-                    <td><a href={anime.url} target="_blank">{anime.url}</a></td>
+                    <td class="tdName">{anime.name}</td>
+                    <td class="tdURL"
+                        ><a href={anime.url} target="_blank">{anime.url}</a></td
+                    >
                 </tr>
             {/each}
         </tbody>
@@ -35,7 +37,6 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin: auto 3rem;
     }
     p {
         font-size: 24px;
@@ -61,18 +62,23 @@
     thead > tr {
         background-color: #abd0ce;
         color: #333;
+        width: 100%;
     }
 
     tbody > tr:nth-child(2n + 1) * {
-        width: 30%;
         background-color: #d9d4cf;
         color: #7c7877;
     }
 
     tbody > tr:nth-child(2n + 2) * {
-        width: 70%;
         background-color: #7c7877;
         color: #d9d4cf;
+    }
+    .tdName {
+        width: 30%;
+    }
+    .tdURL {
+        width: 70%;
     }
 
     .thtitle * {
