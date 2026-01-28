@@ -42,7 +42,7 @@
     <meta name="description" content="Anime List" />
 </svelte:head>
 
-<dev class="container">
+<div class="container">
     <form
         class="search-container"
         onsubmit={async (e) => {
@@ -58,7 +58,7 @@
             <p>{message}</p>
         </dev>
     {/if}
-</dev>
+</div>
 
 <style>
     .container {

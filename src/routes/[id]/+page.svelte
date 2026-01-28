@@ -9,25 +9,34 @@
     <meta name="description" content="Anime List" />
 </svelte:head>
 
-<p>{userName}</p>
-<table>
-    <thead class="thtitle">
-        <tr>
-            <th>Name</th>
-            <th>URL</th>
-        </tr>
-    </thead>
-    <tbody>
-        {#each animes as anime}
+<div>
+    <p>{userName}</p>
+    <table>
+        <thead class="thtitle">
             <tr>
-                <td>{anime.name}</td>
-                <td><a href={anime.url} target="_blank">{anime.url}</a></td>
+                <th>Name</th>
+                <th>URL</th>
             </tr>
-        {/each}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {#each animes as anime}
+                <tr>
+                    <td>{anime.name}</td>
+                    <td><a href={anime.url} target="_blank">{anime.url}</a></td>
+                </tr>
+            {/each}
+        </tbody>
+    </table>
+</div>
 
 <style>
+    div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: auto 3rem;
+    }
     p {
         font-size: 24px;
         font-weight: bold;
@@ -39,12 +48,14 @@
     table {
         border-collapse: collapse;
         width: 100%;
+        table-layout: fixed;
     }
 
     th,
     td {
         padding: 1rem;
         text-align: left;
+        word-break: break-all;
     }
 
     thead > tr {
@@ -53,11 +64,13 @@
     }
 
     tbody > tr:nth-child(2n + 1) * {
+        width: 30%;
         background-color: #d9d4cf;
         color: #7c7877;
     }
 
     tbody > tr:nth-child(2n + 2) * {
+        width: 70%;
         background-color: #7c7877;
         color: #d9d4cf;
     }
