@@ -1,11 +1,16 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
+    import { browser } from '$app/environment';
 
     let id = $state<string>('');
     let message = $state<string>('');
 
     const searchId = async () => {
-        await goto(`/${id}`, { invalidateAll: true });
+        let url = `/${id}`;
+        if (!browser) {
+            url = '/simple-anime-list-page' + url;
+        }
+        await goto(url, { invalidateAll: true });
         message = '清單不存在';
     };
 </script>
