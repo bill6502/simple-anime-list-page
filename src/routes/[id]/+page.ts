@@ -1,18 +1,18 @@
 // since there's no dynamic data here, we can prerender
 // it so that it gets served as a static asset in production
-export const prerender = true;
-export const trailingSlash = 'always';
+// export const prerender = true;
+// export const trailingSlash = 'always';
 
 import { browser } from '$app/environment';
 import type { PageLoad } from '../$types';
-import { error, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 
-export const load: PageLoad = async ({ url, fetch, params }) => {
+export const load: PageLoad = async ({ fetch, params }) => {
   if (!browser) {
     return { animes: [], userName: '' };
   }
 
-  const id = params.id;
+  const { id } = params;
 
   if (!id) {
     return { animes: [], userName: '' };
