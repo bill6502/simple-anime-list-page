@@ -14,9 +14,26 @@ export const load: PageLoad = async ({ fetch, params }) => {
   }
 
   const { id } = params;
+  const host = `${base}/`;
 
-  if (!id) {
-    return { animes: [], userName: '' };
+  const checkResponse = await fetch(
+    'https://ardent-lark-435.convex.cloud/api/run/functions/checkWebsiteInfoBy_Id',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ args: { id } }),
+    },
+  );
+
+  if (!checkResponse.ok) {
+    throw redirect(302, host);
+  }
+
+  const check = await checkResponse.json();
+  if (!check.value) {
+    throw redirect(302, host);
   }
 
   const response = await fetch(
@@ -31,14 +48,10 @@ export const load: PageLoad = async ({ fetch, params }) => {
   );
 
   if (!response.ok) {
-    redirect(302, base);
+    throw redirect(302, host);
   }
 
   const data = await response.json();
-
-  if (!data.value) {
-    redirect(302, base);
-  }
 
   return {
     animes: data.value.animes,
