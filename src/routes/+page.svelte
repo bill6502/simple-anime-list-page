@@ -1,20 +1,39 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-    import { dev } from '$app/environment';
+    import { base } from '$app/paths';
 
     let id = $state<string>('');
-    let message = $state<string>('');
+    let message = $derived.by(() => {
+        const currentId = id;
+        return '';
+    });
 
     const searchId = async () => {
-        let url = `/${id}`;
-        if (!dev) {
-            url = '/simple-anime-list-page' + url;
-        }
-        await goto(url, { invalidateAll: true });
+        let url = `${base}/${id}`;
 
-        setTimeout(() => {
+        const response = await fetch(
+            'https://ardent-lark-435.convex.cloud/api/run/functions/checkWebsiteInfoBy_Id',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ args: { id } }),
+            },
+        );
+
+        if (!response.ok) {
+            message = '無法取得資訊';
+            return;
+        }
+
+        const data = await response.json();
+
+        if (data.value) {
+            await goto(url, { invalidateAll: true });
+        } else {
             message = '清單不存在';
-        }, 5000);
+        }
     };
 </script>
 
