@@ -1,13 +1,12 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-    let { data } = $props();
-    let animes = $derived<{ name: string; url: string }[]>(data.animes);
-    let userName = $derived<string>(data.userName);
 
     let id = $state<string>('');
+    let message = $state<string>('');
 
     const searchId = async () => {
-        await goto(`?id=${id}`, { invalidateAll: true });
+        await goto(`/${id}`, { invalidateAll: true });
+        message = '清單不存在';
     };
 </script>
 
@@ -16,83 +15,32 @@
     <meta name="description" content="Anime List" />
 </svelte:head>
 
-<dev>
-    {#if !userName || !animes}
-        <form
-            class="search-container"
-            onsubmit={async (e) => {
-                e.preventDefault();
-                await searchId();
-            }}
-        >
-            <input bind:value={id} placeholder="Enter id" />
-            <button onclick={async () => await searchId()}>Search</button>
-        </form>
-    {:else}
-        <p>{userName}</p>
-        <table>
-            <thead class="thtitle">
-                <tr>
-                    <th>Name</th>
-                    <th>URL</th>
-                </tr>
-            </thead>
-            <tbody>
-                {#each animes as anime}
-                    <tr>
-                        <td>{anime.name}</td>
-                        <td
-                            ><a href={anime.url} target="_blank">{anime.url}</a
-                            ></td
-                        >
-                    </tr>
-                {/each}
-            </tbody>
-        </table>
+<dev class="container">
+    <form
+        class="search-container"
+        onsubmit={async (e) => {
+            e.preventDefault();
+            await searchId();
+        }}
+    >
+        <input bind:value={id} placeholder="Enter id" />
+        <button onclick={async () => await searchId()}>Search</button>
+    </form>
+    {#if message}
+        <dev class="message">
+            <p>{message}</p>
+        </dev>
     {/if}
 </dev>
 
 <style>
-    p {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 16px;
-        text-align: center;
-        color: aliceblue;
-    }
-
-    dev {
+    .container {
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        flex: 0.6;
-    }
-
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    th,
-    td {
-        padding: 1rem;
-        text-align: left;
-    }
-
-    thead > tr {
-        background-color: #abd0ce;
-        color: #333;
-    }
-
-    tbody > tr:nth-child(2n + 1) * {
-        background-color: #d9d4cf;
-        color: #7c7877;
-    }
-
-    tbody > tr:nth-child(2n + 2) * {
-        background-color: #7c7877;
-        color: #d9d4cf;
+        margin: auto 0;
     }
 
     .search-container {
@@ -113,11 +61,19 @@
         outline: none;
     }
 
-    .search-container > button {
-        width: 100%;
-    }
-
-    .thtitle * {
-        padding: 1.3rem;
+    .message {
+        position: absolute;
+        top: 120%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #fff5f5;
+        border: 1px solid #ff0000;
+        color: #000000;
+        border-radius: 0.2rem;
+        padding: 0 1rem;
+        font-size: 1rem;
+        p {
+            line-height: 1;
+        }
     }
 </style>

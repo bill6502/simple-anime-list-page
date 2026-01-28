@@ -4,15 +4,15 @@ export const prerender = true;
 export const trailingSlash = 'always';
 
 import { browser } from '$app/environment';
-import type { PageLoad } from './$types';
-import { error } from '@sveltejs/kit';
+import type { PageLoad } from '../$types';
+import { error, redirect } from '@sveltejs/kit';
 
-export const load: PageLoad = async ({ url, fetch }) => {
+export const load: PageLoad = async ({ url, fetch, params }) => {
   if (!browser) {
     return { animes: [], userName: '' };
   }
 
-  const id = url.searchParams.get('id');
+  const id = params.id;
 
   if (!id) {
     return { animes: [], userName: '' };
@@ -30,13 +30,17 @@ export const load: PageLoad = async ({ url, fetch }) => {
   );
 
   if (!response.ok) {
-    throw error(404, '找不到該收藏清單');
+    redirect(302, '/');
   }
 
   const data = await response.json();
 
+  if (!data.value) {
+    redirect(302, '/');
+  }
+
   return {
-    animes: data.value?.animes ?? [],
-    userName: data.value?.userName ?? '',
+    animes: data.value.animes,
+    userName: data.value.userName,
   };
 };
