@@ -1,13 +1,13 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-    import { browser } from '$app/environment';
+    import { dev } from '$app/environment';
 
     let id = $state<string>('');
     let message = $state<string>('');
 
     const searchId = async () => {
         let url = `/${id}`;
-        if (browser) {
+        if (!dev) {
             url = '/simple-anime-list-page' + url;
         }
         await goto(url, { invalidateAll: true });
@@ -58,12 +58,23 @@
 
     .search-container > input,
     button {
-        width: 100%;
+        box-sizing: border-box;
         border-radius: 1rem;
-        height: 2rem;
-        padding: 0.5rem 2rem;
+        padding: 1.5rem 2rem;
         border: none;
         outline: none;
+    }
+
+    .search-container > input {
+        width: 100%;
+        height: 2rem;
+    }
+
+    .search-container > button {
+        justify-content: center;
+        padding: 1rem;
+        width: 60%;
+        height: auto;
     }
 
     .message {

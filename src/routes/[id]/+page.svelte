@@ -4,6 +4,11 @@
     let userName = $derived<string>(data.userName);
 </script>
 
+<svelte:head>
+    <title>動畫收藏清單</title>
+    <meta name="description" content="Anime List" />
+</svelte:head>
+
 <p>{userName}</p>
 <table>
     <thead class="thtitle">
