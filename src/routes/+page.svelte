@@ -7,7 +7,7 @@
 
     const searchId = async () => {
         let url = `/${id}`;
-        if (!browser) {
+        if (browser) {
             url = '/simple-anime-list-page' + url;
         }
         await goto(url, { invalidateAll: true });
