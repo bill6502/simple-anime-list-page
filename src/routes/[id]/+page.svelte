@@ -1,6 +1,9 @@
 <script lang="ts">
+    const urls = ['gamer', 'anime1.me', 'anime1.one', 'hanime1'];
     let { data } = $props();
-    let animes = $derived<{ name: string; url: string }[]>(data.animes);
+    let animes = $derived.by<{ name: string; url: string }[]>(() =>
+        [...data.animes].sort((a, b) => a.url.localeCompare(b.url)),
+    );
     let userName = $derived<string>(data.userName);
 </script>
 
