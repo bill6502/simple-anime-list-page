@@ -1,8 +1,25 @@
 <script lang="ts">
-    const urls = ['gamer', 'anime1.me', 'anime1.one', 'hanime1'];
+    type Anime = { name: string; url: string; from: string };
+    const urls = ['gamer', 'anime1.me', 'anime1.one', 'hanime1.me'];
+
     let { data } = $props();
-    let animes = $derived.by<{ name: string; url: string }[]>(() =>
-        [...data.animes].sort((a, b) => a.url.localeCompare(b.url)),
+    let animes = $derived.by<Anime[]>(() =>
+        [...data.animes]
+            .sort((a, b) => a.url.localeCompare(b.url))
+            .map((anime) => {
+                let from = '';
+                for (const url of urls) {
+                    if (anime.url.includes(url)) {
+                        from = url.replace('.', '');
+                    }
+                }
+
+                return {
+                    name: anime.name,
+                    url: anime.url,
+                    from: from,
+                };
+            }),
     );
     let userName = $derived<string>(data.userName);
 </script>
@@ -18,14 +35,14 @@
         <thead class="thtitle">
             <tr>
                 <th class="tdName">Name</th>
-                <th class="tdURL">URL</th>
+                <th class="tdURL titleRightSide">URL</th>
             </tr>
         </thead>
         <tbody>
             {#each animes as anime}
                 <tr>
                     <td class="tdName">{anime.name}</td>
-                    <td class="tdURL"
+                    <td class={`tdURL ${anime.from}RightSide`}
                         ><a href={anime.url} target="_blank">{anime.url}</a></td
                     >
                 </tr>
@@ -84,7 +101,32 @@
         width: 70%;
     }
 
+    .thtitle {
+        position: sticky;
+        top: 0;
+    }
+
     .thtitle * {
-        padding: 1.3rem;
+        padding: 1.5rem;
+    }
+
+    .titleRightSide {
+        box-shadow: inset -0.5rem 0 0 0 #abd0ce;
+    }
+
+    .gamerRightSide {
+        box-shadow: inset -0.5rem 0 0 0 #009bad;
+    }
+
+    .anime1meRightSide {
+        box-shadow: inset -0.5rem 0 0 0 #b92d72;
+    }
+
+    .anime1oneRightSide {
+        box-shadow: inset -0.5rem 0 0 0 #fff;
+    }
+
+    .hanime1meRightSide {
+        box-shadow: inset -0.5rem 0 0 0 #b20710;
     }
 </style>
