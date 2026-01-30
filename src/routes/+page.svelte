@@ -2,38 +2,15 @@
     import { goto } from '$app/navigation';
     import { base } from '$app/paths';
 
+    let { data } = $props();
+
     let id = $state<string>('');
-    let message = $derived.by(() => {
-        const currentId = id;
-        return '';
-    });
+    let message = $derived<string>(data.error);
 
     const searchId = async () => {
-        let url = `${base}/${id}`;
+        const url = `${base}/${id}`;
 
-        const response = await fetch(
-            'https://ardent-lark-435.convex.cloud/api/run/functions/checkWebsiteInfoBy_Id',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ args: { id } }),
-            },
-        );
-
-        if (!response.ok) {
-            message = '無法取得資訊';
-            return;
-        }
-
-        const data = await response.json();
-
-        if (data.value) {
-            await goto(url, { invalidateAll: true });
-        } else {
-            message = '清單不存在';
-        }
+        await goto(url, { invalidateAll: true });
     };
 </script>
 
@@ -111,7 +88,7 @@
         padding: 0 1rem;
         font-size: 1rem;
         p {
-            line-height: 1;
+            line-height: 3;
         }
     }
 </style>

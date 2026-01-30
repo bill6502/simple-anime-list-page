@@ -50,7 +50,7 @@
             background-color: transparent !important;
         }
         &:hover a {
-            color: #fff !important;
+            color: aliceblue !important;
         }
     }
 
@@ -73,9 +73,9 @@
     }
 
     .anime1one_right_side {
-        box-shadow: inset -0.3rem 0 0 0 #fff;
+        box-shadow: inset -0.3rem 0 0 0 aliceblue;
         &:hover {
-            box-shadow: inset -100rem 0 0 0 #fff;
+            box-shadow: inset -100rem 0 0 0 aliceblue;
             a {
                 color: #505050 !important;
             }

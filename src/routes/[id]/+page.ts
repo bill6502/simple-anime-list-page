@@ -26,12 +26,13 @@ export const load: PageLoad = async ({ fetch, params }) => {
   );
 
   if (!checkResponse.ok) {
-    throw redirect(302, host);
+    throw redirect(302, `${host}?error=not_response`);
   }
 
   const check = await checkResponse.json();
-  if (!check.value) {
-    throw redirect(302, host);
+  const isExists = check.value as boolean;
+  if (!isExists) {
+    throw redirect(302, `${host}?error=not_found`);
   }
 
   const response = await fetch(
@@ -46,7 +47,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
   );
 
   if (!response.ok) {
-    throw redirect(302, host);
+    throw redirect(302, `${host}?error=not_response`);
   }
 
   const data = await response.json();

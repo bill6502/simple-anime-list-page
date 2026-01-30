@@ -1,7 +1,7 @@
 <script lang="ts">
-    import AnimeList from '$lib/components/animeList.svelte';
-
     type Anime = { name: string; url: string; from: string };
+
+    import AnimeList from '$lib/components/animeList.svelte';
 
     const urls = ['ani.gamer', 'anime1.me', 'anime1.one', 'hanime1.me'];
 
@@ -26,6 +26,11 @@
                 };
             }),
     );
+    let websites = $derived.by<string[]>(() =>
+        urls.filter((url) =>
+            animes.some((anime) => anime.url.includes('https://' + url)),
+        ),
+    );
     let selectedAnime = $derived.by<Anime[]>(() => {
         if (selectedUrl == '') return animes;
         return animes.filter((anime) =>
@@ -49,7 +54,7 @@
                 selectedUrl = '';
             }}>All</button
         >
-        {#each urls as url}
+        {#each websites as url}
             <button
                 onclick={() => {
                     selectedUrl = url;
@@ -90,9 +95,7 @@
     .buttons {
         position: sticky;
         top: 0;
-        display: grid;
-        grid-gap: 10px;
-        grid-template-columns: repeat(5, 1fr);
+        display: flex;
         justify-content: center;
         align-items: center;
         width: 100%;
@@ -105,7 +108,7 @@
 
     @media screen and (width <= 720px) {
         .buttons {
-            grid-template-columns: repeat(2, 1fr);
+            flex-direction: column;
         }
     }
 
@@ -124,5 +127,6 @@
         white-space: nowrap;
 
         overflow: hidden;
+        width: 100%;
     }
 </style>
