@@ -92,7 +92,7 @@
         top: 0;
         display: grid;
         grid-gap: 10px;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        grid-template-columns: repeat(5, 1fr);
         justify-content: center;
         align-items: center;
         width: 100%;
@@ -103,6 +103,12 @@
         z-index: 10;
     }
 
+    @media screen and (width <= 720px) {
+        .buttons {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
     .buttons button {
         padding: 1rem;
         margin: 0.5rem;
@@ -111,5 +117,12 @@
         background-color: #d9d4cf;
         color: #7c7877;
         cursor: pointer;
+
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        white-space: nowrap;
+
+        overflow: hidden;
     }
 </style>
