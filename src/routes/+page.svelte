@@ -7,7 +7,7 @@
     let id = $state<string>('');
     let message = $derived<string>(data.error);
 
-    const searchId = async () => {
+    const gotoId = async () => {
         const url = `${base}/${id}`;
 
         await goto(url, { invalidateAll: true });
@@ -24,11 +24,11 @@
         class="search-container"
         onsubmit={async (e) => {
             e.preventDefault();
-            await searchId();
+            await gotoId();
         }}
     >
         <input bind:value={id} placeholder="Enter id" />
-        <button onclick={async () => await searchId()}>Search</button>
+        <button>Search</button>
     </form>
     {#if message}
         <dev class="message">
