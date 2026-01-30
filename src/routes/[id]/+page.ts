@@ -3,8 +3,8 @@
 
 import { browser } from '$app/environment';
 import { base } from '$app/paths';
-import type { PageLoad } from '../$types';
 import { redirect } from '@sveltejs/kit';
+import type { PageLoad } from '../../../.svelte-kit/types/src/routes/[id]/$types.d.ts';
 
 export const load: PageLoad = async ({ fetch, params }) => {
   if (!browser) {

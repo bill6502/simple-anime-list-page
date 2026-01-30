@@ -28,7 +28,7 @@
         }}
     >
         <input bind:value={id} placeholder="Enter id" />
-        <button>Search</button>
+        <button type="submit">Search</button>
     </form>
     {#if message}
         <dev class="message">

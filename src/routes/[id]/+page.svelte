@@ -1,13 +1,12 @@
 <script lang="ts">
-    type Anime = { name: string; url: string; from: string };
-
     import AnimeList from '$lib/components/animeList.svelte';
+
+    type Anime = { name: string; url: string; from: string };
 
     const urls = ['ani.gamer', 'anime1.me', 'anime1.one', 'hanime1.me'];
 
     let { data } = $props();
     let selectedUrl = $state<string>('');
-
     let animes = $derived.by<Anime[]>(() =>
         [...data.animes]
             .sort((a, b) => a.url.localeCompare(b.url))
@@ -32,7 +31,9 @@
         ),
     );
     let selectedAnime = $derived.by<Anime[]>(() => {
-        if (selectedUrl == '') return animes;
+        if (selectedUrl == '') {
+            return animes;
+        }
         return animes.filter((anime) =>
             anime.url.includes('https://' + selectedUrl),
         );
