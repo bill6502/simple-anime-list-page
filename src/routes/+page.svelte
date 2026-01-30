@@ -81,7 +81,7 @@
     .search-container > input,
     button {
         box-sizing: border-box;
-        border-radius: 1rem;
+        border-radius: 0.7rem;
         padding: 1.5rem 2rem;
         border: none;
         outline: none;
