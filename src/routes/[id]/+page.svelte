@@ -35,13 +35,13 @@
         <thead class="thtitle">
             <tr>
                 <th class="tdName">Name</th>
-                <th class="tdURL titleRightSide">URL</th>
+                <th class="tdURL">URL</th>
             </tr>
         </thead>
         <tbody>
             {#each animes as anime}
                 <tr>
-                    <td class="tdName">{anime.name}</td>
+                    <td class="tdName testLeftSide">{anime.name}</td>
                     <td class={`tdURL ${anime.from}RightSide`}
                         ><a href={anime.url} target="_blank">{anime.url}</a></td
                     >
@@ -58,6 +58,7 @@
         justify-content: center;
         align-items: center;
     }
+
     p {
         font-size: 24px;
         font-weight: bold;
@@ -99,6 +100,13 @@
     }
     .tdURL {
         width: 70%;
+        transition: box-shadow 1s cubic-bezier(0.47, 0.38, 0, 0.99);
+        a {
+            background-color: transparent !important;
+        }
+        &:hover a {
+            color: #fff !important;
+        }
     }
 
     .thtitle {
@@ -110,23 +118,34 @@
         padding: 1.5rem;
     }
 
-    .titleRightSide {
-        box-shadow: inset -0.5rem 0 0 0 #abd0ce;
-    }
-
     .gamerRightSide {
-        box-shadow: inset -0.5rem 0 0 0 #009bad;
+        box-shadow: inset -0.3rem 0 0 0 #009bad;
+        &:hover {
+            box-shadow: inset -100rem 0 0 0 #009bad;
+        }
     }
 
     .anime1meRightSide {
-        box-shadow: inset -0.5rem 0 0 0 #b92d72;
+        box-shadow: inset -0.3rem 0 0 0 #b92d72;
+        &:hover {
+            box-shadow: inset -100rem 0 0 0 #b92d72;
+        }
     }
 
     .anime1oneRightSide {
-        box-shadow: inset -0.5rem 0 0 0 #fff;
+        box-shadow: inset -0.3rem 0 0 0 #fff;
+        &:hover {
+            box-shadow: inset -100rem 0 0 0 #fff;
+            a {
+                color: #505050 !important;
+            }
+        }
     }
 
     .hanime1meRightSide {
-        box-shadow: inset -0.5rem 0 0 0 #b20710;
+        box-shadow: inset -0.3rem 0 0 0 #b20710;
+        &:hover {
+            box-shadow: inset -100rem 0 0 0 #b20710;
+        }
     }
 </style>
