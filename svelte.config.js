@@ -1,6 +1,7 @@
 // import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import adapter from '@sveltejs/adapter-static';
+import process from 'node:process';
 
 /** @type {import('@sveltejs/kit').Config} */
 
@@ -15,8 +16,6 @@ export default {
       strict: true,
     }),
     paths: {
-      // 如果你的網址是 https://<username>.github.io/<repo-name>/
-      // 這裡要填入 /<repo-name>，如果是自定義網域則維持空字串
       base:
         process.env.NODE_ENV === 'production' ? '/simple-anime-list-page' : '',
     },

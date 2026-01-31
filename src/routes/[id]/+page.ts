@@ -5,6 +5,7 @@ import { browser } from '$app/environment';
 import { base } from '$app/paths';
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from '../../../.svelte-kit/types/src/routes/[id]/$types.d.ts';
+import { env } from '$env/dynamic/public';
 
 export const load: PageLoad = async ({ fetch, params }) => {
   if (!browser) {
@@ -13,17 +14,15 @@ export const load: PageLoad = async ({ fetch, params }) => {
 
   const { id } = params;
   const host = `${base}/`;
+  const db = env.PUBLIC_DB || '';
 
-  const checkResponse = await fetch(
-    'https://ardent-lark-435.convex.cloud/api/run/functions/checkWebsiteInfoBy_Id',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ args: { id } }),
+  const checkResponse = await fetch(`${db}/checkWebsiteInfoBy_Id`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    body: JSON.stringify({ args: { id } }),
+  });
 
   if (!checkResponse.ok) {
     throw redirect(302, `${host}?error=not_response`);
@@ -35,16 +34,13 @@ export const load: PageLoad = async ({ fetch, params }) => {
     throw redirect(302, `${host}?error=not_found`);
   }
 
-  const response = await fetch(
-    'https://ardent-lark-435.convex.cloud/api/run/functions/getWebsiteInfoBy_Id',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ args: { id } }),
+  const response = await fetch(`${db}/getWebsiteInfoBy_Id`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    body: JSON.stringify({ args: { id } }),
+  });
 
   if (!response.ok) {
     throw redirect(302, `${host}?error=not_response`);
