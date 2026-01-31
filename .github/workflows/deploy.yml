@@ -29,7 +29,7 @@ jobs:
       - name: Build SvelteKit
         run: |
           deno install
-          deno task build # 執行你在 deno.json 裡的 build 指令 (產生 build/ 資料夾)
+          PUBLIC_DB=${{ secrets.PUBLIC_DB }} deno task build # 執行你在 deno.json 裡的 build 指令 (產生 build/ 資料夾)
         env:
           PUBLIC_DB: ${{ secrets.PUBLIC_DB }}
 
