@@ -5,7 +5,7 @@ import { browser } from '$app/environment';
 import { base } from '$app/paths';
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from '../../../.svelte-kit/types/src/routes/[id]/$types.d.ts';
-import { env } from '$env/dynamic/public';
+import { PUBLIC_DB } from '$env/static/public';
 
 export const load: PageLoad = async ({ fetch, params }) => {
   if (!browser) {
@@ -14,9 +14,8 @@ export const load: PageLoad = async ({ fetch, params }) => {
 
   const { id } = params;
   const host = `${base}/`;
-  const db = env.PUBLIC_DB || '';
 
-  const checkResponse = await fetch(`${db}/checkWebsiteInfoBy_Id`, {
+  const checkResponse = await fetch(`${PUBLIC_DB}/checkWebsiteInfoBy_Id`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -34,7 +33,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
     throw redirect(302, `${host}?error=not_found`);
   }
 
-  const response = await fetch(`${db}/getWebsiteInfoBy_Id`, {
+  const response = await fetch(`${PUBLIC_DB}/getWebsiteInfoBy_Id`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
