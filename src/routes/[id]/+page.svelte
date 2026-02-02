@@ -38,14 +38,13 @@
                 animes.some((anime) => anime.url.includes('https://' + url)),
         ),
     );
-    let selectedAnime = $derived.by<Anime[]>(() => {
-        if (selectedUrl == 'all') {
-            return animes;
-        }
-        return animes.filter((anime) =>
-            anime.url.includes('https://' + selectedUrl),
-        );
-    });
+    let selectedAnime = $derived.by<Anime[]>(() =>
+        animes.filter(
+            (anime) =>
+                selectedUrl == 'all' ||
+                anime.url.includes('https://' + selectedUrl),
+        ),
+    );
 
     let userName = $derived<string>(data.userName);
 </script>
