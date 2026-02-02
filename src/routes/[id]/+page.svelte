@@ -100,6 +100,7 @@
         position: sticky;
         top: 0;
         display: flex;
+        gap: 1rem;
         justify-content: center;
         align-items: center;
         width: 100%;
@@ -117,8 +118,6 @@
     }
 
     .buttons > button {
-        padding: 1rem;
-        margin: 0.5rem;
         border: none;
         border-radius: 0.5rem;
         background-color: #d9d4cf;

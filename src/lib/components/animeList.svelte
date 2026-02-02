@@ -54,18 +54,16 @@
 
     .tdURL {
         width: 60%;
-        transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: box-shadow 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 
         a {
             background-color: transparent !important;
-            transition: color 0s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
         }
 
         &:hover {
-            transition: box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s !important;
+            transition: box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.4s !important;
             a {
                 color: aliceblue !important;
-                transition: color 0s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
             }
         }
     }
