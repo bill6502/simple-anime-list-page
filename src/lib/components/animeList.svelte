@@ -10,7 +10,7 @@
         {#each animes as anime (anime.name)}
             <tr animate:flip={{ duration: 500 }} in:fade={{ duration: 500 }}>
                 <td class="tdName testLeftSide">{anime.name}</td>
-                <td class={`tdURL ${anime.from}_right_side`}
+                <td class={`tdURL`} data-from={anime.from}
                     ><a href={anime.url} target="_blank">{anime.url}</a></td
                 >
             </tr>
@@ -45,7 +45,7 @@
     }
     .tdURL {
         width: 70%;
-        transition: box-shadow 1s cubic-bezier(0.47, 0.38, 0, 0.99);
+        transition: box-shadow 0.7s cubic-bezier(0.47, 0.38, 0, 0.99);
         a {
             background-color: transparent !important;
         }
@@ -54,35 +54,21 @@
         }
     }
 
-    .thtitle * {
-        padding: 1.5rem;
-    }
-
-    .anigamer_right_side {
+    .tdURL[data-from='anigamer'] {
         box-shadow: inset -0.3rem 0 0 0 #009bad;
         &:hover {
             box-shadow: inset -100rem 0 0 0 #009bad;
         }
     }
 
-    .anime1me_right_side {
+    .tdURL[data-from='anime1me'] {
         box-shadow: inset -0.3rem 0 0 0 #b92d72;
         &:hover {
             box-shadow: inset -100rem 0 0 0 #b92d72;
         }
     }
 
-    .anime1one_right_side {
-        box-shadow: inset -0.3rem 0 0 0 aliceblue;
-        &:hover {
-            box-shadow: inset -100rem 0 0 0 aliceblue;
-            a {
-                color: #505050 !important;
-            }
-        }
-    }
-
-    .hanime1me_right_side {
+    .tdURL[data-from='hanime1me'] {
         box-shadow: inset -0.3rem 0 0 0 #b20710;
         &:hover {
             box-shadow: inset -100rem 0 0 0 #b20710;

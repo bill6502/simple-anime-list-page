@@ -3,10 +3,16 @@
 
     type Anime = { name: string; url: string; from: string };
 
-    const urls = ['ani.gamer', 'anime1.me', 'anime1.one', 'hanime1.me'];
+    const urls = ['all', 'ani.gamer', 'anime1.me', 'hanime1.me'];
+    const urlMap = {
+        all: '全部',
+        'ani.gamer': '巴哈姆特動畫瘋',
+        'anime1.me': 'Anime1',
+        'hanime1.me': 'Hanime1',
+    };
 
     let { data } = $props();
-    let selectedUrl = $state<string>('');
+    let selectedUrl = $state<string>('all');
     let animes = $derived.by<Anime[]>(() =>
         [...data.animes]
             .sort((a, b) => a.url.localeCompare(b.url))
@@ -26,12 +32,14 @@
             }),
     );
     let websites = $derived.by<string[]>(() =>
-        urls.filter((url) =>
-            animes.some((anime) => anime.url.includes('https://' + url)),
+        urls.filter(
+            (url) =>
+                url == 'all' ||
+                animes.some((anime) => anime.url.includes('https://' + url)),
         ),
     );
     let selectedAnime = $derived.by<Anime[]>(() => {
-        if (selectedUrl == '') {
+        if (selectedUrl == 'all') {
             return animes;
         }
         return animes.filter((anime) =>
@@ -50,16 +58,12 @@
 <div class="container">
     <p>{userName}</p>
     <div class="buttons">
-        <button
-            onclick={() => {
-                selectedUrl = '';
-            }}>All</button
-        >
-        {#each websites as url}
+        {#each websites as url (url)}
             <button
-                onclick={() => {
+                class={selectedUrl == url ? 'selected' : ''}
+                onclick={(e) => {
                     selectedUrl = url;
-                }}>{url}</button
+                }}>{urlMap[url]}</button
             >
         {/each}
     </div>
@@ -113,7 +117,7 @@
         }
     }
 
-    .buttons button {
+    .buttons > button {
         padding: 1rem;
         margin: 0.5rem;
         border: none;
@@ -129,5 +133,15 @@
 
         overflow: hidden;
         width: 100%;
+
+        transition:
+            background-color 0.1s ease-out 0.1s,
+            color 0.1s ease-in-out;
+
+        &.selected,
+        &:hover {
+            background-color: #63605f;
+            color: #d9d4cf;
+        }
     }
 </style>
