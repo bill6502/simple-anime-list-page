@@ -1,7 +1,6 @@
 <script lang="ts">
+    import { type Anime } from '$lib/types';
     import AnimeList from '$lib/components/animeList.svelte';
-
-    type Anime = { name: string; url: string; from: string };
 
     const urls = ['all', 'ani.gamer', 'anime1.me', 'hanime1.me'];
     const urlMap = {
@@ -12,6 +11,7 @@
     };
 
     let { data } = $props();
+
     let selectedUrl = $state<string>('all');
     let animes = $derived.by<Anime[]>(() =>
         [...data.animes]

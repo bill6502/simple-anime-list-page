@@ -1,14 +1,21 @@
 <script lang="ts">
+    import { type Anime } from '$lib/types';
     import { flip } from 'svelte/animate';
     import { fade } from 'svelte/transition';
 
-    let { animes } = $props();
+    type props = { animes: Anime[] };
+
+    let { animes }: props = $props();
 </script>
 
 <table>
     <tbody>
         {#each animes as anime (anime.name)}
-            <tr animate:flip={{ duration: 500 }} in:fade={{ duration: 500 }}>
+            <tr
+                class="row"
+                animate:flip={{ duration: 500 }}
+                in:fade={{ duration: 500 }}
+            >
                 <td class="tdName testLeftSide">{anime.name}</td>
                 <td class={`tdURL`} data-from={anime.from}
                     ><a href={anime.url} target="_blank">{anime.url}</a></td
@@ -31,25 +38,30 @@
         word-break: break-all;
     }
 
-    tbody > tr:nth-child(2n + 1) * {
+    .row:nth-child(2n + 1) * {
         background-color: #d9d4cf;
         color: #7c7877;
     }
 
-    tbody > tr:nth-child(2n + 2) * {
+    .row:nth-child(2n + 2) * {
         background-color: #7c7877;
         color: #d9d4cf;
     }
+
     .tdName {
-        width: 30%;
+        width: 40%;
     }
+
     .tdURL {
-        width: 70%;
+        width: 60%;
         transition: box-shadow 0.7s cubic-bezier(0.47, 0.38, 0, 0.99);
+        transition-delay: 0.25s;
+
         a {
             background-color: transparent !important;
         }
         &:hover a {
+            transition-delay: 0.3s;
             color: aliceblue !important;
         }
     }
