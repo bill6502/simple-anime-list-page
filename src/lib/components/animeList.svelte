@@ -54,15 +54,19 @@
 
     .tdURL {
         width: 60%;
-        transition: box-shadow 0.7s cubic-bezier(0.47, 0.38, 0, 0.99);
-        transition-delay: 0.25s;
+        transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
         a {
             background-color: transparent !important;
+            transition: color 0s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
         }
-        &:hover a {
-            transition-delay: 0.3s;
-            color: aliceblue !important;
+
+        &:hover {
+            transition: box-shadow 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s !important;
+            a {
+                color: aliceblue !important;
+                transition: color 0s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+            }
         }
     }
 

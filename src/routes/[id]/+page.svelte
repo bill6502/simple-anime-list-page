@@ -132,9 +132,10 @@
 
         overflow: hidden;
         width: 100%;
+        height: 3rem;
 
         transition:
-            background-color 0.1s ease-out 0.1s,
+            background-color 0.1s ease-in-out,
             color 0.1s ease-in-out;
 
         &.selected,
