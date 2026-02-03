@@ -1,5 +1,4 @@
 import { redirect } from '@sveltejs/kit';
-import { base } from '$app/paths';
 import { PUBLIC_DB } from '$env/static/public';
 import type { PageLoad } from './$types';
 
@@ -23,26 +22,28 @@ export const load: PageLoad = async ({ url }) => {
     if (userJson) {
       localStorage.setItem('user', JSON.stringify(userJson));
       user = userJson;
-      console.log(user);
     }
   }
 
-  const updateAnimesList = await fetch(`${PUBLIC_DB}/updateWebsiteInfo`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      args: { userId: user?.id, userName: user?.username },
-    }),
-  });
+  let updateAnimesList: Response | undefined = undefined;
+  let listId: string = '';
+  if (user) {
+    updateAnimesList = await fetch(`${PUBLIC_DB}/updateWebsiteInfo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        args: { userId: user?.id, userName: user?.username },
+      }),
+    });
 
-  if (!updateAnimesList.ok) {
-    console.error('Failed to update animes list');
-    return { error: 'failed_to_update_animes_list', user: null, listId: '' };
+    if (!updateAnimesList.ok) {
+      console.error('Failed to update animes list');
+      return { error: 'failed_to_update_animes_list', user: null, listId: '' };
+    }
+    listId = ((await updateAnimesList.json()).value as string) ?? '';
   }
-
-  const listId = (await updateAnimesList.json()).value as string;
 
   const error = url.searchParams.get('error');
   if (!error) {

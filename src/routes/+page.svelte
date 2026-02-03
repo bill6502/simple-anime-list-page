@@ -18,11 +18,6 @@
 
         await goto(url_id, { invalidateAll: true });
     };
-
-    const login = async () => {
-        console.log('login');
-        await goto(url, { invalidateAll: true });
-    };
 </script>
 
 <svelte:head>
@@ -94,6 +89,7 @@
     .search-container > input {
         width: 100%;
         height: 2rem;
+        cursor: unset;
     }
 
     .buttons {
