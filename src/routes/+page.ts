@@ -25,16 +25,16 @@ export const load: PageLoad = async ({ url }) => {
     }
   }
 
-  let updateAnimesList: Response | undefined = undefined;
   let listId: string = '';
   if (user) {
-    updateAnimesList = await fetch(`${PUBLIC_DB}/updateWebsiteInfo`, {
+    console.log('User:', user.id, user.username);
+    const updateAnimesList = await fetch(`${PUBLIC_DB}/updateWebsiteInfo`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        args: { userId: user?.id, userName: user?.username },
+        args: { userId: user.id, userName: user.username },
       }),
     });
 
@@ -42,7 +42,7 @@ export const load: PageLoad = async ({ url }) => {
       console.error('Failed to update animes list');
       return { error: 'failed_to_update_animes_list', user: null, listId: '' };
     }
-    listId = ((await updateAnimesList.json()).value as string) ?? '';
+    listId = (await updateAnimesList.json()).value as string;
   }
 
   const error = url.searchParams.get('error');

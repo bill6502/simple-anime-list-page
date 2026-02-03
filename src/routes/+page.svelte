@@ -32,7 +32,7 @@
                 src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
                 alt="User Avatar"
             />
-            <p>Welcome, {user.username}!</p>
+            <p>{user.username}</p>
         </div>
     {/if}
     <form
@@ -45,7 +45,7 @@
         <input bind:value={id} placeholder="Enter id" />
         <div class="buttons">
             <button class="search" type="submit">Search</button>
-            <a class="login" type="button" href={url}> Login / Update</a>
+            <a class="login" type="button" href={url}> Update</a>
         </div>
     </form>
     {#if message}
@@ -95,9 +95,11 @@
     .buttons {
         display: flex;
         width: 100%;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        text-align: center;
+        word-break: break-all;
         gap: 1rem;
     }
 
@@ -157,6 +159,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
+        text-align: center;
+        word-break: break-all;
         gap: 0.5rem;
 
         img {
