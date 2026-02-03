@@ -4,12 +4,23 @@
 
     let { data } = $props();
 
-    let id = $state<string>('');
+    let id = $state<string>(data.listId);
+    let user = $state<any>(data.user);
     let message = $derived<string>(data.error);
 
-    const gotoId = async () => {
-        const url = `${base}/${id}`;
+    const url =
+        base == ''
+            ? 'https://discord.com/oauth2/authorize?client_id=1446749870101757994&response_type=token&redirect_uri=http%3A%2F%2F127.0.0.1%3A5173&scope=identify'
+            : 'https://discord.com/oauth2/authorize?client_id=1446749870101757994&response_type=token&redirect_uri=https%3A%2F%2Fbill6502.github.io%2Fsimple-anime-list-page&scope=identify';
 
+    const gotoId = async () => {
+        const url_id = `${base}/${id}`;
+
+        await goto(url_id, { invalidateAll: true });
+    };
+
+    const login = async () => {
+        console.log('login');
         await goto(url, { invalidateAll: true });
     };
 </script>
@@ -20,6 +31,15 @@
 </svelte:head>
 
 <div class="container">
+    {#if user}
+        <div class="user">
+            <img
+                src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
+                alt="User Avatar"
+            />
+            <p>Welcome, {user.username}!</p>
+        </div>
+    {/if}
     <form
         class="search-container"
         onsubmit={async (e) => {
@@ -28,7 +48,10 @@
         }}
     >
         <input bind:value={id} placeholder="Enter id" />
-        <button type="submit">Search</button>
+        <div class="buttons">
+            <button class="search" type="submit">Search</button>
+            <a class="login" type="button" href={url}> Login / Update</a>
+        </div>
     </form>
     {#if message}
         <dev class="message">
@@ -45,6 +68,7 @@
         justify-content: center;
         align-items: center;
         margin: auto 0;
+        gap: 1rem;
     }
 
     .search-container {
@@ -56,12 +80,15 @@
     }
 
     .search-container > input,
-    button {
+    button,
+    a {
         box-sizing: border-box;
         border-radius: 0.7rem;
         padding: 1.5rem 2rem;
         border: none;
         outline: none;
+        cursor: pointer;
+        text-decoration: none;
     }
 
     .search-container > input {
@@ -69,11 +96,45 @@
         height: 2rem;
     }
 
-    .search-container > button {
+    .buttons {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
         justify-content: center;
-        padding: 1rem;
-        width: 60%;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .search {
+        justify-content: center;
+        padding: 0.8rem 3rem;
+        width: 100%;
         height: auto;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: #c0c0c0;
+        }
+    }
+
+    .login {
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+        padding: 0.8rem 3rem;
+        width: 100%;
+        height: auto;
+        background-color: #7289da;
+        color: #ffffff;
+
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
+
+    .login:hover {
+        background-color: #5865f2;
     }
 
     .message {
@@ -89,6 +150,28 @@
         font-size: 1rem;
         p {
             line-height: 3;
+        }
+    }
+
+    .user {
+        position: absolute;
+        bottom: 120%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+
+        img {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+        }
+
+        p {
+            font-size: 1.2rem;
+            font-weight: bold;
         }
     }
 </style>
