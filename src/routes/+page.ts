@@ -27,7 +27,6 @@ export const load: PageLoad = async ({ url }) => {
 
   let listId: string = '';
   if (user) {
-    console.log('User:', user.id, user.username);
     const updateAnimesList = await fetch(`${PUBLIC_DB}/updateWebsiteInfo`, {
       method: 'POST',
       headers: {
