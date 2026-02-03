@@ -4,7 +4,7 @@
 import { browser } from '$app/environment';
 import { base } from '$app/paths';
 import { redirect } from '@sveltejs/kit';
-import type { PageLoad } from '../../../.svelte-kit/types/src/routes/[id]/$types.d.ts';
+import type { PageLoad } from './$types';
 import { PUBLIC_DB } from '$env/static/public';
 
 export const load: PageLoad = async ({ fetch, params }) => {

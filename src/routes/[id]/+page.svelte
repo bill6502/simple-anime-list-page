@@ -62,6 +62,7 @@
                 class={selectedUrl == url ? 'selected' : ''}
                 onclick={(e) => {
                     selectedUrl = url;
+                    window.scrollTo(0, 0);
                 }}>{urlMap[url]}</button
             >
         {/each}

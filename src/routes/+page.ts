@@ -1,4 +1,4 @@
-import type { PageLoad } from '../../.svelte-kit/types/src/routes/$types.d.ts';
+import type { PageLoad } from './$types';
 
 export const load: PageLoad = ({ url }) => {
   const error = url.searchParams.get('error');
