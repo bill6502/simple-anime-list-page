@@ -50,29 +50,31 @@
             await gotoId();
         }}
     >
-        <input bind:value={id} placeholder="Enter ID" />
+        <input
+            bind:value={id}
+            oninput={() => (message = '')}
+            placeholder="Enter ID"
+        />
         <div class="buttons">
             <button class="search" type="submit">搜尋</button>
             <div class="dcButtons">
                 <a class="dcButton" type="button" data-type="getID" href={url}>
                     取得ID</a
                 >
-                <a
+                <button
                     class="dcButton"
                     type="button"
                     data-type="clear"
                     onclick={clear}
                 >
-                    清除</a
+                    清除</button
                 >
             </div>
         </div>
     </form>
-    {#if message}
-        <dev class="message">
-            <p>{message}</p>
-        </dev>
-    {/if}
+    <dev class="message" data-error={message != ''}>
+        <p>{message}</p>
+    </dev>
 </div>
 
 <style>
@@ -161,22 +163,22 @@
 
         transition: background-color 0.3s ease;
         cursor: pointer;
-    }
 
-    .dcButton[data-type='getID'] {
-        background-color: #7289da;
-    }
+        &[data-type='getID'] {
+            background-color: #7289da;
+        }
 
-    .dcButton[data-type='clear'] {
-        background-color: #dd0000;
-    }
+        &[data-type='clear'] {
+            background-color: #dd0000;
+        }
 
-    .dcButton:hover[data-type='getID'] {
-        background-color: #5865f2;
-    }
+        &:hover[data-type='getID'] {
+            background-color: #5865f2;
+        }
 
-    .dcButton:hover[data-type='clear'] {
-        background-color: #bb0000;
+        &:hover[data-type='clear'] {
+            background-color: #bb0000;
+        }
     }
 
     .message {
@@ -190,8 +192,19 @@
         border-radius: 0.2rem;
         padding: 0 1rem;
         font-size: 1rem;
+        min-width: 20rem;
+        text-align: center;
+        z-index: 999;
+
         p {
             line-height: 3;
+        }
+
+        &[data-error='true'] {
+            display: block;
+        }
+        &[data-error='false'] {
+            display: none;
         }
     }
 

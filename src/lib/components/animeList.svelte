@@ -38,14 +38,16 @@
         word-break: break-all;
     }
 
-    .row:nth-child(2n + 1) * {
-        background-color: #d9d4cf;
-        color: #7c7877;
-    }
+    .row {
+        &:nth-child(2n + 1) * {
+            background-color: #d9d4cf;
+            color: #7c7877;
+        }
 
-    .row:nth-child(2n + 2) * {
-        background-color: #7c7877;
-        color: #d9d4cf;
+        &:nth-child(2n + 2) * {
+            background-color: #7c7877;
+            color: #d9d4cf;
+        }
     }
 
     .tdName {
@@ -66,26 +68,26 @@
                 color: aliceblue !important;
             }
         }
-    }
 
-    .tdURL[data-from='anigamer'] {
-        box-shadow: inset -0.3rem 0 0 0 #009bad;
-        &:hover {
-            box-shadow: inset -100rem 0 0 0 #009bad;
+        &[data-from='anigamer'] {
+            box-shadow: inset -0.3rem 0 0 0 #009bad;
+            &:hover {
+                box-shadow: inset -100rem 0 0 0 #009bad;
+            }
         }
-    }
 
-    .tdURL[data-from='anime1me'] {
-        box-shadow: inset -0.3rem 0 0 0 #b92d72;
-        &:hover {
-            box-shadow: inset -100rem 0 0 0 #b92d72;
+        &[data-from='anime1me'] {
+            box-shadow: inset -0.3rem 0 0 0 #b92d72;
+            &:hover {
+                box-shadow: inset -100rem 0 0 0 #b92d72;
+            }
         }
-    }
 
-    .tdURL[data-from='hanime1me'] {
-        box-shadow: inset -0.3rem 0 0 0 #b20710;
-        &:hover {
-            box-shadow: inset -100rem 0 0 0 #b20710;
+        &[data-from='hanime1me'] {
+            box-shadow: inset -0.3rem 0 0 0 #b20710;
+            &:hover {
+                box-shadow: inset -100rem 0 0 0 #b20710;
+            }
         }
     }
 </style>

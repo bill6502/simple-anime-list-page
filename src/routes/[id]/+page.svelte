@@ -76,8 +76,11 @@
             .then((updateAnimesList) => updateAnimesList.json())
             .then((data) => (isMyAnimeList = data.value == id))
             .catch((error) => {
-                message = 'Failed to update website info';
+                message = '動畫清單更新錯誤';
                 isMyAnimeList = false;
+                setTimeout(() => {
+                    message = '';
+                }, 1500);
             });
     });
 
@@ -93,7 +96,10 @@
         });
 
         if (!updateAnimesList.ok) {
-            message = 'Failed to update website info';
+            message = '動畫清單更新錯誤';
+            setTimeout(() => {
+                message = '';
+            }, 1500);
             return;
         }
 
@@ -108,7 +114,10 @@
         });
 
         if (!getAnimeList.ok) {
-            message = 'Failed to get anime list';
+            message = '動畫清單取得錯誤';
+            setTimeout(() => {
+                message = '';
+            }, 1500);
             return;
         }
 
@@ -138,7 +147,10 @@
 </svelte:head>
 
 <div class="container">
-    <p>{userName}</p>
+    <div class="message" data-error={message ? true : false}>
+        <p>{message}</p>
+    </div>
+    <p class="title">{userName}</p>
     <div class="buttons">
         {#each websites as url (url)}
             <button
@@ -165,11 +177,13 @@
 
 <style>
     .container {
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         gap: 1rem;
+        overflow: hidden;
     }
 
     .list {
@@ -177,11 +191,11 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        border-radius: 1rem;
+        border-radius: 0.7rem;
         overflow: hidden;
     }
 
-    p {
+    .title {
         font-size: 2rem;
         font-weight: bold;
         text-align: center;
@@ -238,9 +252,36 @@
 
     .updateButton {
         animation: flip 0.7s;
+        &[data-disabled='true'] {
+            display: none;
+        }
     }
-    .updateButton[data-disabled='true'] {
-        display: none;
+
+    .message {
+        position: absolute;
+        top: 0%;
+        left: 50%;
+        transform: translate(-50%, -100%);
+        background-color: #fff5f5;
+        border: 1px solid #ff0000;
+        color: #000000;
+        border-radius: 0.2rem;
+        padding: 0 1rem;
+        min-width: 20rem;
+        font-size: 1rem;
+        text-align: center;
+        z-index: 999;
+
+        p {
+            line-height: 3rem;
+        }
+
+        &[data-error='false'] {
+            animation: none;
+        }
+        &[data-error='true'] {
+            animation: message 1s;
+        }
     }
 
     @keyframes flip {
@@ -252,6 +293,21 @@
         }
         100% {
             transform: scale(1, 1);
+        }
+    }
+
+    @keyframes message {
+        0% {
+            top: 0%;
+        }
+        70% {
+            top: 0.7%;
+        }
+        80% {
+            top: 0.7%;
+        }
+        100% {
+            top: 0%;
         }
     }
 </style>
