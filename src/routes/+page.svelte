@@ -13,11 +13,19 @@
             ? 'https://discord.com/oauth2/authorize?client_id=1446749870101757994&response_type=token&redirect_uri=http%3A%2F%2F127.0.0.1%3A5173&scope=identify'
             : 'https://discord.com/oauth2/authorize?client_id=1446749870101757994&response_type=token&redirect_uri=https%3A%2F%2Fbill6502.github.io%2Fsimple-anime-list-page&scope=identify';
 
-    const gotoId = async () => {
+    async function gotoId() {
         const url_id = `${base}/${id}`;
 
         await goto(url_id, { invalidateAll: true });
-    };
+    }
+
+    async function clear() {
+        if (window.localStorage.getItem('user')) {
+            window.localStorage.removeItem('user');
+            await goto(`${base}/`);
+            window.location.reload();
+        }
+    }
 </script>
 
 <svelte:head>
@@ -42,10 +50,22 @@
             await gotoId();
         }}
     >
-        <input bind:value={id} placeholder="Enter id" />
+        <input bind:value={id} placeholder="Enter ID" />
         <div class="buttons">
-            <button class="search" type="submit">Search</button>
-            <a class="login" type="button" href={url}> Update</a>
+            <button class="search" type="submit">搜尋</button>
+            <div class="dcButtons">
+                <a class="dcButton" type="button" data-type="getID" href={url}>
+                    取得ID</a
+                >
+                <a
+                    class="dcButton"
+                    type="button"
+                    data-type="clear"
+                    onclick={clear}
+                >
+                    清除</a
+                >
+            </div>
         </div>
     </form>
     {#if message}
@@ -90,6 +110,7 @@
         width: 100%;
         height: 2rem;
         cursor: unset;
+        text-align: center;
     }
 
     .buttons {
@@ -115,7 +136,19 @@
         }
     }
 
-    .login {
+    .dcButtons {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        word-break: break-all;
+        width: 100%;
+        height: auto;
+        gap: 1rem;
+        padding: 0 5rem;
+    }
+
+    .dcButton {
         position: relative;
         display: flex;
         align-items: center;
@@ -124,15 +157,26 @@
         padding: 0.8rem 3rem;
         width: 100%;
         height: auto;
-        background-color: #7289da;
         color: #ffffff;
 
         transition: background-color 0.3s ease;
         cursor: pointer;
     }
 
-    .login:hover {
+    .dcButton[data-type='getID'] {
+        background-color: #7289da;
+    }
+
+    .dcButton[data-type='clear'] {
+        background-color: #dd0000;
+    }
+
+    .dcButton:hover[data-type='getID'] {
         background-color: #5865f2;
+    }
+
+    .dcButton:hover[data-type='clear'] {
+        background-color: #bb0000;
     }
 
     .message {
@@ -173,6 +217,14 @@
         p {
             font-size: 1.2rem;
             font-weight: bold;
+            color: #ffffff;
+        }
+    }
+
+    @media screen and (width <= 850px) {
+        .dcButtons {
+            flex-direction: column;
+            padding: 0;
         }
     }
 </style>

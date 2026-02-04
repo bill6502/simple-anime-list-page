@@ -1,6 +1,8 @@
 <script lang="ts">
+    import { page } from '$app/stores';
     import { type Anime } from '$lib/types';
     import AnimeList from '$lib/components/animeList.svelte';
+    import { PUBLIC_DB } from '$env/static/public';
 
     const urls = ['all', 'ani.gamer', 'anime1.me', 'hanime1.me'];
     const urlMap = {
@@ -12,25 +14,17 @@
 
     let { data } = $props();
 
+    let message = $state<string>('');
     let selectedUrl = $state<string>('all');
-    let animes = $derived.by<Anime[]>(() =>
-        [...data.animes]
-            .sort((a, b) => a.url.localeCompare(b.url))
-            .map((anime) => {
-                let from = '';
-                for (const url of urls) {
-                    if (anime.url.includes('https://' + url)) {
-                        from = url.replace('.', '');
-                    }
-                }
+    let animes = $state<Anime[]>([]);
 
-                return {
-                    name: anime.name,
-                    url: anime.url,
-                    from: from,
-                };
-            }),
+    let user = $state<any | null>(
+        localStorage.getItem('user')
+            ? JSON.parse(localStorage.getItem('user')!)
+            : null,
     );
+    let isMyAnimeList = $state<boolean>(false);
+
     let websites = $derived.by<string[]>(() =>
         urls.filter(
             (url) =>
@@ -45,8 +39,97 @@
                 anime.url.includes('https://' + selectedUrl),
         ),
     );
-
     let userName = $derived<string>(data.userName);
+
+    //updateAnimeList
+    $effect(() => {
+        animes = [...data.animes]
+            .sort((a, b) => a.url.localeCompare(b.url))
+            .map((anime) => {
+                let from = '';
+                for (const url of urls) {
+                    if (anime.url.includes('https://' + url)) {
+                        from = url.replace('.', '');
+                    }
+                }
+
+                return {
+                    name: anime.name,
+                    url: anime.url,
+                    from: from,
+                };
+            });
+    });
+
+    //isMyAnimeList?
+    $effect(() => {
+        const id = $page.params.id;
+        fetch(`${PUBLIC_DB}/updateWebsiteInfo`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                args: { userId: user.id, userName: user.username },
+            }),
+        })
+            .then((updateAnimesList) => updateAnimesList.json())
+            .then((data) => (isMyAnimeList = data.value == id))
+            .catch((error) => {
+                message = 'Failed to update website info';
+                isMyAnimeList = false;
+            });
+    });
+
+    async function updateAnimeList() {
+        const updateAnimesList = await fetch(`${PUBLIC_DB}/updateWebsiteInfo`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                args: { userId: user.id, userName: user.username },
+            }),
+        });
+
+        if (!updateAnimesList.ok) {
+            message = 'Failed to update website info';
+            return;
+        }
+
+        const id = (await updateAnimesList.json()).value;
+        console.log(id);
+        const getAnimeList = await fetch(`${PUBLIC_DB}/getWebsiteInfoBy_Id`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ args: { id } }),
+        });
+
+        if (!getAnimeList.ok) {
+            message = 'Failed to get anime list';
+            return;
+        }
+
+        const data = await getAnimeList.json();
+        animes = (data.value.animes as Anime[])
+            .sort((a, b) => a.url.localeCompare(b.url))
+            .map((anime) => {
+                let from = '';
+                for (const url of urls) {
+                    if (anime.url.includes('https://' + url)) {
+                        from = url.replace('.', '');
+                    }
+                }
+
+                return {
+                    name: anime.name,
+                    url: anime.url,
+                    from: from,
+                };
+            });
+    }
 </script>
 
 <svelte:head>
@@ -66,6 +149,14 @@
                 }}>{urlMap[url]}</button
             >
         {/each}
+        <button
+            class="updateButton"
+            data-disabled={!user || !isMyAnimeList}
+            onclick={async () => {
+                await updateAnimeList();
+                window.scrollTo(0, 0);
+            }}>更新</button
+        >
     </div>
     <div class="list">
         <AnimeList animes={selectedAnime} />
@@ -142,6 +233,25 @@
         &:hover {
             background-color: #63605f;
             color: #d9d4cf;
+        }
+    }
+
+    .updateButton {
+        animation: flip 0.7s;
+    }
+    .updateButton[data-disabled='true'] {
+        display: none;
+    }
+
+    @keyframes flip {
+        0% {
+            display: inline-flex;
+        }
+        5% {
+            transform: scale(0, 1);
+        }
+        100% {
+            transform: scale(1, 1);
         }
     }
 </style>
