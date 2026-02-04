@@ -11,10 +11,11 @@
         'anime1.me': 'Anime1',
         'hanime1.me': 'Hanime1',
     };
-    const errorMessageDuration = 2200;
+    const messageDuration = 2200;
 
     let { data } = $props();
 
+    let message = $state<string>('');
     let errorMessage = $state<string>('');
     let selectedUrl = $state<string>('all');
     let animes = $state<Anime[]>([]);
@@ -81,7 +82,7 @@
                 isMyAnimeList = false;
                 setTimeout(() => {
                     errorMessage = '';
-                }, errorMessageDuration);
+                }, messageDuration);
             });
     });
 
@@ -100,7 +101,7 @@
             errorMessage = '動畫清單更新錯誤';
             setTimeout(() => {
                 errorMessage = '';
-            }, errorMessageDuration);
+            }, messageDuration);
             return;
         }
 
@@ -117,7 +118,7 @@
             errorMessage = '動畫清單取得錯誤';
             setTimeout(() => {
                 errorMessage = '';
-            }, errorMessageDuration);
+            }, messageDuration);
             return;
         }
 
@@ -139,6 +140,20 @@
                 };
             });
     }
+
+    function showMessage(_message: string) {
+        message = _message;
+        setTimeout(() => {
+            message = '';
+        }, messageDuration);
+    }
+
+    function showErrorMessage(_message: string) {
+        errorMessage = _message;
+        setTimeout(() => {
+            errorMessage = '';
+        }, messageDuration);
+    }
 </script>
 
 <svelte:head>
@@ -147,6 +162,9 @@
 </svelte:head>
 
 <div class="container">
+    <div class="message" data-message={message != '' ? true : false}>
+        <p>{message}</p>
+    </div>
     <div class="errorMessage" data-error={errorMessage != '' ? true : false}>
         <p>{errorMessage}</p>
     </div>
@@ -171,7 +189,12 @@
         >
     </div>
     <div class="list">
-        <AnimeList animes={selectedAnime} />
+        <AnimeList
+            animes={selectedAnime}
+            {user}
+            {showMessage}
+            {showErrorMessage}
+        />
     </div>
 </div>
 
@@ -254,6 +277,30 @@
         animation: flip 0.5s;
         &[data-disabled='true'] {
             display: none;
+        }
+    }
+
+    .message {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%, 100%);
+        background-color: #fff5f5;
+        border: 1px solid #00ee00;
+        color: #000000;
+        border-radius: 0.2rem;
+        padding: 0 1rem;
+        min-width: 20rem;
+        font-size: 1rem;
+        text-align: center;
+        z-index: 999;
+
+        p {
+            line-height: 3rem;
+        }
+
+        &[data-message='true'] {
+            animation: errorMessage 2s cubic-bezier(0.25, 1, 0.5, 1);
         }
     }
 

@@ -20,11 +20,10 @@
     }
 
     async function clear() {
-        if (window.localStorage.getItem('user')) {
-            window.localStorage.removeItem('user');
-            await goto(`${base}/`);
-            window.location.reload();
-        }
+        localStorage.removeItem('user');
+        localStorage.removeItem('userAnimeListId');
+        await goto(`${base}/`);
+        location.reload();
     }
 </script>
 

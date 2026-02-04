@@ -42,6 +42,7 @@ export const load: PageLoad = async ({ url }) => {
       return { error: 'failed_to_update_animes_list', user: null, listId: '' };
     }
     listId = (await updateAnimesList.json()).value as string;
+    localStorage.setItem('userAnimeListId', JSON.stringify({ value: listId }));
   }
 
   const error = url.searchParams.get('error');
