@@ -11,10 +11,11 @@
         'anime1.me': 'Anime1',
         'hanime1.me': 'Hanime1',
     };
+    const errorMessageDuration = 2200;
 
     let { data } = $props();
 
-    let message = $state<string>('');
+    let errorMessage = $state<string>('');
     let selectedUrl = $state<string>('all');
     let animes = $state<Anime[]>([]);
 
@@ -76,11 +77,11 @@
             .then((updateAnimesList) => updateAnimesList.json())
             .then((data) => (isMyAnimeList = data.value == id))
             .catch((error) => {
-                message = '動畫清單更新錯誤';
+                errorMessage = '動畫清單更新錯誤';
                 isMyAnimeList = false;
                 setTimeout(() => {
-                    message = '';
-                }, 1500);
+                    errorMessage = '';
+                }, errorMessageDuration);
             });
     });
 
@@ -96,15 +97,14 @@
         });
 
         if (!updateAnimesList.ok) {
-            message = '動畫清單更新錯誤';
+            errorMessage = '動畫清單更新錯誤';
             setTimeout(() => {
-                message = '';
-            }, 1500);
+                errorMessage = '';
+            }, errorMessageDuration);
             return;
         }
 
         const id = (await updateAnimesList.json()).value;
-        console.log(id);
         const getAnimeList = await fetch(`${PUBLIC_DB}/getWebsiteInfoBy_Id`, {
             method: 'POST',
             headers: {
@@ -114,10 +114,10 @@
         });
 
         if (!getAnimeList.ok) {
-            message = '動畫清單取得錯誤';
+            errorMessage = '動畫清單取得錯誤';
             setTimeout(() => {
-                message = '';
-            }, 1500);
+                errorMessage = '';
+            }, errorMessageDuration);
             return;
         }
 
@@ -147,8 +147,8 @@
 </svelte:head>
 
 <div class="container">
-    <div class="message" data-error={message ? true : false}>
-        <p>{message}</p>
+    <div class="errorMessage" data-error={errorMessage != '' ? true : false}>
+        <p>{errorMessage}</p>
     </div>
     <p class="title">{userName}</p>
     <div class="buttons">
@@ -183,7 +183,7 @@
         justify-content: center;
         align-items: center;
         gap: 1rem;
-        overflow: hidden;
+        /*overflow: hidden;*/
     }
 
     .list {
@@ -251,17 +251,17 @@
     }
 
     .updateButton {
-        animation: flip 0.7s;
+        animation: flip 0.5s;
         &[data-disabled='true'] {
             display: none;
         }
     }
 
-    .message {
-        position: absolute;
-        top: 0%;
+    .errorMessage {
+        position: fixed;
+        bottom: 0;
         left: 50%;
-        transform: translate(-50%, -100%);
+        transform: translate(-50%, 100%);
         background-color: #fff5f5;
         border: 1px solid #ff0000;
         color: #000000;
@@ -276,11 +276,8 @@
             line-height: 3rem;
         }
 
-        &[data-error='false'] {
-            animation: none;
-        }
         &[data-error='true'] {
-            animation: message 1s;
+            animation: errorMessage 2s cubic-bezier(0.25, 1, 0.5, 1);
         }
     }
 
@@ -296,18 +293,16 @@
         }
     }
 
-    @keyframes message {
+    @keyframes errorMessage {
         0% {
-            top: 0%;
+            transform: translate(-50%, 100%);
         }
-        70% {
-            top: 0.7%;
-        }
-        80% {
-            top: 0.7%;
+        15%,
+        85% {
+            transform: translate(-50%, -50px);
         }
         100% {
-            top: 0%;
+            transform: translate(-50%, 100%);
         }
     }
 </style>

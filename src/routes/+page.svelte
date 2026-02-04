@@ -6,7 +6,7 @@
 
     let id = $state<string>(data.listId);
     let user = $state<any>(data.user);
-    let message = $derived<string>(data.error);
+    let errorMessage = $derived<string>(data.error);
 
     const url =
         base == ''
@@ -52,7 +52,7 @@
     >
         <input
             bind:value={id}
-            oninput={() => (message = '')}
+            oninput={() => (errorMessage = '')}
             placeholder="Enter ID"
         />
         <div class="buttons">
@@ -72,8 +72,8 @@
             </div>
         </div>
     </form>
-    <dev class="message" data-error={message != ''}>
-        <p>{message}</p>
+    <dev class="errorMessage" data-error={errorMessage != ''}>
+        <p>{errorMessage}</p>
     </dev>
 </div>
 
@@ -181,7 +181,7 @@
         }
     }
 
-    .message {
+    .errorMessage {
         position: absolute;
         top: 120%;
         left: 50%;
