@@ -14,6 +14,9 @@
 
     let { animes, user, showMessage, showErrorMessage }: props = $props();
 
+    let innerWidth = $state<number>(0);
+    let innerHeight = $state<number>(0);
+
     let userAnimeListId = $state<string | null>(
         localStorage.getItem('userAnimeListId')
             ? JSON.parse(localStorage.getItem('userAnimeListId')!).value
@@ -39,6 +42,8 @@
     }
 </script>
 
+<svelte:window bind:innerWidth bind:innerHeight />
+
 <table>
     <tbody>
         {#each animes as anime (anime.name)}
@@ -49,13 +54,13 @@
             >
                 <td class="tdName testLeftSide">{anime.name}</td>
                 <td class="tdURL" data-from={anime.from}
-                    ><a href={anime.url} target="_blank">{anime.url}</a>
+                    ><a href={anime.url} target="_blank"
+                        >{innerWidth <= 820 ? '[連結]' : anime.url}</a
+                    >
                     {#if user && userAnimeListId != $page.params.id}
-                        {@const name = anime.name}
-                        {@const url = anime.url}
                         <button
                             onclick={async () => {
-                                await addAnime(name, url);
+                                await addAnime(anime.name, anime.url);
                             }}>收藏</button
                         >
                     {/if}
@@ -79,11 +84,17 @@
     }
 
     .row {
+        display: flex;
+        flex-direction: row;
+
+        & * {
+            text-align: center;
+            align-content: center;
+        }
         &:nth-child(2n + 1) * {
             background-color: #d9d4cf;
             color: #7c7877;
         }
-
         &:nth-child(2n + 2) * {
             background-color: #7c7877;
             color: #d9d4cf;
@@ -95,19 +106,17 @@
     }
 
     .tdURL {
-        position: relative;
+        display: flex;
+        align-items: center;
         width: 60%;
         transition: box-shadow 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 
         a {
+            flex: 1;
             background-color: transparent !important;
         }
 
-        & > button {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
+        button {
             background-color: transparent !important;
             border: none;
             color: #d9d4cf;
