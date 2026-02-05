@@ -1,4 +1,5 @@
 <script lang="ts">
+    import MessageBlock from '$lib/components/messageBlock.svelte';
     import './layout.css';
 
     let { children } = $props();
@@ -9,6 +10,7 @@
         {@render children()}
     </main>
 
+    <MessageBlock />
     <footer>
         <p>Just a simple anime-list page</p>
     </footer>

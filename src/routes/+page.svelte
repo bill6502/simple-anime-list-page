@@ -1,12 +1,14 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import { base } from '$app/paths';
+    import { store } from '$lib/store.svelte';
 
     let { data } = $props();
 
-    let id = $state<string>(data.listId);
-    let user = $state<any>(data.user);
-    let errorMessage = $derived<string>(data.error);
+    let id = $state<string>(store.userAnimeListId);
+    let user = store.user;
+
+    store.errorMessage = data.error;
 
     const url =
         base == ''
@@ -22,6 +24,10 @@
     async function clear() {
         localStorage.removeItem('user');
         localStorage.removeItem('userAnimeListId');
+
+        store.user = null;
+        store.userAnimeListId = '';
+
         await goto(`${base}/`);
         location.reload();
     }
@@ -31,7 +37,6 @@
     <title>動畫收藏清單</title>
     <meta name="description" content="Anime List" />
 </svelte:head>
-
 <div class="container">
     {#if user}
         <div class="user">
@@ -51,7 +56,7 @@
     >
         <input
             bind:value={id}
-            oninput={() => (errorMessage = '')}
+            oninput={() => (store.errorMessage = '')}
             placeholder="Enter ID"
         />
         <div class="buttons">
@@ -71,9 +76,6 @@
             </div>
         </div>
     </form>
-    <dev class="errorMessage" data-error={errorMessage != ''}>
-        <p>{errorMessage}</p>
-    </dev>
 </div>
 
 <style>
@@ -177,33 +179,6 @@
 
         &:hover[data-type='clear'] {
             background-color: #bb0000;
-        }
-    }
-
-    .errorMessage {
-        position: absolute;
-        top: 120%;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: #fff5f5;
-        border: 1px solid #ff0000;
-        color: #000000;
-        border-radius: 0.2rem;
-        padding: 0 1rem;
-        font-size: 1rem;
-        min-width: 20rem;
-        text-align: center;
-        z-index: 999;
-
-        p {
-            line-height: 3;
-        }
-
-        &[data-error='true'] {
-            display: block;
-        }
-        &[data-error='false'] {
-            display: none;
         }
     }
 

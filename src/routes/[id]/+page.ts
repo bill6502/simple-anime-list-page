@@ -5,9 +5,9 @@ import { browser } from '$app/environment';
 import { base } from '$app/paths';
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
-import { PUBLIC_DB } from '$env/static/public';
+import db from '$lib/db';
 
-export const load: PageLoad = async ({ fetch, params }) => {
+export const load: PageLoad = async ({ params }) => {
   if (!browser) {
     return { animes: [], userName: '' };
   }
@@ -15,13 +15,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
   const { id } = params;
   const host = `${base}/`;
 
-  const checkResponse = await fetch(`${PUBLIC_DB}/checkWebsiteInfoBy_Id`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ args: { id } }),
-  });
+  const checkResponse = await db.checkWebsiteInfoBy_Id(id);
 
   if (!checkResponse.ok) {
     throw redirect(302, `${host}?error=not_response`);
@@ -33,13 +27,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
     throw redirect(302, `${host}?error=not_found`);
   }
 
-  const response = await fetch(`${PUBLIC_DB}/getWebsiteInfoBy_Id`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ args: { id } }),
-  });
+  const response = await db.getWebsiteInfoBy_Id(id);
 
   if (!response.ok) {
     throw redirect(302, `${host}?error=not_response`);

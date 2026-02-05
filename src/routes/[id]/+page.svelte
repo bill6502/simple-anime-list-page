@@ -1,8 +1,10 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import { type Anime } from '$lib/types';
+    import { store } from '$lib/store.svelte';
+    import { fade } from 'svelte/transition';
+    import db from '$lib/db';
     import AnimeList from '$lib/components/animeList.svelte';
-    import { PUBLIC_DB } from '$env/static/public';
 
     const urls = ['all', 'ani.gamer', 'anime1.me', 'hanime1.me'];
     const urlMap = {
@@ -12,21 +14,14 @@
         'hanime1.me': 'Hanime1',
     };
     const messageDuration = 2200;
+    const user = store.user;
 
     let { data } = $props();
 
-    let message = $state<string>('');
-    let errorMessage = $state<string>('');
     let selectedUrl = $state<string>('all');
     let animes = $state<Anime[]>([]);
 
-    let user = $state<any | null>(
-        localStorage.getItem('user')
-            ? JSON.parse(localStorage.getItem('user')!)
-            : null,
-    );
     let isMyAnimeList = $state<boolean>(false);
-
     let websites = $derived.by<string[]>(() =>
         urls.filter(
             (url) =>
@@ -66,59 +61,35 @@
     //isMyAnimeList?
     $effect(() => {
         const id = $page.params.id;
-        fetch(`${PUBLIC_DB}/updateWebsiteInfo`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                args: { userId: user.id, userName: user.username },
-            }),
-        })
+        if (!user) {
+            return;
+        }
+
+        db.updateWebsiteInfo(user.id, user.username)
             .then((updateAnimesList) => updateAnimesList.json())
             .then((data) => (isMyAnimeList = data.value == id))
             .catch((error) => {
-                errorMessage = '動畫清單更新錯誤';
+                store.message('動畫清單更新錯誤', 'error');
                 isMyAnimeList = false;
-                setTimeout(() => {
-                    errorMessage = '';
-                }, messageDuration);
             });
     });
 
     async function updateAnimeList() {
-        const updateAnimesList = await fetch(`${PUBLIC_DB}/updateWebsiteInfo`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                args: { userId: user.id, userName: user.username },
-            }),
-        });
+        const updateAnimesList = await db.updateWebsiteInfo(
+            user.id,
+            user.username,
+        );
 
         if (!updateAnimesList.ok) {
-            errorMessage = '動畫清單更新錯誤';
-            setTimeout(() => {
-                errorMessage = '';
-            }, messageDuration);
+            store.message('動畫清單更新錯誤', 'error');
             return;
         }
 
         const id = (await updateAnimesList.json()).value;
-        const getAnimeList = await fetch(`${PUBLIC_DB}/getWebsiteInfoBy_Id`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ args: { id } }),
-        });
+        const getAnimeList = await db.getWebsiteInfoBy_Id(id);
 
         if (!getAnimeList.ok) {
-            errorMessage = '動畫清單取得錯誤';
-            setTimeout(() => {
-                errorMessage = '';
-            }, messageDuration);
+            store.message('動畫清單取得錯誤', 'error');
             return;
         }
 
@@ -140,34 +111,13 @@
                 };
             });
     }
-
-    function showMessage(_message: string) {
-        message = _message;
-        setTimeout(() => {
-            message = '';
-        }, messageDuration);
-    }
-
-    function showErrorMessage(_message: string) {
-        errorMessage = _message;
-        setTimeout(() => {
-            errorMessage = '';
-        }, messageDuration);
-    }
 </script>
 
 <svelte:head>
     <title>動畫收藏清單</title>
     <meta name="description" content="Anime List" />
 </svelte:head>
-
 <div class="container">
-    <div class="message" data-message={message != '' ? true : false}>
-        <p>{message}</p>
-    </div>
-    <div class="errorMessage" data-error={errorMessage != '' ? true : false}>
-        <p>{errorMessage}</p>
-    </div>
     <p class="title">{userName}</p>
     <div class="buttons">
         {#each websites as url (url)}
@@ -179,22 +129,18 @@
                 }}>{urlMap[url]}</button
             >
         {/each}
-        <button
-            class="updateButton"
-            data-disabled={!user || !isMyAnimeList}
-            onclick={async () => {
-                await updateAnimeList();
-                window.scrollTo(0, 0);
-            }}>更新</button
-        >
+        {#if user && isMyAnimeList}
+            <button
+                transition:fade={{ duration: 500, delay: 200 }}
+                onclick={async () => {
+                    await updateAnimeList();
+                    window.scrollTo(0, 0);
+                }}>更新</button
+            >
+        {/if}
     </div>
     <div class="list">
-        <AnimeList
-            animes={selectedAnime}
-            {user}
-            {showMessage}
-            {showErrorMessage}
-        />
+        <AnimeList animes={selectedAnime} />
     </div>
 </div>
 
@@ -206,7 +152,6 @@
         justify-content: center;
         align-items: center;
         gap: 1rem;
-        /*overflow: hidden;*/
     }
 
     .list {
@@ -270,86 +215,6 @@
         &:hover {
             background-color: #63605f;
             color: #d9d4cf;
-        }
-    }
-
-    .updateButton {
-        animation: flip 0.5s;
-        &[data-disabled='true'] {
-            display: none;
-        }
-    }
-
-    .message {
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translate(-50%, 100%);
-        background-color: #fff5f5;
-        border: 1px solid #00ee00;
-        color: #000000;
-        border-radius: 0.2rem;
-        padding: 0 1rem;
-        min-width: 20rem;
-        font-size: 1rem;
-        text-align: center;
-        z-index: 999;
-
-        p {
-            line-height: 3rem;
-        }
-
-        &[data-message='true'] {
-            animation: errorMessage 2s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-    }
-
-    .errorMessage {
-        position: fixed;
-        bottom: 0;
-        left: 50%;
-        transform: translate(-50%, 100%);
-        background-color: #fff5f5;
-        border: 1px solid #ff0000;
-        color: #000000;
-        border-radius: 0.2rem;
-        padding: 0 1rem;
-        min-width: 20rem;
-        font-size: 1rem;
-        text-align: center;
-        z-index: 999;
-
-        p {
-            line-height: 3rem;
-        }
-
-        &[data-error='true'] {
-            animation: errorMessage 2s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-    }
-
-    @keyframes flip {
-        0% {
-            display: inline-flex;
-        }
-        5% {
-            transform: scale(0, 1);
-        }
-        100% {
-            transform: scale(1, 1);
-        }
-    }
-
-    @keyframes errorMessage {
-        0% {
-            transform: translate(-50%, 100%);
-        }
-        15%,
-        85% {
-            transform: translate(-50%, -50px);
-        }
-        100% {
-            transform: translate(-50%, 100%);
         }
     }
 </style>

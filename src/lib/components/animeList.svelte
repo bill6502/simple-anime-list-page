@@ -3,42 +3,29 @@
     import { type Anime } from '$lib/types';
     import { flip } from 'svelte/animate';
     import { fade } from 'svelte/transition';
-    import { PUBLIC_DB } from '$env/static/public';
+    import db from '$lib/db';
+    import { store } from '$lib/store.svelte';
 
     type props = {
         animes: Anime[];
-        user: any;
-        showMessage: (message: string) => void;
-        showErrorMessage: (message: string) => void;
     };
 
-    let { animes, user, showMessage, showErrorMessage }: props = $props();
+    let { animes }: props = $props();
+
+    let user = store.user;
+    let userAnimeListId = store.userAnimeListId;
 
     let innerWidth = $state<number>(0);
     let innerHeight = $state<number>(0);
 
-    let userAnimeListId = $state<string | null>(
-        localStorage.getItem('userAnimeListId')
-            ? JSON.parse(localStorage.getItem('userAnimeListId')!).value
-            : null,
-    );
-
     async function addAnime(name: string, url: string) {
-        const response = await fetch(`${PUBLIC_DB}/addAnimeCollection`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                args: { name, url, userId: user.id },
-            }),
-        });
+        const response = await db.addAnimeCollection(name, url, user.id);
 
         if (!response.ok) {
-            showErrorMessage('加入收藏失敗');
+            store.errorMessage = '加入收藏失敗';
             return;
         }
-        showMessage('成功加入收藏');
+        store.successMessage = '成功加入收藏';
     }
 </script>
 
