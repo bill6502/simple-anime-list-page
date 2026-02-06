@@ -5,7 +5,9 @@
 
     let { data } = $props();
 
-    store.errorMessage = data.error;
+    $effect(() => {
+        store.message(data.error, 'error');
+    });
 
     async function gotoId() {
         const url_id = `${base}/${store.userAnimeListId}`;
