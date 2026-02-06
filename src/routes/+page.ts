@@ -5,7 +5,7 @@ import db from '$lib/db.ts';
 
 export const load: PageLoad = async ({ url }) => {
   if (url.href.includes('#')) {
-    throw redirect(307, url.href.replace('#', '?'));
+    throw redirect(302, url.href.replace('#', '?'));
   }
 
   const token_type = url.searchParams.get('token_type') ?? '';
@@ -35,7 +35,7 @@ export const load: PageLoad = async ({ url }) => {
       return { error: 'failed_to_update_animes_list', user: null, listId: '' };
     }
     const listIdJson = await updateAnimesList.json();
-    localStorage.setItem('userAnimeListId', JSON.stringify(listIdJson));
+    localStorage.setItem('userAnimeListId', listIdJson.value);
 
     if (listIdJson.value) {
       listId = listIdJson.value;
@@ -45,6 +45,10 @@ export const load: PageLoad = async ({ url }) => {
 
   store.user = user;
   store.userAnimeListId = listId;
+
+  if (store.lastAnimeListId != '') {
+    throw redirect(302, `${store.baseUrl}/${store.lastAnimeListId}`);
+  }
 
   const error = url.searchParams.get('error');
   if (!error) {

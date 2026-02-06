@@ -1,27 +1,27 @@
 <script lang="ts">
-    import { page } from '$app/stores';
     import { type Anime } from '$lib/types';
-    import { store } from '$lib/store.svelte';
+    import { page } from '$app/stores';
     import { fade } from 'svelte/transition';
-    import db from '$lib/db';
+    import { store } from '$lib/store.svelte';
     import AnimeList from '$lib/components/animeList.svelte';
+    import db from '$lib/db';
 
-    const urls = ['all', 'ani.gamer', 'anime1.me', 'hanime1.me'];
+    const urls = ['ani.gamer', 'anime1.me', 'hanime1.me'];
     const urlMap = {
-        all: '全部',
         'ani.gamer': '巴哈姆特動畫瘋',
         'anime1.me': 'Anime1',
         'hanime1.me': 'Hanime1',
     };
-    const messageDuration = 2200;
-    const user = store.user;
 
     let { data } = $props();
+
+    let innerWidth = $state<number>(0);
+    let expanding = $state<boolean>(false);
+    let showUnAuth = $state<boolean>(false);
 
     let selectedUrl = $state<string>('all');
     let animes = $state<Anime[]>([]);
 
-    let isMyAnimeList = $state<boolean>(false);
     let websites = $derived.by<string[]>(() =>
         urls.filter(
             (url) =>
@@ -58,26 +58,10 @@
             });
     });
 
-    //isMyAnimeList?
-    $effect(() => {
-        const id = $page.params.id;
-        if (!user) {
-            return;
-        }
-
-        db.updateWebsiteInfo(user.id, user.username)
-            .then((updateAnimesList) => updateAnimesList.json())
-            .then((data) => (isMyAnimeList = data.value == id))
-            .catch((error) => {
-                store.message('動畫清單更新錯誤', 'error');
-                isMyAnimeList = false;
-            });
-    });
-
     async function updateAnimeList() {
         const updateAnimesList = await db.updateWebsiteInfo(
-            user.id,
-            user.username,
+            store.user.id,
+            store.user.username,
         );
 
         if (!updateAnimesList.ok) {
@@ -111,32 +95,108 @@
                 };
             });
     }
+
+    function clear() {
+        localStorage.removeItem('user');
+        localStorage.removeItem('userAnimeListId');
+
+        store.user = null;
+        store.userAnimeListId = '';
+
+        // location.reload();
+    }
+
+    function setLastAnimeListId() {
+        localStorage.setItem('lastAnimeListId', $page.params.id!);
+    }
+
+    function toggleSourceSelection() {
+        expanding = !expanding;
+    }
 </script>
 
 <svelte:head>
     <title>動畫收藏清單</title>
-    <meta name="description" content="Anime List" />
+    <meta property="og:title" content="動畫收藏清單" />
+
+    <meta
+        name="description"
+        content={`${data.userName} 的動畫收藏清單\n取得授權後\n可將動畫加入收藏`}
+    />
+    <meta
+        property="og:description"
+        content={`${data.userName} 的動畫收藏清單\n取得授權後\n可將動畫加入收藏`}
+    />
+
+    <meta name="theme-color" content="#403f3d" />
 </svelte:head>
+
+<svelte:window bind:innerWidth />
+
 <div class="container">
-    <p class="title">{userName}</p>
+    <div class="banner">
+        <p class="title">{data.userName}</p>
+        <div class="user-info">
+            {#if store.user}
+                <img
+                    src={`https://cdn.discordapp.com/avatars/${store.user.id}/${store.user.avatar}.png`}
+                    alt="User Avatar"
+                    onclick={() => {
+                        showUnAuth = !showUnAuth;
+                    }}
+                />
+            {/if}
+            {#if !store.user}
+                <a
+                    class="dcButton"
+                    data-type="getID"
+                    onclick={setLastAnimeListId}
+                    href={store.authUrl}>取得授權</a
+                >
+            {:else if showUnAuth}
+                <button
+                    transition:fade={{ duration: 300 }}
+                    class="dcButton"
+                    type="button"
+                    data-type="clear"
+                    onclick={clear}
+                >
+                    清除授權</button
+                >
+            {/if}
+        </div>
+    </div>
     <div class="buttons">
-        {#each websites as url (url)}
-            <button
-                class={selectedUrl == url ? 'selected' : ''}
-                onclick={(e) => {
-                    selectedUrl = url;
-                    window.scrollTo(0, 0);
-                }}>{urlMap[url]}</button
+        {#if innerWidth <= 720}
+            <button class="button" onclick={toggleSourceSelection}>
+                來源</button
             >
+        {/if}
+        {#each websites as url, i (url)}
+            {#if innerWidth > 720 || expanding || url == selectedUrl}
+                <button
+                    transition:fade={{ duration: 300 }}
+                    class={selectedUrl == url ? 'button selected' : 'button'}
+                    onclick={(e) => {
+                        selectedUrl = selectedUrl != url ? url : 'all';
+                        expanding = false;
+                        window.scrollTo(0, 0);
+                    }}>{urlMap[url]}</button
+                >
+            {/if}
         {/each}
-        {#if user && isMyAnimeList}
-            <button
-                transition:fade={{ duration: 500, delay: 200 }}
-                onclick={async () => {
-                    await updateAnimeList();
-                    window.scrollTo(0, 0);
-                }}>更新</button
-            >
+        {#if store.user && data.isMyAnimeList}
+            {#if innerWidth > 720 || expanding}
+                <button
+                    transition:fade={{ duration: 300 }}
+                    class="button"
+                    onclick={async () => {
+                        expanding = false;
+                        await updateAnimeList();
+                        window.scrollTo(0, 0);
+                    }}>更新</button
+                >
+            {/if}
         {/if}
     </div>
     <div class="list">
@@ -154,6 +214,66 @@
         gap: 1rem;
     }
 
+    .banner {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        text-align: center;
+        padding: 0 0.5rem;
+        gap: 0.7rem;
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+
+        & img {
+            width: 3rem;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    }
+
+    .dcButton {
+        box-sizing: border-box;
+        position: relative;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+        padding: 0.8rem 3rem;
+        height: auto;
+        color: #ffffff;
+
+        border-radius: 0.7rem;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        text-decoration: none;
+
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+
+        &[data-type='getID'] {
+            background-color: #7289da;
+        }
+
+        &[data-type='clear'] {
+            background-color: #dd0000;
+        }
+
+        &:hover[data-type='getID'] {
+            background-color: #5865f2;
+        }
+
+        &:hover[data-type='clear'] {
+            background-color: #bb0000;
+        }
+    }
+
     .list {
         display: flex;
         flex-direction: column;
@@ -164,9 +284,13 @@
     }
 
     .title {
+        max-width: 100%;
+        box-sizing: border-box;
         font-size: 2rem;
         font-weight: bold;
         text-align: center;
+        overflow-wrap: break-word;
+        word-break: break-all;
         color: aliceblue;
     }
 
@@ -191,7 +315,13 @@
         }
     }
 
-    .buttons > button {
+    @media screen and (width <= 400px) {
+        .banner {
+            flex-direction: column;
+        }
+    }
+
+    .button {
         border: none;
         border-radius: 0.5rem;
         background-color: #d9d4cf;
@@ -211,10 +341,22 @@
             background-color 0.1s ease-in-out,
             color 0.1s ease-in-out;
 
-        &.selected,
-        &:hover {
+        &.selected {
             background-color: #63605f;
             color: #d9d4cf;
+        }
+        &:active {
+            background-color: #d9d4cf;
+            color: #7c7877;
+        }
+    }
+
+    @media (hover: hover) {
+        .button {
+            &:hover {
+                background-color: #63605f;
+                color: #d9d4cf;
+            }
         }
     }
 </style>

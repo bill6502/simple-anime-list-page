@@ -5,18 +5,10 @@
 
     let { data } = $props();
 
-    let id = $state<string>(store.userAnimeListId);
-    let user = store.user;
-
     store.errorMessage = data.error;
 
-    const url =
-        base == ''
-            ? 'https://discord.com/oauth2/authorize?client_id=1446749870101757994&response_type=token&redirect_uri=http%3A%2F%2F127.0.0.1%3A5173&scope=identify'
-            : 'https://discord.com/oauth2/authorize?client_id=1446749870101757994&response_type=token&redirect_uri=https%3A%2F%2Fbill6502.github.io%2Fsimple-anime-list-page&scope=identify';
-
     async function gotoId() {
-        const url_id = `${base}/${id}`;
+        const url_id = `${base}/${store.userAnimeListId}`;
 
         await goto(url_id, { invalidateAll: true });
     }
@@ -34,17 +26,25 @@
 </script>
 
 <svelte:head>
-    <title>動畫收藏清單</title>
-    <meta name="description" content="Anime List" />
+    <title>動畫收藏清單查詢</title>
+    <meta property="og:title" content="動畫收藏清單查詢" />
+
+    <meta name="description" content={'取得授權後\n可查看自己的動畫清單'} />
+    <meta
+        property="og:description"
+        content={'取得授權後\n可查看自己的動畫清單'}
+    />
+
+    <meta name="theme-color" content="#403f3d" />
 </svelte:head>
 <div class="container">
-    {#if user}
+    {#if store.user}
         <div class="user">
             <img
-                src={`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`}
+                src={`https://cdn.discordapp.com/avatars/${store.user.id}/${store.user.avatar}.png`}
                 alt="User Avatar"
             />
-            <p>{user.username}</p>
+            <p>{store.user.username}</p>
         </div>
     {/if}
     <form
@@ -55,15 +55,20 @@
         }}
     >
         <input
-            bind:value={id}
+            bind:value={store.userAnimeListId}
             oninput={() => (store.errorMessage = '')}
             placeholder="Enter ID"
         />
         <div class="buttons">
             <button class="search" type="submit">搜尋</button>
             <div class="dcButtons">
-                <a class="dcButton" type="button" data-type="getID" href={url}>
-                    取得ID</a
+                <a
+                    class="dcButton"
+                    type="button"
+                    data-type="getID"
+                    href={store.authUrl}
+                >
+                    取得授權</a
                 >
                 <button
                     class="dcButton"
@@ -71,7 +76,7 @@
                     data-type="clear"
                     onclick={clear}
                 >
-                    清除</button
+                    清除授權</button
                 >
             </div>
         </div>

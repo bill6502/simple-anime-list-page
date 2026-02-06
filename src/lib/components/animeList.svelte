@@ -12,14 +12,10 @@
 
     let { animes }: props = $props();
 
-    let user = store.user;
-    let userAnimeListId = store.userAnimeListId;
-
     let innerWidth = $state<number>(0);
-    let innerHeight = $state<number>(0);
 
     async function addAnime(name: string, url: string) {
-        const response = await db.addAnimeCollection(name, url, user.id);
+        const response = await db.addAnimeCollection(name, url, store.user.id);
 
         if (!response.ok) {
             store.errorMessage = '加入收藏失敗';
@@ -29,7 +25,7 @@
     }
 </script>
 
-<svelte:window bind:innerWidth bind:innerHeight />
+<svelte:window bind:innerWidth />
 
 <table>
     <tbody>
@@ -44,7 +40,7 @@
                     ><a href={anime.url} target="_blank"
                         >{innerWidth <= 820 ? '[連結]' : anime.url}</a
                     >
-                    {#if user && userAnimeListId != $page.params.id}
+                    {#if store.user && store.userAnimeListId != $page.params.id}
                         <button
                             onclick={async () => {
                                 await addAnime(anime.name, anime.url);

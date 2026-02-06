@@ -2,9 +2,9 @@
 // it so that it gets served as a static asset in production
 
 import { browser } from '$app/environment';
-import { base } from '$app/paths';
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
+import { store } from '$lib/store.svelte';
 import db from '$lib/db';
 
 export const load: PageLoad = async ({ params }) => {
@@ -13,7 +13,7 @@ export const load: PageLoad = async ({ params }) => {
   }
 
   const { id } = params;
-  const host = `${base}/`;
+  const host = `${store.baseUrl}/`;
 
   const checkResponse = await db.checkWebsiteInfoBy_Id(id);
 
@@ -35,8 +35,20 @@ export const load: PageLoad = async ({ params }) => {
 
   const data = await response.json();
 
+  store.lastAnimeListId = '';
+  localStorage.removeItem('lastAnimeListId');
+
+  if (store.user && store.userAnimeListId == id) {
+    return {
+      animes: data.value.animes,
+      userName: data.value.userName,
+      isMyAnimeList: true,
+    };
+  }
+
   return {
     animes: data.value.animes,
     userName: data.value.userName,
+    isMyAnimeList: false,
   };
 };
