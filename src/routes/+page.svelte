@@ -157,6 +157,8 @@
         align-items: center;
         flex-direction: row;
         justify-content: center;
+        text-align: center;
+        line-height: 1.5;
         padding: 0.8rem 3rem;
         width: 100%;
         height: auto;

@@ -20,6 +20,7 @@
     let showUnAuth = $state<boolean>(false);
 
     let selectedUrl = $state<string>('all');
+    let searchQuery = $state<string>('');
     let animes = $state<Anime[]>([]);
 
     let websites = $derived.by<string[]>(() =>
@@ -30,11 +31,19 @@
         ),
     );
     let selectedAnime = $derived.by<Anime[]>(() =>
-        animes.filter(
-            (anime) =>
-                selectedUrl == 'all' ||
-                anime.url.includes('https://' + selectedUrl),
-        ),
+        animes
+            .filter(
+                (anime) =>
+                    selectedUrl == 'all' ||
+                    anime.url.includes('https://' + selectedUrl),
+            )
+            .filter(
+                (anime) =>
+                    searchQuery == '' ||
+                    anime.name
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase()),
+            ),
     );
     let userName = $derived<string>(data.userName);
 
@@ -185,6 +194,7 @@
             {/if}
         {/if}
     </div>
+    <input bind:value={searchQuery} placeholder="搜尋動畫" />
     <div class="list">
         <AnimeList animes={selectedAnime} />
     </div>
@@ -198,6 +208,20 @@
         justify-content: center;
         align-items: center;
         gap: 1rem;
+
+        & input {
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.5rem;
+            height: 3rem;
+            text-align: center;
+            align-items: center;
+            background-color: #d9d4cf;
+            color: #7c7877;
+        }
     }
 
     .banner {
@@ -206,7 +230,7 @@
         align-items: center;
         justify-content: space-between;
         text-align: center;
-        padding: 0 0.5rem;
+        padding: 0 0.3rem;
         gap: 0.7rem;
     }
 
@@ -214,6 +238,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
+        justify-content: flex-end;
         gap: 0.5rem;
 
         & img {
@@ -303,7 +328,7 @@
 
     @media screen and (width <= 400px) {
         .banner {
-            flex-direction: column;
+            flex-direction: column-reverse;
         }
     }
 
