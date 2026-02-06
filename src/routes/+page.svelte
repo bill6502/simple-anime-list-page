@@ -27,15 +27,6 @@
 
 <svelte:head>
     <title>動畫收藏清單查詢</title>
-    <meta property="og:title" content="動畫收藏清單查詢" />
-
-    <meta name="description" content={'取得授權後\n可查看自己的動畫清單'} />
-    <meta
-        property="og:description"
-        content={'取得授權後\n可查看自己的動畫清單'}
-    />
-
-    <meta name="theme-color" content="#403f3d" />
 </svelte:head>
 <div class="container">
     {#if store.user}

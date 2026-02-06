@@ -117,18 +117,6 @@
 
 <svelte:head>
     <title>動畫收藏清單</title>
-    <meta property="og:title" content="動畫收藏清單" />
-
-    <meta
-        name="description"
-        content={`${data.userName} 的動畫收藏清單\n取得授權後\n可將動畫加入收藏`}
-    />
-    <meta
-        property="og:description"
-        content={`${data.userName} 的動畫收藏清單\n取得授權後\n可將動畫加入收藏`}
-    />
-
-    <meta name="theme-color" content="#403f3d" />
 </svelte:head>
 
 <svelte:window bind:innerWidth />
