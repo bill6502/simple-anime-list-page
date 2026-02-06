@@ -102,8 +102,6 @@
 
         store.user = null;
         store.userAnimeListId = '';
-
-        // location.reload();
     }
 
     function setLastAnimeListId() {

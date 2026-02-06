@@ -5,12 +5,14 @@
 
     let { data } = $props();
 
+    let animeListId = $state<string>(store.userAnimeListId);
+
     $effect(() => {
         store.message(data.error, 'error');
     });
 
     async function gotoId() {
-        const url_id = `${base}/${store.userAnimeListId}`;
+        const url_id = `${base}/${animeListId}`;
 
         await goto(url_id, { invalidateAll: true });
     }
@@ -48,7 +50,7 @@
         }}
     >
         <input
-            bind:value={store.userAnimeListId}
+            bind:value={animeListId}
             oninput={() => (store.errorMessage = '')}
             placeholder="Enter ID"
         />
