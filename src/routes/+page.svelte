@@ -97,7 +97,7 @@
     <p class="title">資料庫內所有動畫 總計{animes.length}部</p>
     <div class="panel">
         <input bind:value={searchQuery} placeholder="搜尋動畫" />
-        {#if searchQuery}
+        {#if store.user && searchQuery}
             <div class="addPanel">
                 <p>加入動畫</p>
                 <div class="addPanelInputs">
