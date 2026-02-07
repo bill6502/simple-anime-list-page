@@ -54,10 +54,13 @@
                         >
                     {/if}
                     {#if innerWidth > 720 || expanding}
-                        {@render nav('首頁', '/')}
+                        {@render nav('首頁', `${store.baseUrl}/`)}
 
                         {#if store.user && store.userAnimeListId}
-                            {@render nav('收藏', `/${store.userAnimeListId}`)}
+                            {@render nav(
+                                '收藏',
+                                `${store.baseUrl}/${store.userAnimeListId}`,
+                            )}
                         {/if}
                     {/if}
                 </div>
