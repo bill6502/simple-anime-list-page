@@ -88,11 +88,7 @@
             await gotoId();
         }}
     >
-        <input
-            bind:value={animeListId}
-            oninput={() => (store.errorMessage = '')}
-            placeholder="搜尋動畫清單ID"
-        />
+        <input bind:value={animeListId} placeholder="搜尋動畫清單ID" />
     </form>
     <p class="title">資料庫內所有動畫 總計{animes.length}部</p>
     <div class="panel">

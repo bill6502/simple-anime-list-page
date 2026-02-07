@@ -1,4 +1,5 @@
 import { base } from '$app/paths';
+import { clearTimeout } from 'node:timers';
 
 type storeType = {
   baseUrl: string;
@@ -21,11 +22,15 @@ const user = localStorage.getItem('user');
 const userAnimeListId = localStorage.getItem('userAnimeListId');
 const lastAnimeListId = localStorage.getItem('lastAnimeListId');
 
+let messageClearTimeout: number | null = null;
 function message(message: string, type: 'success' | 'error') {
   if (type == 'success') store.successMessage = message;
   if (type == 'error') store.errorMessage = message;
 
-  setTimeout(() => {
+  if (messageClearTimeout !== null) {
+    clearTimeout(messageClearTimeout);
+  }
+  messageClearTimeout = setTimeout(() => {
     store.successMessage = '';
     store.errorMessage = '';
   }, 3000);
