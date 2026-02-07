@@ -4,7 +4,7 @@
     import { page } from '$app/state';
     import { innerWidth } from 'svelte/reactivity/window';
     import MessageBlock from '$lib/components/messageBlock.svelte';
-    import Banner from '$lib/components/banner.svelte';
+    import Nav from '$lib/components/banner.svelte';
     import './layout.css';
 
     let { children } = $props();
@@ -35,7 +35,7 @@
 
 <div class="app">
     <main>
-        <Banner />
+        <Nav />
         {@render children()}
     </main>
 

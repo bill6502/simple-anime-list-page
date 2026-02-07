@@ -32,7 +32,7 @@
     <a class={innerWidth.current! <= 720 ? 'button' : ''} {href}>{title}</a>
 {/snippet}
 
-<div class="banner">
+<div class="container">
     <p class="title">動畫清單</p>
 
     <div class="nav">
@@ -88,7 +88,7 @@
 </div>
 
 <style>
-    .banner {
+    .container {
         display: flex;
         width: 100%;
         min-height: 4rem;
@@ -208,7 +208,7 @@
     }
 
     @media screen and (width <= 720px) {
-        .banner {
+        .container {
             flex-direction: column;
             gap: 1rem;
             padding: 0;
