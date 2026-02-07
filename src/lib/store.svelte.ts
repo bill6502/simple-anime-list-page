@@ -1,5 +1,4 @@
 import { base } from '$app/paths';
-import { clearTimeout } from 'node:timers';
 
 type storeType = {
   baseUrl: string;
