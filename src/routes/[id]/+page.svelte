@@ -1,12 +1,11 @@
 <script lang="ts">
-    import { type Anime } from '$lib/types';
+    import { urls, type Anime } from '$lib/types';
     import { page } from '$app/stores';
     import { fade } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import AnimeList from '$lib/components/animeList.svelte';
     import db from '$lib/db';
 
-    const urls = ['ani.gamer', 'anime1.me', 'hanime1.me'];
     const urlMap = {
         'ani.gamer': '巴哈姆特動畫瘋',
         'anime1.me': 'Anime1',
@@ -17,7 +16,6 @@
 
     let innerWidth = $state<number>(0);
     let expanding = $state<boolean>(false);
-    let showUnAuth = $state<boolean>(false);
 
     let selectedUrl = $state<string>('all');
     let searchQuery = $state<string>('');
@@ -67,6 +65,12 @@
             });
     });
 
+    $effect(() => {
+        if (innerWidth > 720) {
+            expanding = false;
+        }
+    });
+
     async function updateAnimeList() {
         const updateAnimesList = await db.updateWebsiteInfo(
             store.user.id,
@@ -105,18 +109,6 @@
             });
     }
 
-    function clear() {
-        localStorage.removeItem('user');
-        localStorage.removeItem('userAnimeListId');
-
-        store.user = null;
-        store.userAnimeListId = '';
-    }
-
-    function setLastAnimeListId() {
-        localStorage.setItem('lastAnimeListId', $page.params.id!);
-    }
-
     function toggleSourceSelection() {
         expanding = !expanding;
     }
@@ -129,38 +121,7 @@
 <svelte:window bind:innerWidth />
 
 <div class="container">
-    <div class="banner">
-        <p class="title">{data.userName}</p>
-        <div class="user-info">
-            {#if store.user}
-                <img
-                    src={`https://cdn.discordapp.com/avatars/${store.user.id}/${store.user.avatar}.png`}
-                    alt="User Avatar"
-                    onclick={() => {
-                        showUnAuth = !showUnAuth;
-                    }}
-                />
-            {/if}
-            {#if !store.user}
-                <a
-                    class="dcButton"
-                    data-type="getID"
-                    onclick={setLastAnimeListId}
-                    href={store.authUrl}>取得授權</a
-                >
-            {:else if showUnAuth}
-                <button
-                    transition:fade={{ duration: 300 }}
-                    class="dcButton"
-                    type="button"
-                    data-type="clear"
-                    onclick={clear}
-                >
-                    清除授權</button
-                >
-            {/if}
-        </div>
-    </div>
+    <p class="title">{data.userName}</p>
     <div class="buttons">
         {#if innerWidth <= 720}
             <button class="button" onclick={toggleSourceSelection}>
@@ -224,67 +185,6 @@
         }
     }
 
-    .banner {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        justify-content: space-between;
-        text-align: center;
-        padding: 0 0.3rem;
-        gap: 0.7rem;
-    }
-
-    .user-info {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 0.5rem;
-
-        & img {
-            width: 3rem;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-    }
-
-    .dcButton {
-        box-sizing: border-box;
-        position: relative;
-        display: flex;
-        align-items: center;
-        flex-direction: row;
-        justify-content: center;
-        padding: 0.8rem 3rem;
-        height: auto;
-        color: #ffffff;
-
-        border-radius: 0.7rem;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        text-decoration: none;
-
-        transition: background-color 0.3s ease;
-        cursor: pointer;
-
-        &[data-type='getID'] {
-            background-color: #7289da;
-        }
-
-        &[data-type='clear'] {
-            background-color: #dd0000;
-        }
-
-        &:hover[data-type='getID'] {
-            background-color: #5865f2;
-        }
-
-        &:hover[data-type='clear'] {
-            background-color: #bb0000;
-        }
-    }
-
     .list {
         display: flex;
         flex-direction: column;
@@ -323,12 +223,6 @@
     @media screen and (width <= 720px) {
         .buttons {
             flex-direction: column;
-        }
-    }
-
-    @media screen and (width <= 400px) {
-        .banner {
-            flex-direction: column-reverse;
         }
     }
 

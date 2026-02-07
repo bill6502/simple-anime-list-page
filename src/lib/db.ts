@@ -1,5 +1,17 @@
 import { PUBLIC_DB } from '$env/static/public';
 
+async function getAllAnimes() {
+  return await fetch(`${PUBLIC_DB}/getAllAnimes`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      args: {},
+    }),
+  });
+}
+
 async function addAnimeCollection(name: string, url: string, userId: string) {
   return await fetch(`${PUBLIC_DB}/addAnimeCollection`, {
     method: 'POST',
@@ -45,6 +57,7 @@ async function checkWebsiteInfoBy_Id(id: string) {
 }
 
 export default {
+  getAllAnimes,
   addAnimeCollection,
   updateWebsiteInfo,
   getWebsiteInfoBy_Id,

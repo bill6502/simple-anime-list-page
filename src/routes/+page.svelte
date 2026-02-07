@@ -1,49 +1,88 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-    import { base } from '$app/paths';
     import { store } from '$lib/store.svelte';
+    import AnimeList from '$lib/components/animeList.svelte';
+    import { urls, type Anime } from '$lib/types';
+    import db from '$lib/db';
 
     let { data } = $props();
 
-    let animeListId = $state<string>(store.userAnimeListId);
+    let animeListId = $state<string>('');
+    let animes = $state<Anime[]>(data.animes);
+
+    let searchQuery = $state<string>('');
+    let filteredAnimes = $derived.by<Anime[]>(() =>
+        animes.filter(
+            (anime) =>
+                searchQuery == '' ||
+                anime.name
+                    .toLocaleLowerCase()
+                    .includes(searchQuery.toLocaleLowerCase()),
+        ),
+    );
+
+    let addAnimeName = $state<string>('');
+    let addAnimeUrl = $state<string>('');
 
     $effect(() => {
         store.message(data.error, 'error');
     });
 
     async function gotoId() {
-        const url_id = `${base}/${animeListId}`;
+        const url_id = `${store.baseUrl}/${animeListId}`;
 
         await goto(url_id, { invalidateAll: true });
     }
 
-    async function clear() {
-        localStorage.removeItem('user');
-        localStorage.removeItem('userAnimeListId');
+    async function addAnime() {
+        if (addAnimeName == '' || addAnimeUrl == '') {
+            store.message('請輸入動畫名稱與網址', 'error');
+            return;
+        }
+        if (
+            animes.some((anime) => anime.name == addAnimeName) ||
+            animes.some((anime) => anime.url == addAnimeUrl)
+        ) {
+            store.message('動畫已存在', 'error');
+            return;
+        }
 
-        store.user = null;
-        store.userAnimeListId = '';
+        const regex = urls.map((url) => `(${url})`).join('|');
+        if (!addAnimeUrl.match(regex)) {
+            store.message(
+                '可加入網址僅限 ani.gamer , anime1.me , hanime1.me',
+                'error',
+            );
+            return;
+        }
 
-        await goto(`${base}/`);
-        location.reload();
+        const response = await db.addAnimeCollection(
+            addAnimeName,
+            addAnimeUrl,
+            store.user.id,
+        );
+        if (response.ok) {
+            store.message('動畫已加入', 'success');
+
+            let from = '';
+            for (const url of urls) {
+                if (addAnimeUrl.includes('https://' + url)) {
+                    from = url.replace('.', '');
+                }
+            }
+            animes.push({ name: addAnimeName, url: addAnimeUrl, from });
+        } else {
+            store.message('加入失敗', 'error');
+        }
     }
 </script>
 
 <svelte:head>
-    <title>動畫收藏清單查詢</title>
+    <title>動畫清單</title>
 </svelte:head>
 <div class="container">
-    {#if store.user}
-        <div class="user">
-            <img
-                src={`https://cdn.discordapp.com/avatars/${store.user.id}/${store.user.avatar}.png`}
-                alt="User Avatar"
-            />
-            <p>{store.user.username}</p>
-        </div>
-    {/if}
     <form
-        class="search-container"
+        class="searchLlistId"
         onsubmit={async (e) => {
             e.preventDefault();
             await gotoId();
@@ -52,30 +91,26 @@
         <input
             bind:value={animeListId}
             oninput={() => (store.errorMessage = '')}
-            placeholder="Enter ID"
+            placeholder="搜尋動畫清單ID"
         />
-        <div class="buttons">
-            <button class="search" type="submit">搜尋</button>
-            <div class="dcButtons">
-                <a
-                    class="dcButton"
-                    type="button"
-                    data-type="getID"
-                    href={store.authUrl}
-                >
-                    取得授權</a
-                >
-                <button
-                    class="dcButton"
-                    type="button"
-                    data-type="clear"
-                    onclick={clear}
-                >
-                    清除授權</button
-                >
-            </div>
-        </div>
     </form>
+    <p class="title">資料庫內所有動畫 總計{animes.length}部</p>
+    <div class="panel">
+        <input bind:value={searchQuery} placeholder="搜尋動畫" />
+        {#if searchQuery}
+            <div class="addPanel">
+                <p>加入動畫</p>
+                <div class="addPanelInputs">
+                    <input bind:value={addAnimeName} placeholder="動畫名稱" />
+                    <input bind:value={addAnimeUrl} placeholder="動畫網址" />
+                </div>
+                <button onclick={addAnime} class="button">加入</button>
+            </div>
+        {/if}
+    </div>
+    <div class="list">
+        <AnimeList animes={filteredAnimes} />
+    </div>
 </div>
 
 <style>
@@ -85,19 +120,42 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin: auto 0;
         gap: 1rem;
     }
 
-    .search-container {
-        width: 60%;
+    .title {
+        max-width: 100%;
+        box-sizing: border-box;
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        overflow-wrap: break-word;
+        word-break: break-all;
+        color: aliceblue;
+    }
+
+    .list {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         align-items: center;
-        gap: 1rem;
+        border-radius: 0.7rem;
+        overflow: hidden;
     }
 
-    .search-container > input,
+    .searchLlistId {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+
+        & button {
+            width: 30%;
+        }
+    }
+
+    .searchLlistId > input,
     button,
     a {
         box-sizing: border-box;
@@ -109,111 +167,116 @@
         text-decoration: none;
     }
 
-    .search-container > input {
+    .searchLlistId > input {
         width: 100%;
         height: 2rem;
         cursor: unset;
         text-align: center;
+        background-color: #d9d4cf;
+        color: #7c7877;
     }
 
-    .buttons {
+    .panel {
+        width: 100%;
         display: flex;
-        width: 100%;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
-        text-align: center;
-        word-break: break-all;
         gap: 1rem;
-    }
 
-    .search {
-        justify-content: center;
-        padding: 0.8rem 3rem;
-        width: 100%;
-        height: auto;
-        transition: background-color 0.3s ease;
-
-        &:hover {
-            background-color: #c0c0c0;
+        & input {
+            width: 100%;
+            height: 2rem;
+            text-align: center;
+            box-sizing: border-box;
+            border-radius: 0.7rem;
+            padding: 1.5rem 2rem;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            background-color: #d9d4cf;
+            color: #7c7877;
         }
     }
 
-    .dcButtons {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        word-break: break-all;
+    .addPanel {
         width: 100%;
-        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         gap: 1rem;
-        padding: 0 5rem;
+
+        & p {
+            max-width: 100%;
+            box-sizing: border-box;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            color: aliceblue;
+        }
     }
 
-    .dcButton {
-        position: relative;
-        display: flex;
-        align-items: center;
-        flex-direction: row;
-        justify-content: center;
-        text-align: center;
-        line-height: 1.5;
-        padding: 0.8rem 3rem;
+    .addPanelInputs {
         width: 100%;
-        height: auto;
-        color: #ffffff;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
 
-        transition: background-color 0.3s ease;
+        & input {
+            width: 50%;
+            height: 2rem;
+            cursor: unset;
+            text-align: center;
+            background-color: #d9d4cf;
+            color: #7c7877;
+        }
+    }
+
+    .addPanelInputs > input {
+        width: 100%;
+        height: 2rem;
+        cursor: unset;
+        text-align: center;
+        background-color: #d9d4cf;
+        color: #7c7877;
+    }
+
+    .button {
+        border: none;
+        border-radius: 0.5rem;
+        background-color: #d9d4cf;
+        color: #7c7877;
         cursor: pointer;
 
-        &[data-type='getID'] {
-            background-color: #7289da;
-        }
-
-        &[data-type='clear'] {
-            background-color: #dd0000;
-        }
-
-        &:hover[data-type='getID'] {
-            background-color: #5865f2;
-        }
-
-        &:hover[data-type='clear'] {
-            background-color: #bb0000;
-        }
-    }
-
-    .user {
-        position: absolute;
-        bottom: 120%;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        display: inline-flex;
         justify-content: center;
-        text-align: center;
-        word-break: break-all;
-        gap: 0.5rem;
+        align-items: center;
+        white-space: nowrap;
 
-        img {
-            width: 5rem;
-            height: 5rem;
-            border-radius: 50%;
-        }
+        overflow: hidden;
+        width: 100%;
+        height: 3rem;
 
-        p {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #ffffff;
+        transition:
+            background-color 0.1s ease-in-out,
+            color 0.1s ease-in-out;
+
+        &:active {
+            background-color: #d9d4cf;
+            color: #7c7877;
         }
     }
 
-    @media screen and (width <= 850px) {
-        .dcButtons {
+    @media (width <= 720px) {
+        .addPanelInputs {
             flex-direction: column;
-            padding: 0;
+            /*align-items: stretch;*/
+        }
+
+        .addPanelInputs > input {
+            width: 100%;
         }
     }
 </style>
