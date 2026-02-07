@@ -1,8 +1,8 @@
 <script lang="ts">
     import { urls, type Anime } from '$lib/types';
-    import { page } from '$app/stores';
     import { fade } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
+    import { innerWidth } from 'svelte/reactivity/window';
     import AnimeList from '$lib/components/animeList.svelte';
     import db from '$lib/db';
 
@@ -14,7 +14,6 @@
 
     let { data } = $props();
 
-    let innerWidth = $state<number>(0);
     let expanding = $state<boolean>(false);
 
     let selectedUrl = $state<string>('all');
@@ -66,7 +65,7 @@
     });
 
     $effect(() => {
-        if (innerWidth > 720) {
+        if (innerWidth.current! > 720) {
             expanding = false;
         }
     });
@@ -118,18 +117,16 @@
     <title>動畫收藏清單</title>
 </svelte:head>
 
-<svelte:window bind:innerWidth />
-
 <div class="container">
     <p class="title">{data.userName}</p>
     <div class="buttons">
-        {#if innerWidth <= 720}
+        {#if innerWidth.current! <= 720}
             <button class="button" onclick={toggleSourceSelection}>
                 來源</button
             >
         {/if}
         {#each websites as url, i (url)}
-            {#if innerWidth > 720 || expanding || url == selectedUrl}
+            {#if innerWidth.current! > 720 || expanding || url == selectedUrl}
                 <button
                     transition:fade={{ duration: 300 }}
                     class={selectedUrl == url ? 'button selected' : 'button'}
@@ -142,7 +139,7 @@
             {/if}
         {/each}
         {#if store.user && data.isMyAnimeList}
-            {#if innerWidth > 720 || expanding}
+            {#if innerWidth.current! > 720 || expanding}
                 <button
                     transition:fade={{ duration: 300 }}
                     class="button"

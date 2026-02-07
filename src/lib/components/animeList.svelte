@@ -3,16 +3,15 @@
     import { type Anime } from '$lib/types';
     import { flip } from 'svelte/animate';
     import { fade } from 'svelte/transition';
-    import db from '$lib/db';
     import { store } from '$lib/store.svelte';
+    import { innerWidth } from 'svelte/reactivity/window';
+    import db from '$lib/db';
 
     type props = {
         animes: Anime[];
     };
 
     let { animes }: props = $props();
-
-    let innerWidth = $state<number>(0);
 
     async function addAnime(name: string, url: string) {
         const response = await db.addAnimeCollection(name, url, store.user.id);
@@ -25,8 +24,6 @@
     }
 </script>
 
-<svelte:window bind:innerWidth />
-
 <table>
     <tbody>
         {#each animes as anime (anime.name)}
@@ -38,7 +35,7 @@
                 <td class="tdName testLeftSide">{anime.name}</td>
                 <td class="tdURL" data-from={anime.from}
                     ><a href={anime.url} target="_blank"
-                        >{innerWidth <= 820 ? '[連結]' : anime.url}</a
+                        >{innerWidth.current! <= 820 ? '[連結]' : anime.url}</a
                     >
                     {#if store.user && store.userAnimeListId != $page.params.id}
                         <button
