@@ -132,7 +132,7 @@
         {#each websites as url, i (url)}
             {#if innerWidth.current! > 720 || expanding || url == selectedUrl}
                 <button
-                    transition:fade={{ duration: 300 }}
+                    in:fade={{ duration: 300 }}
                     class={selectedUrl == url ? 'button selected' : 'button'}
                     onclick={(e) => {
                         selectedUrl = selectedUrl != url ? url : 'all';
@@ -146,7 +146,7 @@
         {#if store.user && data.isMyAnimeList}
             {#if innerWidth.current! > 720 || expanding}
                 <button
-                    transition:fade={{ duration: 300 }}
+                    in:fade={{ duration: 500 }}
                     class="button"
                     onclick={async () => {
                         expanding = false;

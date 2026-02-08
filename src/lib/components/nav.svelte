@@ -5,9 +5,17 @@
     import { innerWidth } from 'svelte/reactivity/window';
     import { goto } from '$app/navigation';
 
+    let pictureUrl = $derived.by<string>(() =>
+        store.user
+            ? `https://cdn.discordapp.com/avatars/${store.user.id}/${store.user.avatar}.png`
+            : 'https://cdn-icons-png.flaticon.com/512/17561/17561717.png ',
+    );
+
     let animeListId = $state<string>('');
-    let showUnAuth = $state<boolean>(false);
+    let showAuth = $state<boolean>(false);
     let expanding = $state<boolean>(false);
+
+    let collectNav = $state<HTMLElement | undefined>(undefined);
 
     $effect(() => {
         if (innerWidth.current! > 720) {
@@ -16,9 +24,16 @@
     });
 
     function setLastAnimeListId() {
+        if (store.user) {
+            store.message('已取得授權', 'success');
+            return;
+        }
+
         if (page.params.id) {
             localStorage.setItem('lastAnimeListId', page.params.id);
         }
+
+        window.location.href = store.authUrl;
     }
 
     function clear() {
@@ -36,8 +51,14 @@
     }
 </script>
 
-{#snippet nav(title: string, href: string)}
-    <a class={innerWidth.current! <= 720 ? 'button' : ''} {href}>{title}</a>
+{#snippet nav(title: string, href: string, enabled: boolean)}
+    <a
+        in:fade={{ duration: 500 }}
+        class={innerWidth.current! <= 720
+            ? `button ${enabled ? '' : 'disabled'}`
+            : `${enabled ? '' : 'disabled'}`}
+        {href}>{title}</a
+    >
 {/snippet}
 <div class="container">
     <div class="main">
@@ -51,14 +72,12 @@
                     >
                 {/if}
                 {#if innerWidth.current! > 720 || expanding}
-                    {@render nav('首頁', `${store.baseUrl}/`)}
-
-                    {#if store.user && store.userAnimeListId}
-                        {@render nav(
-                            '收藏',
-                            `${store.baseUrl}/${store.userAnimeListId}`,
-                        )}
-                    {/if}
+                    {@render nav('首頁', `${store.baseUrl}/`, true)}
+                    {@render nav(
+                        '收藏',
+                        `${store.baseUrl}/${store.userAnimeListId}`,
+                        store.user && store.userAnimeListId,
+                    )}
                 {/if}
             </div>
             <form onsubmit={gotoId}>
@@ -66,32 +85,30 @@
             </form>
             {#if innerWidth.current! > 720 || expanding}
                 <div class="user-info">
-                    {#if store.user}
-                        <img
-                            src={`https://cdn.discordapp.com/avatars/${store.user.id}/${store.user.avatar}.png`}
-                            alt="User Avatar"
-                            onclick={() => {
-                                showUnAuth = !showUnAuth;
-                            }}
-                        />
-                    {/if}
-                    {#if !store.user}
-                        <a
-                            class="dcButton"
-                            data-type="getID"
-                            onclick={setLastAnimeListId}
-                            href={store.authUrl}>取得授權</a
-                        >
-                    {:else if showUnAuth}
-                        <button
-                            transition:fade={{ duration: 300 }}
-                            class="dcButton"
-                            type="button"
-                            data-type="clear"
-                            onclick={clear}
-                        >
-                            清除授權</button
-                        >
+                    <div
+                        class="user-avatar"
+                        onclick={() => (showAuth = !showAuth)}
+                    >
+                        <img src={pictureUrl} alt="User Avatar" />
+                    </div>
+                    {#if showAuth}
+                        <div class="auth-container">
+                            <button
+                                in:fade={{ duration: 300 }}
+                                class="button"
+                                data-type="getID"
+                                onclick={setLastAnimeListId}>取得授權</button
+                            >
+                            <button
+                                in:fade={{ duration: 300 }}
+                                class="button"
+                                type="button"
+                                data-type="clear"
+                                onclick={clear}
+                            >
+                                清除授權</button
+                            >
+                        </div>
                     {/if}
                 </div>
             {/if}
@@ -118,7 +135,6 @@
             width: 100%;
             border: none;
             margin: 0;
-            /*margin-top: 1rem;*/
             border-top: 0.1rem solid #ccc;
         }
     }
@@ -180,54 +196,54 @@
         gap: 2rem;
     }
 
+    .disabled {
+        display: none !important;
+    }
+
     .user-info {
+        position: relative;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
 
+        .auth-container {
+            max-width: 30rem;
+            display: flex;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-75%);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.5rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            gap: 0.5rem;
+
+            background-color: #7c7877;
+
+            z-index: 11;
+            .button {
+                width: 10rem;
+                background-color: #d9d4cf;
+                color: #7c7877;
+            }
+
+            .button:hover {
+                background-color: #6b6766;
+                color: #d9d4cf;
+            }
+        }
+    }
+
+    .user-avatar {
         & img {
             width: 4rem;
             border-radius: 50%;
             cursor: pointer;
-        }
-    }
-
-    .dcButton {
-        box-sizing: border-box;
-        position: relative;
-        display: flex;
-        align-items: center;
-        flex-direction: row;
-        justify-content: center;
-        padding: 0.8rem 3rem;
-        height: auto;
-        color: #ffffff;
-
-        border-radius: 0.7rem;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        text-decoration: none;
-
-        transition: background-color 0.3s ease;
-        cursor: pointer;
-
-        &[data-type='getID'] {
-            background-color: #7289da;
-        }
-
-        &[data-type='clear'] {
-            background-color: #dd0000;
-        }
-
-        &:hover[data-type='getID'] {
-            background-color: #5865f2;
-        }
-
-        &:hover[data-type='clear'] {
-            background-color: #bb0000;
         }
     }
 
@@ -291,6 +307,19 @@
             flex-direction: column;
             width: 100%;
             gap: 1rem;
+        }
+
+        .user-info {
+            .auth-container {
+                transform: translateX(-50%);
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+
+                .button {
+                    min-width: 10rem;
+                }
+            }
         }
     }
 </style>
