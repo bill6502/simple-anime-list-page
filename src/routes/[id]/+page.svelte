@@ -1,10 +1,12 @@
 <script lang="ts">
+    import { page } from '$app/state';
     import { urls, type Anime } from '$lib/types';
     import { fade } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';
     import AnimeList from '$lib/components/animeList.svelte';
     import db from '$lib/db';
+    import { goto } from '$app/navigation';
 
     const urlMap = {
         'ani.gamer': '巴哈姆特動畫瘋',
@@ -70,6 +72,12 @@
         }
     });
 
+    $effect(() => {
+        if (page.url.searchParams.get('from')) {
+            goto(page.url.pathname);
+        }
+    });
+
     async function updateAnimeList() {
         const updateAnimesList = await db.updateWebsiteInfo(
             store.user.id,
@@ -112,6 +120,11 @@
     function toggleSourceSelection() {
         expanding = !expanding;
     }
+
+    function copyListId() {
+        navigator.clipboard.writeText(page.params.id!);
+        store.message('已複製清單ID至剪貼簿', 'success');
+    }
 </script>
 
 <svelte:head>
@@ -120,7 +133,9 @@
 
 <div class="container">
     <div class="title">
-        <p>{data.userName}</p>
+        <p class="copy" title="點擊以複製清單ID" onclick={copyListId}>
+            {data.userName}
+        </p>
         <p>{animes.length}部動畫</p>
     </div>
     <div class="buttons">
@@ -164,6 +179,12 @@
 </div>
 
 <style>
+    .copy {
+        cursor: pointer;
+        &:hover {
+            color: #c0c0c0;
+        }
+    }
     .container {
         position: relative;
         display: flex;

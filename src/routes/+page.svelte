@@ -1,6 +1,8 @@
 <script lang="ts">
     import { store } from '$lib/store.svelte';
     import { urls, type Anime } from '$lib/types';
+    import { goto } from '$app/navigation';
+    import { page } from '$app/state';
     import AnimeList from '$lib/components/animeList.svelte';
     import db from '$lib/db';
 
@@ -25,6 +27,9 @@
 
     $effect(() => {
         store.message(data.error, 'error');
+        if (page.url.searchParams.get('error')) {
+            goto(page.url.pathname);
+        }
     });
 
     async function addAnime() {

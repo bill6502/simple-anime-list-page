@@ -88,8 +88,9 @@
                     <div
                         class="user-avatar"
                         onclick={() => (showAuth = !showAuth)}
+                        title="點擊以顯示/隱藏"
                     >
-                        <img src={pictureUrl} alt="User Avatar" />
+                        <img src={pictureUrl} />
                     </div>
                     {#if showAuth}
                         <div class="auth-container">
@@ -214,7 +215,7 @@
             position: absolute;
             top: 100%;
             left: 50%;
-            transform: translateX(-75%);
+            transform: translateX(calc(-50% - 4rem));
             flex-direction: column;
             align-items: center;
             justify-content: center;
