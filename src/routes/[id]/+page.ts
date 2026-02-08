@@ -7,7 +7,7 @@ import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import db from '$lib/db';
 
-export const load: PageLoad = async ({ params, fetch }) => {
+export const load: PageLoad = async ({ url, params, fetch }) => {
   if (!browser) {
     return { animes: [], userName: '' };
   }
@@ -16,8 +16,10 @@ export const load: PageLoad = async ({ params, fetch }) => {
     store.fetch = fetch;
   }
 
+  store.message(url.searchParams.get('error') ?? '', 'error');
+
   const { id } = params;
-  const host = `${store.baseUrl}/`;
+  const host = `${store.baseUrl}${url.searchParams.get('from')}`;
 
   const checkResponse = await db.checkWebsiteInfoBy_Id(id);
 

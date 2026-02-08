@@ -106,6 +106,7 @@
                     from: from,
                 };
             });
+        store.message('已成功更新', 'success');
     }
 
     function toggleSourceSelection() {
@@ -118,7 +119,10 @@
 </svelte:head>
 
 <div class="container">
-    <p class="title">{data.userName}</p>
+    <div class="title">
+        <p>{data.userName}</p>
+        <p>{animes.length}部動畫</p>
+    </div>
     <div class="buttons">
         {#if innerWidth.current! <= 720}
             <button class="button" onclick={toggleSourceSelection}>
@@ -134,7 +138,8 @@
                         selectedUrl = selectedUrl != url ? url : 'all';
                         expanding = false;
                         window.scrollTo(0, 0);
-                    }}>{urlMap[url]}</button
+                    }}
+                    >{`${urlMap[url]}(${animes.filter((anime) => anime.url.includes('https://' + url)).length})`}</button
                 >
             {/if}
         {/each}
@@ -197,14 +202,22 @@
     }
 
     .title {
-        max-width: 100%;
         box-sizing: border-box;
-        font-size: 2rem;
-        font-weight: bold;
-        text-align: center;
-        overflow-wrap: break-word;
-        word-break: break-all;
-        color: aliceblue;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 3rem;
+
+        p {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            color: aliceblue;
+        }
     }
 
     .buttons {
@@ -223,6 +236,9 @@
     }
 
     @media screen and (width <= 720px) {
+        .title {
+            flex-direction: column;
+        }
         .buttons {
             flex-direction: column;
         }
@@ -235,7 +251,7 @@
         color: #7c7877;
         cursor: pointer;
 
-        display: inline-flex;
+        display: flex;
         justify-content: center;
         align-items: center;
         white-space: nowrap;

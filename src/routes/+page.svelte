@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
     import { store } from '$lib/store.svelte';
-    import AnimeList from '$lib/components/animeList.svelte';
     import { urls, type Anime } from '$lib/types';
+    import AnimeList from '$lib/components/animeList.svelte';
     import db from '$lib/db';
 
     let { data } = $props();
@@ -75,8 +74,10 @@
     <title>動畫清單</title>
 </svelte:head>
 <div class="container">
-    <p class="title">資料庫內所有動畫</p>
-    <p class="title">總計{animes.length}部</p>
+    <div class="title">
+        <p>資料庫內所有動畫</p>
+        <p>{animes.length}部動畫</p>
+    </div>
     <div class="panel">
         <input bind:value={searchQuery} placeholder="搜尋動畫" />
         {#if store.user && searchQuery}
@@ -106,14 +107,22 @@
     }
 
     .title {
-        max-width: 100%;
         box-sizing: border-box;
-        font-size: 2rem;
-        font-weight: bold;
-        text-align: center;
-        overflow-wrap: break-word;
-        word-break: break-all;
-        color: aliceblue;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 3rem;
+
+        p {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            color: aliceblue;
+        }
     }
 
     .list {
@@ -125,21 +134,7 @@
         overflow: hidden;
     }
 
-    .searchLlistId {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 1rem;
-
-        & button {
-            width: 30%;
-        }
-    }
-
-    .searchLlistId > input,
-    button,
-    a {
+    button {
         box-sizing: border-box;
         border-radius: 0.7rem;
         padding: 1.5rem 2rem;
@@ -147,15 +142,6 @@
         outline: none;
         cursor: pointer;
         text-decoration: none;
-    }
-
-    .searchLlistId > input {
-        width: 100%;
-        height: 2rem;
-        cursor: unset;
-        text-align: center;
-        background-color: #d9d4cf;
-        color: #7c7877;
     }
 
     .panel {
@@ -257,6 +243,12 @@
     }
 
     @media (width <= 720px) {
+        .title {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
         .addPanelInputs {
             flex-direction: column;
             /*align-items: stretch;*/

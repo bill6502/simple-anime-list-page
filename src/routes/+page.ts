@@ -13,6 +13,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
     throw redirect(302, url.href.replace('#', '?'));
   }
 
+  store.message(url.searchParams.get('error') ?? '', 'error');
+
   const token_type = url.searchParams.get('token_type') ?? '';
   const access_token = url.searchParams.get('access_token') ?? '';
 

@@ -29,9 +29,9 @@
         store.userAnimeListId = '';
     }
 
-    async function gotoId() {
-        const url_id = `${store.baseUrl}/${animeListId}`;
-
+    async function gotoId(e: Event) {
+        e.preventDefault();
+        const url_id = `${store.baseUrl}/${animeListId}?from=${page.url.pathname}`;
         await goto(url_id, { invalidateAll: true });
     }
 </script>
@@ -61,12 +61,7 @@
                     {/if}
                 {/if}
             </div>
-            <form
-                onsubmit={async (e) => {
-                    e.preventDefault();
-                    await gotoId();
-                }}
-            >
+            <form onsubmit={gotoId}>
                 <input bind:value={animeListId} placeholder="搜尋動畫清單" />
             </form>
             {#if innerWidth.current! > 720 || expanding}
