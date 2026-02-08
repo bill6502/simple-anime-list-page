@@ -1,7 +1,8 @@
 import { PUBLIC_DB } from '$env/static/public';
+import { store } from './store.svelte.ts';
 
 async function getAllAnimes() {
-  return await fetch(`${PUBLIC_DB}/getAllAnimes`, {
+  return await store.fetch!(`${PUBLIC_DB}/getAllAnimes`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -13,7 +14,7 @@ async function getAllAnimes() {
 }
 
 async function addAnimeCollection(name: string, url: string, userId: string) {
-  return await fetch(`${PUBLIC_DB}/addAnimeCollection`, {
+  return await store.fetch!(`${PUBLIC_DB}/addAnimeCollection`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -25,7 +26,7 @@ async function addAnimeCollection(name: string, url: string, userId: string) {
 }
 
 async function updateWebsiteInfo(userId: string, userName: string) {
-  return await fetch(`${PUBLIC_DB}/updateWebsiteInfo`, {
+  return await store.fetch!(`${PUBLIC_DB}/updateWebsiteInfo`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,7 +38,7 @@ async function updateWebsiteInfo(userId: string, userName: string) {
 }
 
 async function getWebsiteInfoBy_Id(id: string) {
-  return await fetch(`${PUBLIC_DB}/getWebsiteInfoBy_Id`, {
+  return await store.fetch!(`${PUBLIC_DB}/getWebsiteInfoBy_Id`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -47,7 +48,7 @@ async function getWebsiteInfoBy_Id(id: string) {
 }
 
 async function checkWebsiteInfoBy_Id(id: string) {
-  return await fetch(`${PUBLIC_DB}/checkWebsiteInfoBy_Id`, {
+  return await store.fetch!(`${PUBLIC_DB}/checkWebsiteInfoBy_Id`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

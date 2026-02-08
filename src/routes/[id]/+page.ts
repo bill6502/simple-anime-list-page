@@ -7,9 +7,13 @@ import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import db from '$lib/db';
 
-export const load: PageLoad = async ({ params }) => {
+export const load: PageLoad = async ({ params, fetch }) => {
   if (!browser) {
     return { animes: [], userName: '' };
+  }
+
+  if (store.fetch == undefined) {
+    store.fetch = fetch;
   }
 
   const { id } = params;

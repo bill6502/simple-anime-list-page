@@ -4,7 +4,11 @@ import { store } from '$lib/store.svelte';
 import { urls, type Anime } from '$lib/types.ts';
 import db from '$lib/db.ts';
 
-export const load: PageLoad = async ({ url }) => {
+export const load: PageLoad = async ({ url, fetch }) => {
+  if (store.fetch == undefined) {
+    store.fetch = fetch;
+  }
+
   if (url.href.includes('#')) {
     throw redirect(302, url.href.replace('#', '?'));
   }

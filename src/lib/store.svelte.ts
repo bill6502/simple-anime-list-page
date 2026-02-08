@@ -8,6 +8,7 @@ type storeType = {
   lastAnimeListId: string;
   successMessage: string;
   errorMessage: string;
+  fetch: typeof fetch | undefined;
   message: (message: string, type: 'success' | 'error') => void;
 };
 
@@ -43,5 +44,6 @@ export const store = $state<storeType>({
   lastAnimeListId: lastAnimeListId ?? '',
   successMessage: '',
   errorMessage: '',
+  fetch: undefined,
   message,
 });

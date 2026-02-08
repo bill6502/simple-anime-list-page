@@ -179,6 +179,11 @@
             align-items: center;
             background-color: #d9d4cf;
             color: #7c7877;
+
+            transition: background-color 0.3s ease;
+            &:focus {
+                background-color: #e5e5e5;
+            }
         }
     }
 

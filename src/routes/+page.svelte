@@ -28,12 +28,6 @@
         store.message(data.error, 'error');
     });
 
-    async function gotoId() {
-        const url_id = `${store.baseUrl}/${animeListId}`;
-
-        await goto(url_id, { invalidateAll: true });
-    }
-
     async function addAnime() {
         if (addAnimeName == '' || addAnimeUrl == '') {
             store.message('請輸入動畫名稱與網址', 'error');
@@ -81,16 +75,8 @@
     <title>動畫清單</title>
 </svelte:head>
 <div class="container">
-    <form
-        class="searchLlistId"
-        onsubmit={async (e) => {
-            e.preventDefault();
-            await gotoId();
-        }}
-    >
-        <input bind:value={animeListId} placeholder="搜尋動畫清單ID" />
-    </form>
-    <p class="title">資料庫內所有動畫 總計{animes.length}部</p>
+    <p class="title">資料庫內所有動畫</p>
+    <p class="title">總計{animes.length}部</p>
     <div class="panel">
         <input bind:value={searchQuery} placeholder="搜尋動畫" />
         {#if store.user && searchQuery}
@@ -191,6 +177,11 @@
             text-decoration: none;
             background-color: #d9d4cf;
             color: #7c7877;
+
+            transition: background-color 0.3s ease;
+            &:focus {
+                background-color: #e5e5e5;
+            }
         }
     }
 
