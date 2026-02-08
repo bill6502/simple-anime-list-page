@@ -1,3 +1,7 @@
+import {
+  PUBLIC_DISCORD_AUTH,
+  PUBLIC_DISCORD_AUTH_LOCAL,
+} from '$env/static/public';
 import { base } from '$app/paths';
 
 type storeType = {
@@ -13,10 +17,7 @@ type storeType = {
 };
 
 const baseUrl = base;
-const authUrl =
-  base == ''
-    ? 'https://discord.com/oauth2/authorize?client_id=1446749870101757994&response_type=token&redirect_uri=http%3A%2F%2F127.0.0.1%3A5173&scope=identify'
-    : 'https://discord.com/oauth2/authorize?client_id=1446749870101757994&response_type=token&redirect_uri=https%3A%2F%2Fbill6502.github.io%2Fsimple-anime-list-page&scope=identify';
+const authUrl = base == '' ? PUBLIC_DISCORD_AUTH_LOCAL : PUBLIC_DISCORD_AUTH;
 
 const user = localStorage.getItem('user');
 const userAnimeListId = localStorage.getItem('userAnimeListId');
