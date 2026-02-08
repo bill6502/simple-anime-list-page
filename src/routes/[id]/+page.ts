@@ -19,7 +19,7 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
   store.message(url.searchParams.get('error') ?? '', 'error');
 
   const { id } = params;
-  const host = `${url.searchParams.get('from')}`;
+  const host = url.searchParams.get('from') ?? store.baseUrl;
 
   const checkResponse = await db.checkWebsiteInfoBy_Id(id);
 
