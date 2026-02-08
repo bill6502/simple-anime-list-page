@@ -27,9 +27,6 @@
 
     $effect(() => {
         store.message(data.error, 'error');
-        if (page.url.searchParams.get('error')) {
-            goto(page.url.pathname);
-        }
     });
 
     async function addAnime() {
