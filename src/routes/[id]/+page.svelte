@@ -72,12 +72,6 @@
         }
     });
 
-    $effect(() => {
-        if (page.url.searchParams.get('from')) {
-            goto(page.url.pathname);
-        }
-    });
-
     async function updateAnimeList() {
         const updateAnimesList = await db.updateWebsiteInfo(
             store.user.id,
