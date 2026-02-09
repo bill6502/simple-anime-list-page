@@ -151,7 +151,7 @@
                     class={selectedUrl == url ? 'button selected' : 'button'}
                     onclick={(e) => {
                         selectedUrl = selectedUrl != url ? url : 'all';
-                        expanding = false;
+                        expanding = !expanding ? true : expanding;
                         window.scrollTo(0, 0);
                     }}
                     >{`${urlMap[url]}(${animes.filter((anime) => anime.url.includes('https://' + url)).length})`}</button
@@ -164,7 +164,7 @@
                     in:fade={{ duration: 500 }}
                     class="button"
                     onclick={async () => {
-                        expanding = false;
+                        expanding = !expanding ? true : expanding;
                         await updateAnimeList();
                         window.scrollTo(0, 0);
                     }}>更新</button
@@ -295,7 +295,7 @@
         }
     }
 
-    @media (hover: hover) {
+    @media (hover: hover) and (pointer: fine) {
         .button {
             &:hover {
                 background-color: #63605f;
