@@ -7,6 +7,7 @@ import { base } from '$app/paths';
 type storeType = {
   baseUrl: string;
   authUrl: string;
+  currentPath: 'home' | 'mylist';
   user: any;
   userAnimeListId: string;
   lastAnimeListId: string;
@@ -40,6 +41,7 @@ function message(message: string, type: 'success' | 'error') {
 export const store = $state<storeType>({
   baseUrl,
   authUrl,
+  currentPath: 'home',
   user: user ? JSON.parse(user) : null,
   userAnimeListId: userAnimeListId ?? '',
   lastAnimeListId: lastAnimeListId ?? '',

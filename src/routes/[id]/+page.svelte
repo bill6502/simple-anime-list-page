@@ -70,6 +70,7 @@
         if (innerWidth.current! > 720) {
             expanding = false;
         }
+        store.currentPath = 'mylist';
     });
 
     async function updateAnimeList() {
@@ -142,7 +143,8 @@
             {#if innerWidth.current! > 720 || expanding || url == selectedUrl}
                 <button
                     in:slide={{ duration: 500 }}
-                    class={selectedUrl == url ? 'button selected' : 'button'}
+                    class="button"
+                    class:selected={selectedUrl == url}
                     onclick={(e) => {
                         selectedUrl = selectedUrl != url ? url : 'all';
                         expanding = !expanding;

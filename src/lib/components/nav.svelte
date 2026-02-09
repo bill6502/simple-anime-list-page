@@ -51,13 +51,13 @@
     }
 </script>
 
-{#snippet nav(title: string, href: string, enabled: boolean)}
+{#snippet nav(title: string, path: string, href: string, enabled: boolean)}
     <a
         in:slide={{ duration: 300 }}
         out:slide={{ duration: 100 }}
-        class={innerWidth.current! <= 720
-            ? `button ${enabled ? '' : 'disabled'}`
-            : `${enabled ? '' : 'disabled'}`}
+        class:button={innerWidth.current! <= 720}
+        class:disabled={!enabled}
+        class:current={store.currentPath === path}
         {href}>{title}</a
     >
 {/snippet}
@@ -73,9 +73,10 @@
                     >
                 {/if}
                 {#if innerWidth.current! > 720 || expanding}
-                    {@render nav('首頁', `${store.baseUrl}/`, true)}
+                    {@render nav('首頁', 'home', `${store.baseUrl}/`, true)}
                     {@render nav(
                         '收藏',
+                        'mylist',
                         `${store.baseUrl}/${store.userAnimeListId}`,
                         store.user && store.userAnimeListId,
                     )}
@@ -198,10 +199,12 @@
         align-items: center;
         justify-content: center;
         gap: 2rem;
-    }
 
-    .disabled {
-        display: none !important;
+        & > a {
+            transition:
+                background-color 0.3s ease-in-out,
+                color 0.3s ease-in-out;
+        }
     }
 
     .user-info {
@@ -273,14 +276,18 @@
         width: 100%;
         height: 3rem;
 
-        transition:
-            background-color 0.1s ease-in-out,
-            color 0.1s ease-in-out;
-
         &:active {
             background-color: #d9d4cf;
             color: #7c7877;
         }
+    }
+
+    .disabled {
+        display: none;
+    }
+
+    .current {
+        color: skyblue;
     }
 
     @media screen and (width <= 720px) {
