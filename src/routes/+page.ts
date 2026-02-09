@@ -3,7 +3,7 @@ import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import { urls, type Anime } from '$lib/types.ts';
 import db from '$lib/db.ts';
-import { getErrorMessage, type error } from '../lib/utility.ts';
+import { getErrorMessage, errorEnum } from '../lib/utility.ts';
 
 export const load: PageLoad = async ({ url, fetch }) => {
   if (store.fetch == undefined) {
@@ -16,7 +16,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 
   const error = url.searchParams.get('error');
   if (error) {
-    store.errorMessage = getErrorMessage(error as error);
+    store.errorMessage = getErrorMessage(errorEnum[error]);
   }
 
   const token_type = url.searchParams.get('token_type') ?? '';
@@ -69,7 +69,9 @@ export const load: PageLoad = async ({ url, fetch }) => {
     const updateAnimesList = await db.updateWebsiteInfo(user.id, user.username);
 
     if (!updateAnimesList.ok) {
-      store.errorMessage = getErrorMessage('failed_to_update_animes_list');
+      store.errorMessage = getErrorMessage(
+        errorEnum['failed_to_update_animes_list'],
+      );
       return {
         listId: '',
         animes,

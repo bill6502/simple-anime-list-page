@@ -6,7 +6,7 @@ import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import db from '$lib/db';
-import { getErrorMessage, type error } from '$lib/utility.ts';
+import { getErrorMessage, errorEnum } from '$lib/utility.ts';
 
 export const load: PageLoad = async ({ url, params, fetch }) => {
   if (!browser) {
@@ -19,7 +19,7 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
 
   const error = url.searchParams.get('error');
   if (error) {
-    store.errorMessage = getErrorMessage(error as error);
+    store.errorMessage = getErrorMessage(errorEnum[error]);
   }
 
   const { id } = params;
