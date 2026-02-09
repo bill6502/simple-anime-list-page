@@ -32,7 +32,7 @@
                 animate:flip={{ duration: 500 }}
                 in:slide={{ duration: 500 }}
             >
-                <td class="tdName testLeftSide">{anime.name}</td>
+                <td class="tdName">{anime.name}</td>
                 <td class="tdURL" data-from={anime.from}
                     ><a href={anime.url} target="_blank"
                         >{innerWidth.current! <= 820 ? '[連結]' : anime.url}</a
@@ -83,6 +83,26 @@
 
     .tdName {
         width: 40%;
+
+        &:hover {
+            + .tdURL {
+                transition: box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.4s !important;
+                a {
+                    color: aliceblue !important;
+                }
+            }
+            + .tdURL[data-from='anigamer'] {
+                box-shadow: inset -100rem 0 0 0 #009bad;
+            }
+
+            + .tdURL[data-from='anime1me'] {
+                box-shadow: inset -100rem 0 0 0 #b92d72;
+            }
+
+            + .tdURL[data-from='hanime1me'] {
+                box-shadow: inset -100rem 0 0 0 #b20710;
+            }
+        }
     }
 
     .tdURL {
