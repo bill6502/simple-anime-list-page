@@ -56,9 +56,9 @@
         in:slide={{ duration: 300 }}
         out:slide={{ duration: 100 }}
         class:button={innerWidth.current! <= 720}
-        class:disabled={!enabled}
         class:current={store.currentPath === path}
-        {href}>{title}</a
+        class:disabled={!enabled}
+        href={enabled ? href : undefined}>{title}</a
     >
 {/snippet}
 <div class="container">
@@ -201,6 +201,7 @@
         gap: 2rem;
 
         & > a {
+            text-decoration: none;
             transition:
                 background-color 0.3s ease-in-out,
                 color 0.3s ease-in-out;
@@ -283,7 +284,10 @@
     }
 
     .disabled {
-        display: none;
+        opacity: 0.5;
+        filter: grayscale(1);
+        cursor: default;
+        display: inline-flex;
     }
 
     .current {
@@ -337,6 +341,9 @@
                     color: #d9d4cf;
                 }
             }
+        }
+        .disabled:hover {
+            cursor: default;
         }
     }
 </style>
