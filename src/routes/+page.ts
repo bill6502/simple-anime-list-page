@@ -3,6 +3,7 @@ import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import { urls, type Anime } from '$lib/types.ts';
 import db from '$lib/db.ts';
+import { getErrorMessage, type error } from '../lib/utility.ts';
 
 export const load: PageLoad = async ({ url, fetch }) => {
   if (store.fetch == undefined) {
@@ -13,7 +14,10 @@ export const load: PageLoad = async ({ url, fetch }) => {
     throw redirect(302, url.href.replace('#', '?'));
   }
 
-  store.errorMessage = url.searchParams.get('error') ?? '';
+  const error = url.searchParams.get('error');
+  if (error) {
+    store.errorMessage = getErrorMessage(error as error);
+  }
 
   const token_type = url.searchParams.get('token_type') ?? '';
   const access_token = url.searchParams.get('access_token') ?? '';
@@ -65,8 +69,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
     const updateAnimesList = await db.updateWebsiteInfo(user.id, user.username);
 
     if (!updateAnimesList.ok) {
+      store.errorMessage = getErrorMessage('failed_to_update_animes_list');
       return {
-        error: 'failed_to_update_animes_list',
         listId: '',
         animes,
       };
@@ -87,9 +91,5 @@ export const load: PageLoad = async ({ url, fetch }) => {
     throw redirect(302, `${store.baseUrl}/${store.lastAnimeListId}`);
   }
 
-  const error = url.searchParams.get('error');
-  if (!error) {
-    return { error: '', listId, animes };
-  }
-  return { error, listId, animes };
+  return { listId, animes };
 };

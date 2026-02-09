@@ -29,10 +29,6 @@
     let addAnimeName = $state<string>('');
     let addAnimeUrl = $state<string>('');
 
-    $effect(() => {
-        store.errorMessage = data.error;
-    });
-
     async function addAnime() {
         if (addAnimeName == '' || addAnimeUrl == '') {
             store.errorMessage = '請輸入動畫名稱與網址';
