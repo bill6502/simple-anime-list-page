@@ -2,7 +2,7 @@
     import { page } from '$app/stores';
     import { type Anime } from '$lib/types';
     import { flip } from 'svelte/animate';
-    import { fade } from 'svelte/transition';
+    import { slide } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';
     import db from '$lib/db';
@@ -30,7 +30,7 @@
             <tr
                 class="row"
                 animate:flip={{ duration: 500 }}
-                in:fade={{ duration: 500 }}
+                in:slide={{ duration: 500 }}
             >
                 <td class="tdName testLeftSide">{anime.name}</td>
                 <td class="tdURL" data-from={anime.from}

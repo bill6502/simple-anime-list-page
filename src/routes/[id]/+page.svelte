@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/state';
     import { urls, type Anime } from '$lib/types';
-    import { fade } from 'svelte/transition';
+    import { slide } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';
     import AnimeList from '$lib/components/animeList.svelte';
@@ -147,7 +147,8 @@
         {#each websites as url, i (url)}
             {#if innerWidth.current! > 720 || expanding || url == selectedUrl}
                 <button
-                    in:fade={{ duration: 300 }}
+                    in:slide={{ duration: 300 }}
+                    out:slide={{ duration: 100 }}
                     class={selectedUrl == url ? 'button selected' : 'button'}
                     onclick={(e) => {
                         selectedUrl = selectedUrl != url ? url : 'all';
@@ -161,7 +162,8 @@
         {#if store.user && data.isMyAnimeList}
             {#if innerWidth.current! > 720 || expanding}
                 <button
-                    in:fade={{ duration: 500 }}
+                    in:slide={{ duration: 300 }}
+                    out:slide={{ duration: 100 }}
                     class="button"
                     onclick={async () => {
                         expanding = !expanding ? true : expanding;
@@ -181,9 +183,6 @@
 <style>
     .copy {
         cursor: pointer;
-        &:hover {
-            color: #c0c0c0;
-        }
     }
     .container {
         position: relative;
@@ -238,6 +237,8 @@
             overflow-wrap: break-word;
             word-break: break-all;
             color: aliceblue;
+
+            transition: color 0.1s ease-in-out;
         }
     }
 
@@ -300,6 +301,11 @@
             &:hover {
                 background-color: #63605f;
                 color: #d9d4cf;
+            }
+        }
+        .copy {
+            &:hover {
+                color: #c0c0c0;
             }
         }
     }

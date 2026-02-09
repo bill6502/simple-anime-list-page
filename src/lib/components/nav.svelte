@@ -1,6 +1,6 @@
 <script lang="ts">
     import { store } from '$lib/store.svelte';
-    import { fade } from 'svelte/transition';
+    import { slide } from 'svelte/transition';
     import { page } from '$app/state';
     import { innerWidth } from 'svelte/reactivity/window';
     import { goto } from '$app/navigation';
@@ -53,7 +53,8 @@
 
 {#snippet nav(title: string, href: string, enabled: boolean)}
     <a
-        in:fade={{ duration: 500 }}
+        in:slide={{ duration: 300 }}
+        out:slide={{ duration: 100 }}
         class={innerWidth.current! <= 720
             ? `button ${enabled ? '' : 'disabled'}`
             : `${enabled ? '' : 'disabled'}`}
@@ -95,13 +96,15 @@
                     {#if showAuth}
                         <div class="auth-container">
                             <button
-                                in:fade={{ duration: 300 }}
+                                in:slide={{ duration: 300 }}
+                                out:slide={{ duration: 100 }}
                                 class="button"
                                 data-type="getID"
                                 onclick={setLastAnimeListId}>取得授權</button
                             >
                             <button
-                                in:fade={{ duration: 300 }}
+                                in:slide={{ duration: 300 }}
+                                out:slide={{ duration: 100 }}
                                 class="button"
                                 type="button"
                                 data-type="clear"
@@ -232,11 +235,6 @@
                 background-color: #d9d4cf;
                 color: #7c7877;
             }
-
-            .button:hover {
-                background-color: #6b6766;
-                color: #d9d4cf;
-            }
         }
     }
 
@@ -319,6 +317,17 @@
 
                 .button {
                     min-width: 10rem;
+                }
+            }
+        }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        .user-info {
+            .auth-container {
+                .button:hover {
+                    background-color: #6b6766;
+                    color: #d9d4cf;
                 }
             }
         }
