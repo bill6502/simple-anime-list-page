@@ -141,13 +141,11 @@
         {#each websites as url, i (url)}
             {#if innerWidth.current! > 720 || expanding || url == selectedUrl}
                 <button
-                    in:slide={{ duration: 300 }}
-                    out:slide={{ duration: 100 }}
+                    in:slide={{ duration: 500 }}
                     class={selectedUrl == url ? 'button selected' : 'button'}
                     onclick={(e) => {
                         selectedUrl = selectedUrl != url ? url : 'all';
-                        expanding = !expanding ? true : expanding;
-                        window.scrollTo(0, 0);
+                        expanding = !expanding;
                     }}
                     >{`${urlMap[url]}(${animes.filter((anime) => anime.url.includes('https://' + url)).length})`}</button
                 >
@@ -162,7 +160,6 @@
                     onclick={async () => {
                         expanding = !expanding ? true : expanding;
                         await updateAnimeList();
-                        window.scrollTo(0, 0);
                     }}>更新</button
                 >
             {/if}

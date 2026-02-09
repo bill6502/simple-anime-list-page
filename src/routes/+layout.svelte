@@ -5,6 +5,7 @@
     import { innerWidth } from 'svelte/reactivity/window';
     import MessageBlock from '$lib/components/messageBlock.svelte';
     import Nav from '$lib/components/nav.svelte';
+    import Totop from '$lib/components/totop.svelte';
     import './layout.css';
 
     let { children } = $props();
@@ -40,6 +41,7 @@
     </main>
 
     <MessageBlock />
+    <Totop />
     <footer>
         <p>Just a simple anime-list page</p>
     </footer>
