@@ -8,10 +8,6 @@
 
     let { data } = $props();
 
-    $effect(() => {
-        store.currentPath = 'home';
-    });
-
     let animeListId = $state<string>('');
     let animes = $state<Anime[]>(data.animes);
 
@@ -28,6 +24,10 @@
 
     let addAnimeName = $state<string>('');
     let addAnimeUrl = $state<string>('');
+
+    $effect(() => {
+        store.currentPath = 'home';
+    });
 
     async function addAnime() {
         if (addAnimeName == '' || addAnimeUrl == '') {

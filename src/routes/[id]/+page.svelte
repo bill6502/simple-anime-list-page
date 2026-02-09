@@ -1,18 +1,11 @@
 <script lang="ts">
     import { page } from '$app/state';
-    import { urls, type Anime } from '$lib/types';
+    import { urls, urlMap, type Anime } from '$lib/types';
     import { slide } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';
     import AnimeList from '$lib/components/animeList.svelte';
     import db from '$lib/db';
-    import { goto } from '$app/navigation';
-
-    const urlMap = {
-        'ani.gamer': '巴哈姆特動畫瘋',
-        'anime1.me': 'Anime1',
-        'hanime1.me': 'Hanime1',
-    };
 
     let { data } = $props();
 
@@ -142,7 +135,8 @@
         {#each websites as url, i (url)}
             {#if innerWidth.current! > 720 || expanding || url == selectedUrl}
                 <button
-                    in:slide={{ duration: 500 }}
+                    in:slide={{ duration: 300 }}
+                    out:slide={{ duration: 100 }}
                     class="button"
                     class:selected={selectedUrl == url}
                     onclick={(e) => {
@@ -175,14 +169,19 @@
 
 <style>
     .copy {
-        font-size: 2.3rem;
+        font-size: 2rem;
         font-weight: bold;
         font-family: var(--font-body);
         background-color: transparent;
         color: aliceblue;
         border: none;
         outline: none;
+        text-align: center;
+        overflow-wrap: break-word;
+        word-break: break-all;
         cursor: pointer;
+
+        transition: color 0.2s ease-in-out;
     }
     .container {
         position: relative;
