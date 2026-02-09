@@ -80,7 +80,7 @@
         );
 
         if (!updateAnimesList.ok) {
-            store.message('動畫清單更新錯誤', 'error');
+            store.errorMessage = '動畫清單更新錯誤';
             return;
         }
 
@@ -88,7 +88,7 @@
         const getAnimeList = await db.getWebsiteInfoBy_Id(id);
 
         if (!getAnimeList.ok) {
-            store.message('動畫清單取得錯誤', 'error');
+            store.errorMessage = '動畫清單取得錯誤';
             return;
         }
 
@@ -109,7 +109,7 @@
                     from: from,
                 };
             });
-        store.message('已成功更新', 'success');
+        store.successMessage = '已成功更新';
     }
 
     function toggleSourceSelection() {
@@ -118,7 +118,7 @@
 
     function copyListId() {
         navigator.clipboard.writeText(page.params.id!);
-        store.message('已複製清單ID至剪貼簿', 'success');
+        store.successMessage = '已複製清單ID至剪貼簿';
     }
 </script>
 

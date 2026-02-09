@@ -25,7 +25,7 @@
 
     function setLastAnimeListId() {
         if (store.user) {
-            store.message('已取得授權', 'success');
+            store.successMessage = '已取得授權';
             return;
         }
 

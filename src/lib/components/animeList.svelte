@@ -17,10 +17,10 @@
         const response = await db.addAnimeCollection(name, url, store.user.id);
 
         if (!response.ok) {
-            store.message('加入收藏失敗', 'error');
+            store.errorMessage = '加入收藏失敗';
             return;
         }
-        store.message('加入收藏', 'success');
+        store.successMessage = '已加入收藏';
     }
 </script>
 

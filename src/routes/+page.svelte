@@ -30,28 +30,26 @@
     let addAnimeUrl = $state<string>('');
 
     $effect(() => {
-        store.message(data.error, 'error');
+        store.errorMessage = data.error;
     });
 
     async function addAnime() {
         if (addAnimeName == '' || addAnimeUrl == '') {
-            store.message('請輸入動畫名稱與網址', 'error');
+            store.errorMessage = '請輸入動畫名稱與網址';
             return;
         }
         if (
             animes.some((anime) => anime.name == addAnimeName) ||
             animes.some((anime) => anime.url == addAnimeUrl)
         ) {
-            store.message('動畫已存在', 'error');
+            store.errorMessage = '動畫已存在';
             return;
         }
 
         const regex = urls.map((url) => `(${url})`).join('|');
         if (!addAnimeUrl.match(regex)) {
-            store.message(
-                '可加入網址僅限 ani.gamer , anime1.me , hanime1.me',
-                'error',
-            );
+            store.errorMessage =
+                '可加入網址僅限 ani.gamer , anime1.me , hanime1.me';
             return;
         }
 
@@ -61,7 +59,7 @@
             store.user.id,
         );
         if (response.ok) {
-            store.message('動畫已加入', 'success');
+            store.successMessage = '動畫已成功加入';
 
             let from = '';
             for (const url of urls) {
@@ -71,7 +69,7 @@
             }
             animes.push({ name: addAnimeName, url: addAnimeUrl, from });
         } else {
-            store.message('加入失敗', 'error');
+            store.errorMessage = '加入失敗';
         }
     }
 </script>

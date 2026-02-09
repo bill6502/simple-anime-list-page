@@ -16,7 +16,7 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
     store.fetch = fetch;
   }
 
-  store.message(url.searchParams.get('error') ?? '', 'error');
+  store.errorMessage = url.searchParams.get('error') ?? '';
 
   const { id } = params;
   const host = url.searchParams.get('from') ?? url.pathname;

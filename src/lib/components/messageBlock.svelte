@@ -1,24 +1,41 @@
 <script lang="ts">
     import { store } from '$lib/store.svelte';
     import { fly } from 'svelte/transition';
+
+    let successMessage = $derived.by(() => {
+        if (store.successMessage != '') {
+            setTimeout(() => {
+                store.successMessage = '';
+            }, 3000);
+        }
+        return store.successMessage;
+    });
+    let errorMessage = $derived.by(() => {
+        if (store.errorMessage != '') {
+            setTimeout(() => {
+                store.errorMessage = '';
+            }, 3000);
+        }
+        return store.errorMessage;
+    });
 </script>
 
-{#if store.successMessage != ''}
+{#if successMessage != ''}
     <div
         transition:fly={{ y: 50, duration: 500 }}
         class="message"
         data-message="success"
     >
-        <p>{store.successMessage}</p>
+        <p>{successMessage}</p>
     </div>
 {/if}
-{#if store.errorMessage != ''}
+{#if errorMessage != ''}
     <div
         transition:fly={{ y: 50, duration: 500 }}
         class="message"
         data-message="error"
     >
-        <p>{store.errorMessage}</p>
+        <p>{errorMessage}</p>
     </div>
 {/if}
 

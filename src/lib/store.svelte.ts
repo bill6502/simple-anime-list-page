@@ -14,7 +14,6 @@ type storeType = {
   successMessage: string;
   errorMessage: string;
   fetch: typeof fetch | undefined;
-  message: (message: string, type: 'success' | 'error') => void;
 };
 
 const baseUrl = base;
@@ -23,20 +22,6 @@ const authUrl = base == '' ? PUBLIC_DISCORD_AUTH_LOCAL : PUBLIC_DISCORD_AUTH;
 const user = localStorage.getItem('user');
 const userAnimeListId = localStorage.getItem('userAnimeListId');
 const lastAnimeListId = localStorage.getItem('lastAnimeListId');
-
-let messageClearTimeout: number | null = null;
-function message(message: string, type: 'success' | 'error') {
-  if (type == 'success') store.successMessage = message;
-  if (type == 'error') store.errorMessage = message;
-
-  if (messageClearTimeout !== null) {
-    clearTimeout(messageClearTimeout);
-  }
-  messageClearTimeout = setTimeout(() => {
-    store.successMessage = '';
-    store.errorMessage = '';
-  }, 3000);
-}
 
 export const store = $state<storeType>({
   baseUrl,
@@ -48,5 +33,4 @@ export const store = $state<storeType>({
   successMessage: '',
   errorMessage: '',
   fetch: undefined,
-  message,
 });
