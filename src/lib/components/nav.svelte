@@ -321,14 +321,11 @@
 
         .user-info {
             .auth-container {
+                max-width: calc(100vw - 3rem);
                 transform: translateX(-50%);
                 flex-direction: row;
                 align-items: center;
                 justify-content: center;
-
-                .button {
-                    min-width: 10rem;
-                }
             }
         }
     }
