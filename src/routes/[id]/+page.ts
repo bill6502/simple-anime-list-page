@@ -19,7 +19,9 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
 
   const error = url.searchParams.get('error');
   if (error) {
-    store.errorMessage = getErrorMessage(errorEnum[error]);
+    store.errorMessage = getErrorMessage(
+      errorEnum[error as keyof typeof errorEnum],
+    );
   }
 
   const { id } = params;

@@ -16,7 +16,9 @@ export const load: PageLoad = async ({ url, fetch }) => {
 
   const error = url.searchParams.get('error');
   if (error) {
-    store.errorMessage = getErrorMessage(errorEnum[error]);
+    store.errorMessage = getErrorMessage(
+      errorEnum[error as keyof typeof errorEnum],
+    );
   }
 
   const token_type = url.searchParams.get('token_type') ?? '';
@@ -42,7 +44,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
   if (getAllAnimes.ok) {
     const animesJson = await getAllAnimes.json();
 
-    animesJson.value.map((anime: any) => {
+    animesJson.value.map((anime: Anime) => {
       animes.push({ name: anime.name, url: anime.url, from: '' } as Anime);
     });
 

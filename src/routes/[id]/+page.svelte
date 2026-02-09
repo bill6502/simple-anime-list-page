@@ -128,9 +128,9 @@
 
 <div class="container">
     <div class="title">
-        <p class="copy" title="點擊以複製清單ID" onclick={copyListId}>
+        <button class="copy" title="點擊以複製清單ID" onclick={copyListId}>
             {data.userName}
-        </p>
+        </button>
         <p>{animes.length}部動畫</p>
     </div>
     <div class="buttons">
@@ -149,7 +149,7 @@
                         selectedUrl = selectedUrl != url ? url : 'all';
                         expanding = !expanding;
                     }}
-                    >{`${urlMap[url]}(${animes.filter((anime) => anime.url.includes('https://' + url)).length})`}</button
+                    >{`${urlMap[url as keyof typeof urlMap]}(${animes.filter((anime) => anime.url.includes('https://' + url)).length})`}</button
                 >
             {/if}
         {/each}
@@ -175,6 +175,13 @@
 
 <style>
     .copy {
+        font-size: 2.3rem;
+        font-weight: bold;
+        font-family: var(--font-body);
+        background-color: transparent;
+        color: aliceblue;
+        border: none;
+        outline: none;
         cursor: pointer;
     }
     .container {
@@ -298,7 +305,7 @@
         }
         .copy {
             &:hover {
-                color: #c0c0c0;
+                color: skyblue;
             }
         }
     }
