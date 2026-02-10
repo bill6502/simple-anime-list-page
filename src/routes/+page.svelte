@@ -69,7 +69,7 @@
 </script>
 
 <svelte:head>
-    <title>動畫清單</title>
+    <title>首頁 - 動畫清單</title>
 </svelte:head>
 <div class="container">
     <div class="title">
