@@ -1,6 +1,6 @@
 <script lang="ts">
     import { store } from '$lib/store.svelte';
-    import { urls, type Anime } from '$lib/types';
+    import { urls, type Anime } from '$lib/type';
     import { goto } from '$app/navigation';
     import { page } from '$app/state';
     import AnimeList from '$lib/components/animeList.svelte';

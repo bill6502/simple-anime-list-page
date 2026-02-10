@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from '$app/state';
-    import { urls, urlMap, type Anime } from '$lib/types';
+    import { urls, urlMap, type Anime } from '$lib/type';
     import { slide } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';

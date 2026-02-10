@@ -1,17 +1,10 @@
-export enum errorEnum {
-  not_found,
-  not_response,
-  failed_to_update_animes_list,
-}
-export function getErrorMessage(e: errorEnum): string {
-  switch (e) {
-    case errorEnum.not_found:
-      return '找不到符合搜尋';
-    case errorEnum.not_response:
-      return '資料庫無回應';
-    case errorEnum.failed_to_update_animes_list:
-      return '動畫清單更新錯誤';
-    default:
-      return '';
-  }
-}
+export const errorMessages: Record<string, string> = {
+  not_found: '找不到符合搜尋',
+  not_response: '伺服器回應錯誤',
+  failed_to_update_animes_list: '更新動畫清單失敗',
+};
+
+export const getErrorMessage = (error: string): string => {
+  if (errorMessages[error]) return errorMessages[error];
+  return '未知錯誤';
+};
