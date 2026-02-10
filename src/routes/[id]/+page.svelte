@@ -263,6 +263,12 @@
         .buttons {
             flex-direction: column;
         }
+
+        .container {
+            & input {
+                width: 100%;
+            }
+        }
     }
 
     .button {
@@ -305,12 +311,6 @@
         .copy {
             &:hover {
                 color: skyblue;
-            }
-        }
-
-        .container {
-            & input {
-                width: 100%;
             }
         }
     }

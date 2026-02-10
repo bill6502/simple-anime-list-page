@@ -8,10 +8,11 @@
 
     let { data } = $props();
 
-    let animeListId = $state<string>('');
-    let animes = $state<Anime[]>(data.animes);
-
     let searchQuery = $state<string>('');
+    let addAnimeName = $state<string>('');
+    let addAnimeUrl = $state<string>('');
+
+    let animes = $derived<Anime[]>(data.animes);
     let filteredAnimes = $derived.by<Anime[]>(() =>
         animes.filter(
             (anime) =>
@@ -21,9 +22,6 @@
                     .includes(searchQuery.toLocaleLowerCase()),
         ),
     );
-
-    let addAnimeName = $state<string>('');
-    let addAnimeUrl = $state<string>('');
 
     $effect(() => {
         store.currentPath = 'home';
