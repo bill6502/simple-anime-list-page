@@ -228,7 +228,7 @@
             justify-content: center;
             margin-top: 0.5rem;
             padding: 1rem;
-            border-radius: 1rem;
+            border-radius: 0.3rem;
             gap: 0.5rem;
 
             background-color: #7c7877;
@@ -236,6 +236,7 @@
             z-index: 11;
             .button {
                 width: 10rem;
+                border-radius: 0.3rem;
                 background-color: #d9d4cf;
                 color: #7c7877;
             }
@@ -317,6 +318,7 @@
             flex-direction: column;
             width: 100%;
             gap: 1rem;
+            background-color: #7c7877;
         }
 
         .user-info {

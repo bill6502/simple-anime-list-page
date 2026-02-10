@@ -132,7 +132,7 @@
                 來源</button
             >
         {/if}
-        {#each websites as url, i (url)}
+        {#each websites as url (url)}
             {#if innerWidth.current! > 720 || expanding || url == selectedUrl}
                 <button
                     in:slide={{ duration: 300 }}
@@ -141,7 +141,7 @@
                     class:selected={selectedUrl == url}
                     onclick={(e) => {
                         selectedUrl = selectedUrl != url ? url : 'all';
-                        expanding = !expanding;
+                        expanding = selectedUrl == 'all';
                     }}
                     >{`${urlMap[url as keyof typeof urlMap]}(${animes.filter((anime) => anime.url.includes('https://' + url)).length})`}</button
                 >
