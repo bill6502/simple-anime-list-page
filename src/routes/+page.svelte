@@ -152,7 +152,7 @@
         gap: 1rem;
 
         & input {
-            width: 100%;
+            width: 50%;
             height: 2rem;
             text-align: center;
             box-sizing: border-box;
@@ -251,11 +251,16 @@
 
         .addPanelInputs {
             flex-direction: column;
-            /*align-items: stretch;*/
         }
 
         .addPanelInputs > input {
             width: 100%;
+        }
+
+        .panel {
+            & input {
+                width: 100%;
+            }
         }
     }
 </style>

@@ -193,7 +193,7 @@
             overflow: hidden;
 
             & > svg {
-                height: 100%;
+                height: 2.5rem;
                 width: min-content;
                 background-color: #d9d4cf;
                 fill: #d9d4cf;

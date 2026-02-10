@@ -192,7 +192,7 @@
         gap: 1rem;
 
         & input {
-            width: 100%;
+            width: 50%;
             border: none;
             outline: none;
             font-size: 1rem;
@@ -305,6 +305,12 @@
         .copy {
             &:hover {
                 color: skyblue;
+            }
+        }
+
+        .container {
+            & input {
+                width: 100%;
             }
         }
     }
