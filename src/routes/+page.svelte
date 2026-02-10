@@ -10,15 +10,23 @@
     let addAnimeName = $state<string>('');
     let addAnimeUrl = $state<string>('');
 
+    let isComparingToMyAnimeList = $state<boolean>(false);
+
     let animes = $derived<Anime[]>(data.animes);
     let filteredAnimes = $derived.by<Anime[]>(() =>
-        animes.filter(
-            (anime) =>
-                searchQuery == '' ||
-                anime.name
-                    .toLocaleLowerCase()
-                    .includes(searchQuery.toLocaleLowerCase()),
-        ),
+        animes
+            .filter(
+                (anime) =>
+                    searchQuery == '' ||
+                    anime.name
+                        .toLocaleLowerCase()
+                        .includes(searchQuery.toLocaleLowerCase()),
+            )
+            .filter(
+                (anime) =>
+                    !isComparingToMyAnimeList ||
+                    !store.userAnimeList.some((a) => a.name == anime.name),
+            ),
     );
 
     $effect(() => {
@@ -64,6 +72,10 @@
             store.errorMessage = '加入失敗';
         }
     }
+
+    function comparingToMyAnimeList() {
+        isComparingToMyAnimeList = !isComparingToMyAnimeList;
+    }
 </script>
 
 <svelte:head>
@@ -75,7 +87,15 @@
         <p>{animes.length}部動畫</p>
     </div>
     <div class="panel">
-        <input bind:value={searchQuery} placeholder="搜尋動畫" />
+        <div class="search">
+            <input bind:value={searchQuery} placeholder="搜尋動畫" />
+            <button
+                onclick={comparingToMyAnimeList}
+                class="button"
+                disabled={!(store.user && store.userAnimeList)}
+                title="過濾出未收藏動畫">過濾</button
+            >
+        </div>
         {#if store.user && searchQuery}
             <div class="addPanel">
                 <p>加入動畫</p>
@@ -147,7 +167,20 @@
         align-items: center;
         gap: 1rem;
 
-        & input {
+        .search {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+
+            button {
+                width: 20%;
+            }
+        }
+
+        input {
             width: 100%;
             height: 2rem;
             text-align: center;
@@ -232,6 +265,12 @@
             background-color 0.1s ease-in-out,
             color 0.1s ease-in-out;
 
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            background-color: #d9d4cf !important;
+            color: #7c7877 !important;
+        }
         &:active {
             background-color: #d9d4cf;
             color: #7c7877;
@@ -251,6 +290,23 @@
 
         .addPanelInputs > input {
             width: 100%;
+        }
+
+        .search {
+            flex-direction: column !important;
+
+            & * {
+                width: 100% !important;
+            }
+        }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        .search {
+            button:hover {
+                background-color: #7c7877;
+                color: #d9d4cf;
+            }
         }
     }
 </style>
