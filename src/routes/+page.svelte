@@ -92,8 +92,9 @@
             <button
                 onclick={comparingToMyAnimeList}
                 class="button"
+                class:enabled={isComparingToMyAnimeList}
                 disabled={!(store.user && store.userAnimeList)}
-                title="過濾出未收藏動畫">過濾</button
+                title="顯示未收藏動畫">過濾</button
             >
         </div>
         {#if store.user && searchQuery}
@@ -177,6 +178,11 @@
 
             button {
                 width: 20%;
+            }
+
+            .enabled {
+                background-color: #7c7877 !important;
+                color: #d9d4cf !important;
             }
         }
 
@@ -262,8 +268,8 @@
         height: 3rem;
 
         transition:
-            background-color 0.1s ease-in-out,
-            color 0.1s ease-in-out;
+            background-color 0.2s ease-in-out,
+            color 0.2s ease-in-out;
 
         &:disabled {
             cursor: not-allowed;

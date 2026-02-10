@@ -282,8 +282,8 @@
         height: 3rem;
 
         transition:
-            background-color 0.1s ease-in-out,
-            color 0.1s ease-in-out;
+            background-color 0.2s ease-in-out,
+            color 0.2s ease-in-out;
 
         &.selected {
             background-color: #63605f;
