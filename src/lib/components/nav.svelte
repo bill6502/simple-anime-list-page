@@ -84,6 +84,21 @@
             </div>
             <form onsubmit={gotoId}>
                 <input bind:value={animeListId} placeholder="搜尋動畫清單" />
+                <svg
+                    width="800px"
+                    height="800px"
+                    viewBox="0 0 16 16"
+                    xmlns="http://www.w3.org/2000/svg"
+                    version="1.1"
+                    fill="none"
+                    stroke="#ffffff"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                >
+                    <path d="m11.25 11.25 3 3" />
+                    <circle cx="7.5" cy="7.5" r="4.75" />
+                </svg>
             </form>
             {#if innerWidth.current! > 720 || expanding}
                 <div class="user-info">
@@ -165,26 +180,42 @@
         gap: 1rem;
 
         form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: row;
             flex: 1;
             border: none;
             outline: none;
-            padding: 0.5rem;
             margin: 0 5rem;
-        }
-        input {
-            width: 100%;
-            border: none;
-            outline: none;
+            height: 2.5rem;
             border-radius: 0.5rem;
-            min-height: 2.5rem;
-            background-color: #d9d4cf;
-            color: #7c7877;
-            font-size: 1rem;
-            text-align: center;
+            overflow: hidden;
 
-            transition: background-color 0.3s ease;
-            &:focus {
-                background-color: #e5e5e5;
+            & > svg {
+                height: 100%;
+                width: min-content;
+                background-color: #d9d4cf;
+                fill: #d9d4cf;
+                transition: fill 0.3s ease;
+                border-left: 0.02rem solid aliceblue;
+            }
+
+            & > input {
+                width: 100%;
+                height: 100%;
+                border: none;
+                outline: none;
+                min-height: 2.5rem;
+                background-color: #d9d4cf;
+                color: #7c7877;
+                font-size: 1rem;
+                text-align: center;
+
+                transition: background-color 0.3s ease;
+                &:focus {
+                    background-color: #e5e5e5;
+                }
             }
         }
     }
