@@ -37,7 +37,19 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
     throw redirect(302, `${host}?error=not_found`);
   }
 
-  if (store.userAnimeList.length > 0) {
+  if (
+    store.user &&
+    store.userAnimeListId != '' &&
+    store.userAnimeList.length == 0
+  ) {
+    const userAnimeList = await db.getWebsiteInfoBy_Id(store.userAnimeListId);
+    if (userAnimeList.ok) {
+      const userAnimeListJson = await userAnimeList.json();
+      store.userAnimeList = userAnimeListJson.value.animes;
+    }
+  }
+
+  if (store.userAnimeListId == id && store.userAnimeList.length > 0) {
     return {
       animes: store.userAnimeList,
       userName: store.user.username,

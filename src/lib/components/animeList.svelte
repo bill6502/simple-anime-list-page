@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from '$app/stores';
-    import { type Anime } from '$lib/types';
+    import { type Anime } from '$lib/type';
     import { flip } from 'svelte/animate';
     import { slide } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
@@ -21,6 +21,52 @@
             return;
         }
         store.successMessage = '已加入收藏';
+
+        const updateWebsiteInfo = await db.updateWebsiteInfo(
+            store.user.id,
+            store.user.username,
+        );
+        if (updateWebsiteInfo.ok) {
+            store.userAnimeListId = (await updateWebsiteInfo.json()).value;
+
+            const getUserAnimeList = await db.getWebsiteInfoBy_Id(
+                store.userAnimeListId,
+            );
+            if (getUserAnimeList.ok) {
+                const userAnimeListJson = await getUserAnimeList.json();
+                store.userAnimeList = userAnimeListJson.value.animes;
+            }
+        }
+    }
+
+    async function deleteAnime(name: string, url: string) {
+        const deleteAnimeCollection = await db.deleteAnimeCollection(
+            name,
+            url,
+            store.user.id,
+        );
+
+        if (!deleteAnimeCollection.ok) {
+            store.errorMessage = '取消收藏失敗';
+            return;
+        }
+        store.successMessage = '已取消收藏';
+
+        const updateWebsiteInfo = await db.updateWebsiteInfo(
+            store.user.id,
+            store.user.username,
+        );
+        if (updateWebsiteInfo.ok) {
+            store.userAnimeListId = (await updateWebsiteInfo.json()).value;
+
+            const getUserAnimeList = await db.getWebsiteInfoBy_Id(
+                store.userAnimeListId,
+            );
+            if (getUserAnimeList.ok) {
+                const userAnimeListJson = await getUserAnimeList.json();
+                store.userAnimeList = userAnimeListJson.value.animes;
+            }
+        }
     }
 </script>
 
@@ -37,12 +83,31 @@
                     ><a href={anime.url} target="_blank"
                         >{innerWidth.current! <= 820 ? '[連結]' : anime.url}</a
                     >
-                    {#if store.user && store.userAnimeListId != $page.params.id}
-                        <button
-                            onclick={async () => {
-                                await addAnime(anime.name, anime.url);
-                            }}>收藏</button
-                        >
+                    {#if store.user}
+                        {#if store.userAnimeListId != $page.params.id}
+                            {#if store.userAnimeList.some((a) => a.name == anime.name)}
+                                <button
+                                    onclick={async () => {
+                                        await deleteAnime(
+                                            anime.name,
+                                            anime.url,
+                                        );
+                                    }}>取消</button
+                                >
+                            {:else}
+                                <button
+                                    onclick={async () => {
+                                        await addAnime(anime.name, anime.url);
+                                    }}>收藏</button
+                                >
+                            {/if}
+                        {:else}
+                            <button
+                                onclick={async () => {
+                                    await deleteAnime(anime.name, anime.url);
+                                }}>取消</button
+                            >
+                        {/if}
                     {/if}
                 </td>
             </tr>

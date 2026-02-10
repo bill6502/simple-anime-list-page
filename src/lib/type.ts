@@ -1,3 +1,4 @@
+export type path = 'home' | 'mylist';
 export const errorMessages: Record<string, string> = {
   not_found: '找不到符合搜尋',
   not_response: '伺服器回應錯誤',

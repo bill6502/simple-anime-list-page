@@ -5,9 +5,6 @@
     "preview": "deno run -A npm:vite preview"
   },
   "lint": {
-    "rules": {
-      "tags": ["recommended"],
-      "exclude": ["no-sloppy-imports"]
-    }
+    "rules": {}
   }
 }

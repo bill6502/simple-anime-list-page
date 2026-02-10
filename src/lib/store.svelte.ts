@@ -3,12 +3,12 @@ import {
   PUBLIC_DISCORD_AUTH_LOCAL,
 } from '$env/static/public';
 import { base } from '$app/paths';
-import type { Anime } from './type.ts';
+import type { Anime, path } from './type.ts';
 
 type storeType = {
   baseUrl: string;
   authUrl: string;
-  currentPath: 'home' | 'mylist';
+  currentPath: path;
   user: any;
   userAnimeList: Omit<Anime, 'from'>[];
   userAnimeListId: string;
