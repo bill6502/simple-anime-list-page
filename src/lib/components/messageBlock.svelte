@@ -10,6 +10,14 @@
         }
         return store.successMessage;
     });
+    let notificationMessage = $derived.by(() => {
+        if (store.notificationMessage != '') {
+            setTimeout(() => {
+                store.notificationMessage = '';
+            }, 3000);
+        }
+        return store.notificationMessage;
+    });
     let errorMessage = $derived.by(() => {
         if (store.errorMessage != '') {
             setTimeout(() => {
@@ -29,6 +37,15 @@
         <p>{successMessage}</p>
     </div>
 {/if}
+{#if notificationMessage != ''}
+    <div
+        transition:fly={{ y: 50, duration: 500 }}
+        class="message"
+        data-message="notification"
+    >
+        <p>{notificationMessage}</p>
+    </div>
+{/if}
 {#if errorMessage != ''}
     <div
         transition:fly={{ y: 50, duration: 500 }}
@@ -46,7 +63,7 @@
         left: 50%;
         transform: translateX(-50%) translateY(-2rem);
         background-color: #fff5f5;
-        border: 1px solid #00ee00;
+        border: 0.1rem solid #00ee00;
         color: #000000;
         border-radius: 0.2rem;
         padding: 0 1rem;
@@ -60,12 +77,14 @@
         }
 
         &[data-message='success'] {
-            background-color: #f5fff5;
             border-color: #00ee00;
         }
 
+        &[data-message='notification'] {
+            border-color: #eeee00;
+        }
+
         &[data-message='error'] {
-            background-color: #fff5f5;
             border-color: #ee0000;
         }
     }

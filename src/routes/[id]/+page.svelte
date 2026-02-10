@@ -81,7 +81,7 @@
         const getAnimeList = await db.getWebsiteInfoBy_Id(id);
 
         if (!getAnimeList.ok) {
-            store.errorMessage = '動畫清單取得錯誤';
+            store.notificationMessage = '此動畫清單不存在';
             return;
         }
 

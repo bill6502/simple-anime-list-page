@@ -77,14 +77,17 @@ export const load: PageLoad = async ({ url, fetch }) => {
     const listIdJson = await updateAnimesList.json();
     localStorage.setItem('userAnimeListId', listIdJson.value);
 
-    if (listIdJson.value) {
-      listId = listIdJson.value;
+    listId = listIdJson.value;
+    store.userAnimeListId = listId;
+
+    const userAnimeList = await db.getWebsiteInfoBy_Id(listId);
+    if (userAnimeList.ok) {
+      const userAnimeListJson = await userAnimeList.json();
+      store.userAnimeList = userAnimeListJson.value.animes;
     }
-    store.userAnimeListId = listIdJson.value;
   }
 
   store.user = user;
-  store.userAnimeListId = listId;
 
   if (store.lastAnimeListId != '') {
     throw redirect(302, `${store.baseUrl}/${store.lastAnimeListId}`);

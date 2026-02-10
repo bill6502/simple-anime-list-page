@@ -3,15 +3,18 @@ import {
   PUBLIC_DISCORD_AUTH_LOCAL,
 } from '$env/static/public';
 import { base } from '$app/paths';
+import type { Anime } from './type.ts';
 
 type storeType = {
   baseUrl: string;
   authUrl: string;
   currentPath: 'home' | 'mylist';
   user: any;
+  userAnimeList: Omit<Anime, 'from'>[];
   userAnimeListId: string;
   lastAnimeListId: string;
   successMessage: string;
+  notificationMessage: string;
   errorMessage: string;
   fetch: typeof fetch | undefined;
 };
@@ -28,9 +31,11 @@ export const store = $state<storeType>({
   authUrl,
   currentPath: 'home',
   user: user ? JSON.parse(user) : null,
+  userAnimeList: [],
   userAnimeListId: userAnimeListId ?? '',
   lastAnimeListId: lastAnimeListId ?? '',
   successMessage: '',
+  notificationMessage: '',
   errorMessage: '',
   fetch: undefined,
 });

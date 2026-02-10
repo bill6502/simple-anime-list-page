@@ -1,8 +1,6 @@
 <script lang="ts">
     import { store } from '$lib/store.svelte';
     import { urls, type Anime } from '$lib/type';
-    import { goto } from '$app/navigation';
-    import { page } from '$app/state';
     import AnimeList from '$lib/components/animeList.svelte';
     import db from '$lib/db';
 
@@ -29,20 +27,20 @@
 
     async function addAnime() {
         if (addAnimeName == '' || addAnimeUrl == '') {
-            store.errorMessage = '請輸入動畫名稱與網址';
+            store.notificationMessage = '請輸入動畫名稱與網址';
             return;
         }
         if (
             animes.some((anime) => anime.name == addAnimeName) ||
             animes.some((anime) => anime.url == addAnimeUrl)
         ) {
-            store.errorMessage = '動畫已存在';
+            store.notificationMessage = '動畫已存在';
             return;
         }
 
         const regex = urls.map((url) => `(${url})`).join('|');
         if (!addAnimeUrl.match(regex)) {
-            store.errorMessage =
+            store.notificationMessage =
                 '可加入網址僅限 ani.gamer , anime1.me , hanime1.me';
             return;
         }

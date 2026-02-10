@@ -25,6 +25,22 @@ async function addAnimeCollection(name: string, url: string, userId: string) {
   });
 }
 
+async function deleteAnimeCollection(
+  name: string,
+  url: string,
+  userId: string,
+) {
+  return await store.fetch!(`${PUBLIC_DB}/deleteAnimeCollection`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      args: { name, url, userId },
+    }),
+  });
+}
+
 async function updateWebsiteInfo(userId: string, userName: string) {
   return await store.fetch!(`${PUBLIC_DB}/updateWebsiteInfo`, {
     method: 'POST',
@@ -60,6 +76,7 @@ async function checkWebsiteInfoBy_Id(id: string) {
 export default {
   getAllAnimes,
   addAnimeCollection,
+  deleteAnimeCollection,
   updateWebsiteInfo,
   getWebsiteInfoBy_Id,
   checkWebsiteInfoBy_Id,
