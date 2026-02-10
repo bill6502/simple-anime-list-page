@@ -150,7 +150,7 @@
         gap: 1rem;
 
         & input {
-            width: 50%;
+            width: 100%;
             height: 2rem;
             text-align: center;
             box-sizing: border-box;
@@ -253,12 +253,6 @@
 
         .addPanelInputs > input {
             width: 100%;
-        }
-
-        .panel {
-            & input {
-                width: 100%;
-            }
         }
     }
 </style>

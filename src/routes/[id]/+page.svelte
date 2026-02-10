@@ -192,7 +192,7 @@
         gap: 1rem;
 
         & input {
-            width: 50%;
+            width: 100%;
             border: none;
             outline: none;
             font-size: 1rem;
@@ -262,12 +262,6 @@
         }
         .buttons {
             flex-direction: column;
-        }
-
-        .container {
-            & input {
-                width: 100%;
-            }
         }
     }
 
