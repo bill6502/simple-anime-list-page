@@ -1,9 +1,8 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
-import { urls, type Anime } from '$lib/type.ts';
+import { urls, errorMessages, type Anime } from '$lib/type.ts';
 import db from '$lib/db.ts';
-import { getErrorMessage } from '../lib/utility.ts';
 
 export const load: PageLoad = async ({ url, fetch }) => {
   if (store.fetch == undefined) {
@@ -15,8 +14,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
   }
 
   const error = url.searchParams.get('error');
-  if (error) {
-    store.errorMessage = getErrorMessage(error);
+  if (error && error in errorMessages) {
+    store.errorMessage = errorMessages[error];
   }
 
   const token_type = url.searchParams.get('token_type') ?? '';
@@ -69,7 +68,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
     const updateAnimesList = await db.updateWebsiteInfo(user.id, user.username);
 
     if (!updateAnimesList.ok) {
-      store.errorMessage = getErrorMessage('failed_to_update_animes_list');
+      store.errorMessage = errorMessages['failed_to_update_animes_list'];
       return {
         listId: '',
         animes,

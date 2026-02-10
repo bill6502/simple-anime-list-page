@@ -5,8 +5,8 @@ import { browser } from '$app/environment';
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
+import { errorMessages } from '$lib/type.ts';
 import db from '$lib/db';
-import { getErrorMessage } from '$lib/utility.ts';
 
 export const load: PageLoad = async ({ url, params, fetch }) => {
   if (!browser) {
@@ -18,8 +18,8 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
   }
 
   const error = url.searchParams.get('error');
-  if (error) {
-    store.errorMessage = getErrorMessage(error);
+  if (error && error in errorMessages) {
+    store.errorMessage = errorMessages[error];
   }
 
   const { id } = params;
