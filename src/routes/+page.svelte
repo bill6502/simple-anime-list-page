@@ -2,7 +2,7 @@
     import { store } from '$lib/store.svelte';
     import { urls, type Anime } from '$lib/type';
     import AnimeList from '$lib/components/animeList.svelte';
-    import { setLocalStorage } from '$lib/utility.js';
+    import { setLocalStorage, updateMyAnimeList } from '$lib/utility.js';
     import db from '$lib/db';
 
     let { data } = $props();
@@ -13,7 +13,7 @@
 
     let isComparingToMyAnimeList = $state<boolean>(false);
 
-    let animes = $derived<Anime[]>(data.animes);
+    let animes = $state<Anime[]>(data.animes);
     let filteredAnimes = $derived.by<Anime[]>(() =>
         animes
             .filter(
@@ -69,6 +69,7 @@
                     from = url.replace('.', '');
                 }
             }
+            await updateMyAnimeList();
             animes.push({ name: addAnimeName, url: addAnimeUrl, from });
         } else {
             store.errorMessage = '加入失敗';

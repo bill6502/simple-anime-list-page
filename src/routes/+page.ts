@@ -41,25 +41,16 @@ export const load: PageLoad = async ({ url, fetch }) => {
     const animesJson = await getAllAnimes.json();
 
     animesJson.value.map((anime: Anime) => {
-      animes.push({ name: anime.name, url: anime.url, from: '' } as Anime);
+      let from = '';
+      for (const url of urls) {
+        if (anime.url.includes('https://' + url)) {
+          from = url.replace('.', '');
+        }
+      }
+      animes.push({ name: anime.name, url: anime.url, from } as Anime);
     });
 
-    animes = animes
-      .map((anime) => {
-        let from = '';
-        for (const url of urls) {
-          if (anime.url.includes('https://' + url)) {
-            from = url.replace('.', '');
-          }
-        }
-
-        return {
-          name: anime.name,
-          url: anime.url,
-          from: from,
-        };
-      })
-      .sort((a, b) => a.url.localeCompare(b.url));
+    animes = animes.sort((a, b) => a.url.localeCompare(b.url));
   }
 
   if (store.user) {
