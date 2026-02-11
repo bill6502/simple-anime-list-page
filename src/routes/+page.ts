@@ -2,6 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import { urls, errorMessages, type Anime } from '$lib/type.ts';
+import { updateWebsiteInfo } from '../lib/utility.ts';
 import db from '$lib/db.ts';
 
 export const load: PageLoad = async ({ url, fetch }) => {
@@ -21,8 +22,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
   const token_type = url.searchParams.get('token_type') ?? '';
   const access_token = url.searchParams.get('access_token') ?? '';
 
-  let user = store.user;
-  if (!user && token_type && access_token) {
+  if (!store.user && token_type && access_token) {
     const response = await fetch('https://discord.com/api/v10/users/@me', {
       headers: {
         Authorization: `${token_type} ${access_token}`,
@@ -31,8 +31,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 
     const userJson = await response.json();
     if (userJson) {
-      localStorage.setItem('user', JSON.stringify(userJson));
-      user = userJson;
+      store.user = userJson;
     }
   }
 
@@ -63,35 +62,15 @@ export const load: PageLoad = async ({ url, fetch }) => {
       .sort((a, b) => a.url.localeCompare(b.url));
   }
 
-  let listId = store.userAnimeListId;
-  if (user) {
-    const updateAnimesList = await db.updateWebsiteInfo(user.id, user.username);
-
-    if (!updateAnimesList.ok) {
-      store.errorMessage = errorMessages['failed_to_update_animes_list'];
-      return {
-        listId: '',
-        animes,
-      };
-    }
-    const listIdJson = await updateAnimesList.json();
-    localStorage.setItem('userAnimeListId', listIdJson.value);
-
-    listId = listIdJson.value;
-    store.userAnimeListId = listId;
-
-    const userAnimeList = await db.getWebsiteInfoBy_Id(listId);
-    if (userAnimeList.ok) {
-      const userAnimeListJson = await userAnimeList.json();
-      store.userAnimeList = userAnimeListJson.value.animes;
-    }
+  if (store.user) {
+    await updateWebsiteInfo();
   }
-
-  store.user = user;
 
   if (store.lastAnimeListId != '') {
     throw redirect(302, `${store.baseUrl}/${store.lastAnimeListId}`);
   }
 
-  return { listId, animes };
+  return {
+    animes,
+  };
 };

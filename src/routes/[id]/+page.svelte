@@ -4,8 +4,8 @@
     import { slide } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';
+    import { setLocalStorage, updateWebsiteInfo } from '$lib/utility';
     import AnimeList from '$lib/components/animeList.svelte';
-    import db from '$lib/db';
 
     let { data } = $props();
 
@@ -26,6 +26,11 @@
         animes
             .filter(
                 (anime) =>
+                    page.params.id != store.userAnimeListId ||
+                    store.userAnimeList.some((a) => a.name == anime.name),
+            )
+            .filter(
+                (anime) =>
                     selectedUrl == 'all' ||
                     anime.url.includes('https://' + selectedUrl),
             )
@@ -39,7 +44,6 @@
     );
     let userName = $derived<string>(data.userName);
 
-    //updateAnimeList
     $effect(() => {
         animes = [...data.animes]
             .sort((a, b) => a.url.localeCompare(b.url))
@@ -63,30 +67,19 @@
         if (innerWidth.current! > 720) {
             expanding = false;
         }
+    });
+
+    $effect(() => {
         store.currentPath = 'mylist';
+        return () => {
+            setLocalStorage();
+        };
     });
 
     async function updateAnimeList() {
-        const updateAnimesList = await db.updateWebsiteInfo(
-            store.user.id,
-            store.user.username,
-        );
+        await updateWebsiteInfo();
 
-        if (!updateAnimesList.ok) {
-            store.errorMessage = '動畫清單更新錯誤';
-            return;
-        }
-
-        const id = (await updateAnimesList.json()).value;
-        const getAnimeList = await db.getWebsiteInfoBy_Id(id);
-
-        if (!getAnimeList.ok) {
-            store.notificationMessage = '此動畫清單不存在';
-            return;
-        }
-
-        const data = await getAnimeList.json();
-        animes = (data.value.animes as Anime[])
+        animes = store.userAnimeList
             .sort((a, b) => a.url.localeCompare(b.url))
             .map((anime) => {
                 let from = '';

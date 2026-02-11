@@ -2,6 +2,7 @@
     import { store } from '$lib/store.svelte';
     import { urls, type Anime } from '$lib/type';
     import AnimeList from '$lib/components/animeList.svelte';
+    import { setLocalStorage } from '$lib/utility.js';
     import db from '$lib/db';
 
     let { data } = $props();
@@ -31,6 +32,9 @@
 
     $effect(() => {
         store.currentPath = 'home';
+        return () => {
+            setLocalStorage();
+        };
     });
 
     async function addAnime() {
@@ -272,7 +276,7 @@
             color 0.2s ease-in-out;
 
         &:disabled {
-            cursor: not-allowed;
+            cursor: unset;
             opacity: 0.5;
             background-color: #d9d4cf !important;
             color: #7c7877 !important;

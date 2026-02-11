@@ -5,6 +5,7 @@
     import { slide } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';
+    import { updateWebsiteInfo } from '$lib/utility';
     import db from '$lib/db';
 
     type props = {
@@ -22,21 +23,7 @@
         }
         store.successMessage = '已加入收藏';
 
-        const updateWebsiteInfo = await db.updateWebsiteInfo(
-            store.user.id,
-            store.user.username,
-        );
-        if (updateWebsiteInfo.ok) {
-            store.userAnimeListId = (await updateWebsiteInfo.json()).value;
-
-            const getUserAnimeList = await db.getWebsiteInfoBy_Id(
-                store.userAnimeListId,
-            );
-            if (getUserAnimeList.ok) {
-                const userAnimeListJson = await getUserAnimeList.json();
-                store.userAnimeList = userAnimeListJson.value.animes;
-            }
-        }
+        await updateWebsiteInfo();
     }
 
     async function deleteAnime(name: string, url: string) {
@@ -52,21 +39,7 @@
         }
         store.successMessage = '已取消收藏';
 
-        const updateWebsiteInfo = await db.updateWebsiteInfo(
-            store.user.id,
-            store.user.username,
-        );
-        if (updateWebsiteInfo.ok) {
-            store.userAnimeListId = (await updateWebsiteInfo.json()).value;
-
-            const getUserAnimeList = await db.getWebsiteInfoBy_Id(
-                store.userAnimeListId,
-            );
-            if (getUserAnimeList.ok) {
-                const userAnimeListJson = await getUserAnimeList.json();
-                store.userAnimeList = userAnimeListJson.value.animes;
-            }
-        }
+        await updateWebsiteInfo();
     }
 </script>
 
