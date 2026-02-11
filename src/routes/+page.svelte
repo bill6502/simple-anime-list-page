@@ -63,7 +63,7 @@
             store.user.id,
         );
         if (response.ok) {
-            store.successMessage = '動畫已成功加入';
+            store.successMessage = '已加入收藏中';
 
             let from = '';
             for (const url of urls) {

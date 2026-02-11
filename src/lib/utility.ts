@@ -10,14 +10,14 @@ export function setLocalStorage() {
   }
 }
 
-export async function updateWebsiteInfo() {
+export async function updateMyAnimeList() {
   const updateWebsiteInfo = await db.updateWebsiteInfo(
     store.user.id,
     store.user.username,
   );
 
   if (!updateWebsiteInfo.ok) {
-    store.errorMessage = '動畫清單更新錯誤';
+    store.errorMessage = '更新失敗';
     return;
   }
 

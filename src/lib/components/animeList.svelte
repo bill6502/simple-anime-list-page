@@ -5,7 +5,7 @@
     import { slide } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';
-    import { updateWebsiteInfo } from '$lib/utility';
+    import { updateMyAnimeList } from '$lib/utility';
     import db from '$lib/db';
 
     type props = {
@@ -23,7 +23,7 @@
         }
         store.successMessage = '已加入收藏';
 
-        await updateWebsiteInfo();
+        await updateMyAnimeList();
     }
 
     async function deleteAnime(name: string, url: string) {
@@ -39,7 +39,7 @@
         }
         store.successMessage = '已取消收藏';
 
-        await updateWebsiteInfo();
+        await updateMyAnimeList();
     }
 </script>
 

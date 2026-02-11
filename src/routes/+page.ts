@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import { urls, errorMessages, type Anime } from '$lib/type.ts';
-import { updateWebsiteInfo } from '../lib/utility.ts';
+import { updateMyAnimeList } from '../lib/utility.ts';
 import db from '$lib/db.ts';
 
 export const load: PageLoad = async ({ url, fetch }) => {
@@ -63,7 +63,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
   }
 
   if (store.user) {
-    await updateWebsiteInfo();
+    await updateMyAnimeList();
   }
 
   if (store.lastAnimeListId != '') {

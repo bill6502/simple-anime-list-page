@@ -4,7 +4,7 @@
     import { slide } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';
-    import { setLocalStorage, updateWebsiteInfo } from '$lib/utility';
+    import { setLocalStorage, updateMyAnimeList } from '$lib/utility';
     import AnimeList from '$lib/components/animeList.svelte';
 
     let { data } = $props();
@@ -76,8 +76,8 @@
         };
     });
 
-    async function updateAnimeList() {
-        await updateWebsiteInfo();
+    async function update() {
+        await updateMyAnimeList();
 
         animes = store.userAnimeList
             .sort((a, b) => a.url.localeCompare(b.url))
@@ -95,7 +95,7 @@
                     from: from,
                 };
             });
-        store.successMessage = '已成功更新';
+        store.successMessage = '已更新';
     }
 
     function toggleSourceSelection() {
@@ -147,8 +147,7 @@
                     out:slide={{ duration: 100 }}
                     class="button"
                     onclick={async () => {
-                        expanding = !expanding ? true : expanding;
-                        await updateAnimeList();
+                        await update();
                     }}>更新</button
                 >
             {/if}

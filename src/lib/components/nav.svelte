@@ -110,7 +110,7 @@
                         <img src={pictureUrl} />
                     </div>
                     {#if showAuth}
-                        <div class="auth-container">
+                        <div class="buttons">
                             <button
                                 in:slide={{ duration: 300 }}
                                 out:slide={{ duration: 100 }}
@@ -247,7 +247,7 @@
         justify-content: center;
         gap: 0.5rem;
 
-        .auth-container {
+        .buttons {
             max-width: 30rem;
             display: flex;
             position: absolute;
@@ -353,19 +353,24 @@
         }
 
         .user-info {
-            .auth-container {
-                max-width: calc(100vw - 3rem);
+            .buttons {
+                width: 22.5rem;
                 transform: translateX(-50%);
                 flex-direction: row;
+                flex-wrap: wrap;
                 align-items: center;
-                justify-content: center;
+                justify-content: flex-start;
+                button {
+                    width: 100% !important;
+                    max-width: 10rem !important;
+                }
             }
         }
     }
 
     @media (hover: hover) and (pointer: fine) {
         .user-info {
-            .auth-container {
+            .buttons {
                 .button:hover {
                     background-color: #6b6766;
                     color: #d9d4cf;
