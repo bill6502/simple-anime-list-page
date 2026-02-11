@@ -32,9 +32,7 @@
 
     $effect(() => {
         store.currentPath = 'home';
-        return () => {
-            setLocalStorage();
-        };
+        setLocalStorage();
     });
 
     async function addAnime() {

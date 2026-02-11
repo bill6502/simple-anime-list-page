@@ -71,9 +71,7 @@
 
     $effect(() => {
         store.currentPath = 'mylist';
-        return () => {
-            setLocalStorage();
-        };
+        setLocalStorage();
     });
 
     async function update() {
