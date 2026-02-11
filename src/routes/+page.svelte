@@ -97,7 +97,7 @@
                 class="button"
                 class:enabled={isComparingToMyAnimeList}
                 disabled={!(store.user && store.userAnimeList)}
-                title="顯示未收藏動畫">過濾</button
+                title="顯示未收藏動畫">未收藏</button
             >
         </div>
         {#if store.user && searchQuery}
