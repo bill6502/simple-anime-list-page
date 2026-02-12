@@ -37,9 +37,7 @@
             .filter(
                 (anime) =>
                     searchQuery == '' ||
-                    anime.name
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase()),
+                    anime.name.toLowerCase().includes(searchQuery),
             ),
     );
     let userName = $derived<string>(data.userName);
@@ -104,6 +102,25 @@
         navigator.clipboard.writeText(page.params.id!);
         store.successMessage = '已複製清單ID至剪貼簿';
     }
+
+    function search(
+        event: KeyboardEvent & {
+            currentTarget: EventTarget & HTMLInputElement;
+        },
+    ) {
+        if (event.key === 'Enter') {
+            const input = event.target as HTMLInputElement;
+            const query = input.value.toLowerCase();
+            searchQuery = query;
+        }
+    }
+
+    function clearSearch(event: Event) {
+        const input = event.target as HTMLInputElement;
+        if (input.value === '') {
+            searchQuery = '';
+        }
+    }
 </script>
 
 <svelte:head>
@@ -151,7 +168,7 @@
             {/if}
         {/if}
     </div>
-    <input bind:value={searchQuery} placeholder="搜尋動畫" />
+    <input oninput={clearSearch} onkeyup={search} placeholder="搜尋動畫" />
     <div class="list">
         <AnimeList animes={selectedAnime} />
     </div>

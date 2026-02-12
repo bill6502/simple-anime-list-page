@@ -3,6 +3,7 @@
     import { urls, type Anime } from '$lib/type';
     import AnimeList from '$lib/components/animeList.svelte';
     import { setLocalStorage, updateMyAnimeList } from '$lib/utility.js';
+    import { slide } from 'svelte/transition';
     import db from '$lib/db';
 
     let { data } = $props();
@@ -11,6 +12,7 @@
     let addAnimeName = $state<string>('');
     let addAnimeUrl = $state<string>('');
 
+    let isAddingAnime = $state<boolean>(false);
     let isComparingToMyAnimeList = $state<boolean>(false);
 
     let animes = $state<Anime[]>(data.animes);
@@ -19,9 +21,7 @@
             .filter(
                 (anime) =>
                     searchQuery == '' ||
-                    anime.name
-                        .toLocaleLowerCase()
-                        .includes(searchQuery.toLocaleLowerCase()),
+                    anime.name.toLowerCase().includes(searchQuery),
             )
             .filter(
                 (anime) =>
@@ -76,8 +76,31 @@
         }
     }
 
-    function comparingToMyAnimeList() {
+    function toggleComparingToMyAnimeList() {
         isComparingToMyAnimeList = !isComparingToMyAnimeList;
+    }
+
+    function toggleAddAnime() {
+        isAddingAnime = !isAddingAnime;
+    }
+
+    function search(
+        event: KeyboardEvent & {
+            currentTarget: EventTarget & HTMLInputElement;
+        },
+    ) {
+        if (event.key === 'Enter') {
+            const input = event.target as HTMLInputElement;
+            const query = input.value.toLowerCase();
+            searchQuery = query;
+        }
+    }
+
+    function clearSearch(event: Event) {
+        const input = event.target as HTMLInputElement;
+        if (input.value === '') {
+            searchQuery = '';
+        }
     }
 </script>
 
@@ -91,18 +114,33 @@
     </div>
     <div class="panel">
         <div class="search">
-            <input bind:value={searchQuery} placeholder="搜尋動畫" />
+            <input
+                oninput={clearSearch}
+                onkeyup={search}
+                placeholder="搜尋動畫"
+            />
             <button
-                onclick={comparingToMyAnimeList}
+                onclick={toggleAddAnime}
+                class="button"
+                class:enabled={isAddingAnime}
+                disabled={!(store.user && searchQuery)}
+                title="新增動畫">新增動畫</button
+            >
+            <button
+                onclick={toggleComparingToMyAnimeList}
                 class="button"
                 class:enabled={isComparingToMyAnimeList}
                 disabled={!(store.user && store.userAnimeList)}
                 title="顯示未收藏動畫">未收藏</button
             >
         </div>
-        {#if store.user && searchQuery}
-            <div class="addPanel">
-                <p>加入動畫</p>
+        {#if isAddingAnime}
+            <div
+                in:slide={{ duration: 300 }}
+                out:slide={{ duration: 100 }}
+                class="addPanel"
+            >
+                <p>新增動畫</p>
                 <div class="addPanelInputs">
                     <input bind:value={addAnimeName} placeholder="動畫名稱" />
                     <input bind:value={addAnimeUrl} placeholder="動畫網址" />
