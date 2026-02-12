@@ -100,6 +100,7 @@
         const input = event.target as HTMLInputElement;
         if (input.value === '') {
             searchQuery = '';
+            isAddingAnime = false;
         }
     }
 </script>
