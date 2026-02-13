@@ -8,6 +8,9 @@ export function setLocalStorage() {
   if (store.userAnimeListId != '') {
     localStorage.setItem('userAnimeListId', store.userAnimeListId);
   }
+
+  store.lastAnimeListId = '';
+  localStorage.removeItem('lastAnimeListId');
 }
 
 export async function updateMyAnimeList() {

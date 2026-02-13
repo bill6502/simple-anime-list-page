@@ -55,9 +55,6 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
 
   const data = await response.json();
 
-  store.lastAnimeListId = '';
-  localStorage.removeItem('lastAnimeListId');
-
   return {
     animes: data.value.animes,
     userName: data.value.userName,

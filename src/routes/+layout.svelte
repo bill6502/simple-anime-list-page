@@ -1,7 +1,4 @@
 <script lang="ts">
-    import { store } from '$lib/store.svelte';
-    import { fade } from 'svelte/transition';
-    import { page } from '$app/state';
     import { innerWidth } from 'svelte/reactivity/window';
     import MessageBlock from '$lib/components/messageBlock.svelte';
     import Nav from '$lib/components/nav.svelte';
@@ -18,20 +15,6 @@
             expanding = false;
         }
     });
-
-    function setLastAnimeListId() {
-        if (page.params.id) {
-            localStorage.setItem('lastAnimeListId', page.params.id);
-        }
-    }
-
-    function clear() {
-        localStorage.removeItem('user');
-        localStorage.removeItem('userAnimeListId');
-
-        store.user = null;
-        store.userAnimeListId = '';
-    }
 </script>
 
 <div class="app">

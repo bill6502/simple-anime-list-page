@@ -72,7 +72,11 @@
         setLocalStorage();
     });
 
-    async function update() {
+    async function updateAnimeList() {
+        if (!store.user) {
+            store.notificationMessage = '需取得Discord授權';
+            return;
+        }
         await updateMyAnimeList();
 
         animes = store.userAnimeList
@@ -155,17 +159,15 @@
                 >
             {/if}
         {/each}
-        {#if store.user && data.isMyAnimeList}
-            {#if innerWidth.current! > 720 || expanding}
-                <button
-                    in:slide={{ duration: 300 }}
-                    out:slide={{ duration: 100 }}
-                    class="button"
-                    onclick={async () => {
-                        await update();
-                    }}>更新</button
-                >
-            {/if}
+        {#if innerWidth.current! > 720 || expanding}
+            <button
+                in:slide={{ duration: 300 }}
+                out:slide={{ duration: 100 }}
+                class="button"
+                class:disabled={!store.user}
+                disabled={!store.user}
+                onclick={updateAnimeList}>更新</button
+            >
         {/if}
     </div>
     <input oninput={clearSearch} onkeyup={search} placeholder="搜尋動畫" />
@@ -291,6 +293,13 @@
         transition:
             background-color 0.2s ease-in-out,
             color 0.2s ease-in-out;
+
+        &:disabled {
+            cursor: unset;
+            opacity: 0.5;
+            background-color: #d9d4cf !important;
+            color: #7c7877 !important;
+        }
 
         &.selected {
             background-color: #63605f;

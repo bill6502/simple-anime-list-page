@@ -36,13 +36,18 @@
     });
 
     async function addAnime() {
+        if (!store.user) {
+            store.notificationMessage = '需取得Discord授權';
+            return;
+        }
+
         if (addAnimeName == '' || addAnimeUrl == '') {
             store.notificationMessage = '請輸入動畫名稱與網址';
             return;
         }
         if (
-            animes.some((anime) => anime.name == addAnimeName) ||
-            animes.some((anime) => anime.url == addAnimeUrl)
+            animes.some((anime) => anime.name.trim() == addAnimeName.trim()) ||
+            animes.some((anime) => anime.url.trim() == addAnimeUrl.trim())
         ) {
             store.notificationMessage = '動畫已存在';
             return;
@@ -77,6 +82,10 @@
     }
 
     function toggleComparingToMyAnimeList() {
+        if (!store.user) {
+            store.notificationMessage = '需取得Discord授權';
+            return;
+        }
         isComparingToMyAnimeList = !isComparingToMyAnimeList;
     }
 
@@ -91,7 +100,7 @@
     ) {
         if (event.key === 'Enter') {
             const input = event.target as HTMLInputElement;
-            const query = input.value.toLowerCase();
+            const query = input.value.toLowerCase().trim();
             searchQuery = query;
         }
     }
@@ -100,7 +109,6 @@
         const input = event.target as HTMLInputElement;
         if (input.value === '') {
             searchQuery = '';
-            isAddingAnime = false;
         }
     }
 </script>
@@ -120,12 +128,8 @@
                 onkeyup={search}
                 placeholder="搜尋動畫"
             />
-            <button
-                onclick={toggleAddAnime}
-                class="button"
-                class:enabled={isAddingAnime}
-                disabled={!(store.user && searchQuery)}
-                title="新增動畫">新增動畫</button
+            <button onclick={toggleAddAnime} class="button" title="新增動畫"
+                >新增動畫</button
             >
             <button
                 onclick={toggleComparingToMyAnimeList}
@@ -146,7 +150,11 @@
                     <input bind:value={addAnimeName} placeholder="動畫名稱" />
                     <input bind:value={addAnimeUrl} placeholder="動畫網址" />
                 </div>
-                <button onclick={addAnime} class="button">加入</button>
+                <button
+                    disabled={!(store.user && searchQuery)}
+                    onclick={addAnime}
+                    class="button">加入</button
+                >
             </div>
         {/if}
     </div>
