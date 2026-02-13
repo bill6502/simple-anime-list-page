@@ -7,6 +7,7 @@ import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import { errorMessages } from '$lib/type.ts';
 import db from '$lib/db';
+import { updateMyAnimeList } from '../../lib/utility.ts';
 
 export const load: PageLoad = async ({ url, params, fetch }) => {
   if (!browser) {
@@ -25,6 +26,15 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
   const { id } = params;
   const host = url.searchParams.get('from') ?? url.pathname;
 
+  if (store.user && store.userAnimeListId == id) {
+    await updateMyAnimeList();
+    return {
+      animes: store.userAnimeList,
+      userName: store.user.username,
+      isMyAnimeList: true,
+    };
+  }
+
   const checkResponse = await db.checkWebsiteInfoBy_Id(id);
 
   if (!checkResponse.ok) {
@@ -37,26 +47,6 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
     throw redirect(302, `${host}?error=not_found`);
   }
 
-  if (
-    store.user &&
-    store.userAnimeListId != '' &&
-    store.userAnimeList.length == 0
-  ) {
-    const userAnimeList = await db.getWebsiteInfoBy_Id(store.userAnimeListId);
-    if (userAnimeList.ok) {
-      const userAnimeListJson = await userAnimeList.json();
-      store.userAnimeList = userAnimeListJson.value.animes;
-    }
-  }
-
-  if (store.userAnimeListId == id && store.userAnimeList.length > 0) {
-    return {
-      animes: store.userAnimeList,
-      userName: store.user.username,
-      isMyAnimeList: true,
-    };
-  }
-
   const response = await db.getWebsiteInfoBy_Id(id);
 
   if (!response.ok) {
@@ -67,14 +57,6 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
 
   store.lastAnimeListId = '';
   localStorage.removeItem('lastAnimeListId');
-
-  if (store.user && store.userAnimeListId == id) {
-    return {
-      animes: data.value.animes,
-      userName: data.value.userName,
-      isMyAnimeList: true,
-    };
-  }
 
   return {
     animes: data.value.animes,
