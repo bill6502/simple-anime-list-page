@@ -32,6 +32,7 @@ jobs:
           deno task build # 執行你在 deno.json 裡的 build 指令 (產生 build/ 資料夾)
         env:
           PUBLIC_DB: ${{ secrets.PUBLIC_DB }}
+          PUBLIC_API_KEY: ${{ secrets.PUBLIC_API_KEY }}
           PUBLIC_DISCORD_AUTH_LOCAL: ${{ secrets.PUBLIC_DISCORD_AUTH_LOCAL }}
           PUBLIC_DISCORD_AUTH: ${{ secrets.PUBLIC_DISCORD_AUTH }}
 

@@ -1,15 +1,15 @@
-import { PUBLIC_DB } from '$env/static/public';
+import { PUBLIC_DB, PUBLIC_API_KEY } from '$env/static/public';
 import { store } from './store.svelte.ts';
 
 async function getAllAnimes() {
+  console.log(PUBLIC_API_KEY);
   return await store.fetch!(`${PUBLIC_DB}/getAllAnimes`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      api_key: PUBLIC_API_KEY,
     },
-    body: JSON.stringify({
-      args: {},
-    }),
+    body: JSON.stringify({}),
   });
 }
 
@@ -18,9 +18,12 @@ async function addAnimeCollection(name: string, url: string, userId: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      api_key: PUBLIC_API_KEY,
     },
     body: JSON.stringify({
-      args: { name, url, userId },
+      name,
+      url,
+      userId,
     }),
   });
 }
@@ -34,9 +37,12 @@ async function deleteAnimeCollection(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      api_key: PUBLIC_API_KEY,
     },
     body: JSON.stringify({
-      args: { name, url, userId },
+      name,
+      url,
+      userId,
     }),
   });
 }
@@ -46,9 +52,11 @@ async function updateWebsiteInfo(userId: string, userName: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      api_key: PUBLIC_API_KEY,
     },
     body: JSON.stringify({
-      args: { userId, userName },
+      userId,
+      userName,
     }),
   });
 }
@@ -58,8 +66,9 @@ async function getWebsiteInfoBy_Id(id: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      api_key: PUBLIC_API_KEY,
     },
-    body: JSON.stringify({ args: { id } }),
+    body: JSON.stringify({ id }),
   });
 }
 
@@ -68,8 +77,9 @@ async function checkWebsiteInfoBy_Id(id: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      api_key: PUBLIC_API_KEY,
     },
-    body: JSON.stringify({ args: { id } }),
+    body: JSON.stringify({ id }),
   });
 }
 

@@ -42,7 +42,7 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
   }
 
   const check = await checkResponse.json();
-  const isExists = check.value as boolean;
+  const isExists = check as boolean;
   if (!isExists) {
     throw redirect(302, `${host}?error=not_found`);
   }
@@ -56,8 +56,8 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
   const data = await response.json();
 
   return {
-    animes: data.value.animes,
-    userName: data.value.userName,
+    animes: data.animes,
+    userName: data.userName,
     isMyAnimeList: false,
   };
 };

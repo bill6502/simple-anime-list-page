@@ -24,7 +24,7 @@ export async function updateMyAnimeList() {
     return;
   }
 
-  store.userAnimeListId = (await updateWebsiteInfo.json()).value;
+  store.userAnimeListId = await updateWebsiteInfo.json();
 
   const getUserAnimeList = await db.getWebsiteInfoBy_Id(store.userAnimeListId);
 
@@ -34,5 +34,5 @@ export async function updateMyAnimeList() {
   }
 
   const userAnimeListJson = await getUserAnimeList.json();
-  store.userAnimeList = userAnimeListJson.value.animes;
+  store.userAnimeList = userAnimeListJson.animes;
 }

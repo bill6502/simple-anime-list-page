@@ -40,7 +40,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
   if (getAllAnimes.ok) {
     const animesJson = await getAllAnimes.json();
 
-    animesJson.value.map((anime: Anime) => {
+    animesJson.map((anime: Anime) => {
       let from = '';
       for (const url of urls) {
         if (anime.url.includes('https://' + url)) {
