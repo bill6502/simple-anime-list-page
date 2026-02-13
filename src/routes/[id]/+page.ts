@@ -6,8 +6,8 @@ import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import { errorMessages } from '$lib/type.ts';
-import db from '$lib/db';
 import { updateMyAnimeList } from '../../lib/utility.ts';
+import db from '$lib/db';
 
 export const load: PageLoad = async ({ url, params, fetch }) => {
   if (!browser) {

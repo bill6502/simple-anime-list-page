@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { slide, fly } from 'svelte/transition';
+    import { fly } from 'svelte/transition';
     import { scrollY } from 'svelte/reactivity/window';
 </script>
 

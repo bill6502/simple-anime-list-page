@@ -107,7 +107,7 @@
         store.successMessage = '已複製清單ID至剪貼簿';
     }
 
-    function search(
+    function searchAnime(
         event: KeyboardEvent & {
             currentTarget: EventTarget & HTMLInputElement;
         },
@@ -174,7 +174,7 @@
             >
         {/if}
     </div>
-    <input oninput={clearSearch} onkeyup={search} placeholder="搜尋動畫" />
+    <input oninput={clearSearch} onkeyup={searchAnime} placeholder="搜尋動畫" />
     <div class="list">
         <AnimeList animes={selectedAnime} />
     </div>

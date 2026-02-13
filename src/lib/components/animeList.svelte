@@ -2,7 +2,7 @@
     import { page } from '$app/stores';
     import { type Anime } from '$lib/type';
     import { flip } from 'svelte/animate';
-    import { slide } from 'svelte/transition';
+    import { fly } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';
     import { updateMyAnimeList } from '$lib/utility';
@@ -49,7 +49,7 @@
             <tr
                 class="row"
                 animate:flip={{ duration: 500 }}
-                in:slide={{ duration: 500 }}
+                in:fly={{ duration: 500 }}
             >
                 <td class="tdName">{anime.name}</td>
                 <td class="tdURL" data-from={anime.from}
