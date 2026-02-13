@@ -40,7 +40,6 @@
                     anime.name.toLowerCase().includes(searchQuery),
             ),
     );
-    let userName = $derived<string>(data.userName);
 
     $effect(() => {
         animes = [...data.animes]
@@ -73,7 +72,7 @@
     });
 
     async function updateAnimeList() {
-        if (!store.user) {
+        if (!(store.user && page.params.id == store.userAnimeListId)) {
             store.notificationMessage = '需取得Discord授權';
             return;
         }
@@ -164,8 +163,12 @@
                 in:slide={{ duration: 300 }}
                 out:slide={{ duration: 100 }}
                 class="button"
-                class:disabled={!store.user}
-                disabled={!store.user}
+                class:disabled={!(
+                    store.user && page.params.id == store.userAnimeListId
+                )}
+                disabled={!(
+                    store.user && page.params.id == store.userAnimeListId
+                )}
                 onclick={updateAnimeList}>更新</button
             >
         {/if}
