@@ -128,16 +128,18 @@
                 onkeyup={search}
                 placeholder="搜尋動畫"
             />
-            <button onclick={toggleAddAnime} class="button" title="新增動畫"
-                >新增動畫</button
-            >
-            <button
-                onclick={toggleComparingToMyAnimeList}
-                class="button"
-                class:enabled={isComparingToMyAnimeList}
-                disabled={!(store.user && store.userAnimeList)}
-                title="顯示未收藏動畫">未收藏</button
-            >
+            <div class="buttons">
+                <button onclick={toggleAddAnime} class="button" title="新增動畫"
+                    >新增動畫</button
+                >
+                <button
+                    onclick={toggleComparingToMyAnimeList}
+                    class="button"
+                    class:enabled={isComparingToMyAnimeList}
+                    disabled={!(store.user && store.userAnimeList)}
+                    title="顯示未收藏動畫">未收藏</button
+                >
+            </div>
         </div>
         {#if isAddingAnime}
             <div
@@ -203,7 +205,7 @@
 
     button {
         box-sizing: border-box;
-        border-radius: 0.7rem;
+        border-radius: 0.5rem;
         padding: 1.5rem 2rem;
         border: none;
         outline: none;
@@ -227,12 +229,22 @@
             width: 100%;
 
             button {
-                width: 20%;
+                width: 100%;
             }
 
             .enabled {
                 background-color: #7c7877 !important;
                 color: #d9d4cf !important;
+            }
+
+            .buttons {
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                align-items: center;
+                box-sizing: border-box;
+                background-color: transparent;
+                z-index: 10;
             }
         }
 
@@ -241,7 +253,7 @@
             height: 2rem;
             text-align: center;
             box-sizing: border-box;
-            border-radius: 0.7rem;
+            border-radius: 0.5rem;
             padding: 1.5rem 2rem;
             border: none;
             outline: none;
@@ -261,7 +273,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding: 0.7rem;
+        border-radius: 0.5rem;
         gap: 1rem;
+        background-color: #7c7877;
 
         & p {
             max-width: 100%;
@@ -301,38 +316,6 @@
         color: #7c7877;
     }
 
-    .button {
-        border: none;
-        border-radius: 0.5rem;
-        background-color: #d9d4cf;
-        color: #7c7877;
-        cursor: pointer;
-
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        white-space: nowrap;
-
-        overflow: hidden;
-        width: 100%;
-        height: 3rem;
-
-        transition:
-            background-color 0.2s ease-in-out,
-            color 0.2s ease-in-out;
-
-        &:disabled {
-            cursor: unset;
-            opacity: 0.5;
-            background-color: #d9d4cf !important;
-            color: #7c7877 !important;
-        }
-        &:active {
-            background-color: #d9d4cf;
-            color: #7c7877;
-        }
-    }
-
     @media (width <= 720px) {
         .title {
             flex-direction: column;
@@ -353,6 +336,15 @@
 
             & * {
                 width: 100% !important;
+            }
+
+            .buttons {
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 0.7rem;
+                background-color: #7c7877 !important;
+                border-radius: 0.5rem;
             }
         }
     }

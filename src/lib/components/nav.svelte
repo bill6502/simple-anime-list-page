@@ -110,7 +110,7 @@
                         <img src={pictureUrl} />
                     </div>
                     {#if showAuth}
-                        <div class="buttons">
+                        <div class="drop-down-list">
                             <button
                                 in:slide={{ duration: 300 }}
                                 out:slide={{ duration: 100 }}
@@ -222,13 +222,14 @@
 
     .nav-item {
         box-sizing: border-box;
-        border-radius: 0.7rem;
+        border-radius: 0.5rem;
         border: none;
         outline: none;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 0.7rem;
         gap: 2rem;
 
         & > a {
@@ -247,7 +248,7 @@
         justify-content: center;
         gap: 0.5rem;
 
-        .buttons {
+        .drop-down-list {
             max-width: 30rem;
             display: flex;
             position: absolute;
@@ -258,7 +259,7 @@
             align-items: center;
             justify-content: center;
             margin-top: 0.5rem;
-            padding: 1rem;
+            padding: 0.7rem;
             border-radius: 0.3rem;
             gap: 0.5rem;
 
@@ -353,7 +354,7 @@
         }
 
         .user-info {
-            .buttons {
+            .drop-down-list {
                 width: 22.5rem;
                 transform: translateX(-50%);
                 flex-direction: row;

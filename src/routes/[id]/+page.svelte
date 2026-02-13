@@ -277,43 +277,6 @@
         }
     }
 
-    .button {
-        border: none;
-        border-radius: 0.5rem;
-        background-color: #d9d4cf;
-        color: #7c7877;
-        cursor: pointer;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        white-space: nowrap;
-
-        overflow: hidden;
-        width: 100%;
-        height: 3rem;
-
-        transition:
-            background-color 0.2s ease-in-out,
-            color 0.2s ease-in-out;
-
-        &:disabled {
-            cursor: unset;
-            opacity: 0.5;
-            background-color: #d9d4cf !important;
-            color: #7c7877 !important;
-        }
-
-        &.selected {
-            background-color: #63605f;
-            color: #d9d4cf;
-        }
-        &:active {
-            background-color: #d9d4cf;
-            color: #7c7877;
-        }
-    }
-
     @media (hover: hover) and (pointer: fine) {
         .button {
             &:hover {
