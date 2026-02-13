@@ -6,6 +6,7 @@
     import { innerWidth } from 'svelte/reactivity/window';
     import { setLocalStorage, updateMyAnimeList } from '$lib/utility';
     import AnimeList from '$lib/components/animeList.svelte';
+    import Line from '$lib/components/line.svelte';
 
     let { data } = $props();
 
@@ -140,8 +141,8 @@
     <div class="buttons">
         {#if innerWidth.current! <= 720}
             <button class="button" onclick={toggleSourceSelection}>
-                來源</button
-            >
+                <Line />
+            </button>
         {/if}
         {#each websites as url (url)}
             {#if innerWidth.current! > 720 || expanding || url == selectedUrl}
@@ -278,12 +279,6 @@
     }
 
     @media (hover: hover) and (pointer: fine) {
-        .button {
-            &:hover {
-                background-color: #63605f;
-                color: #d9d4cf;
-            }
-        }
         .copy {
             &:hover {
                 color: skyblue;

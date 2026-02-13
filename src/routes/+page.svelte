@@ -129,8 +129,11 @@
                 placeholder="搜尋動畫"
             />
             <div class="buttons">
-                <button onclick={toggleAddAnime} class="button" title="新增動畫"
-                    >新增動畫</button
+                <button
+                    class:enabled={isAddingAnime}
+                    onclick={toggleAddAnime}
+                    class="button"
+                    title="新增動畫">新增動畫</button
                 >
                 <button
                     onclick={toggleComparingToMyAnimeList}
@@ -233,7 +236,7 @@
             }
 
             .enabled {
-                background-color: #7c7877 !important;
+                background-color: #63605f !important;
                 color: #d9d4cf !important;
             }
 
@@ -345,15 +348,6 @@
                 padding: 0.7rem;
                 background-color: #7c7877 !important;
                 border-radius: 0.5rem;
-            }
-        }
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-        .search {
-            button:hover {
-                background-color: #7c7877;
-                color: #d9d4cf;
             }
         }
     }

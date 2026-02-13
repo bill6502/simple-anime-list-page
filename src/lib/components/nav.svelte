@@ -247,31 +247,28 @@
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
+    }
+    .drop-down-list {
+        max-width: 30rem;
+        display: flex;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(calc(-50% - 4rem));
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 0.5rem;
+        padding: 0.7rem;
+        border-radius: 0.3rem;
+        gap: 0.5rem;
 
-        .drop-down-list {
-            max-width: 30rem;
-            display: flex;
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(calc(-50% - 4rem));
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 0.5rem;
-            padding: 0.7rem;
-            border-radius: 0.3rem;
-            gap: 0.5rem;
+        background-color: #7c7877;
 
-            background-color: #7c7877;
-
-            z-index: 11;
-            .button {
-                width: 10rem;
-                border-radius: 0.3rem;
-                background-color: #d9d4cf;
-                color: #7c7877;
-            }
+        z-index: 11;
+        .button {
+            width: 10rem !important;
+            border-radius: 0.3rem !important;
         }
     }
 
@@ -355,31 +352,25 @@
 
         .user-info {
             .drop-down-list {
-                width: 22.5rem;
+                /*width: 22.5rem;*/
                 transform: translateX(-50%);
-                flex-direction: row;
+                /*flex-direction: row;
                 flex-wrap: wrap;
                 align-items: center;
-                justify-content: flex-start;
+                justify-content: space-around;*/
+
+                width: 70vw;
+                min-width: 300px;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-gap: 0.5rem;
+                align-items: center;
+                justify-content: center;
                 button {
                     width: 100% !important;
-                    max-width: 10rem !important;
+                    margin: 0 auto;
                 }
             }
-        }
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-        .user-info {
-            .buttons {
-                .button:hover {
-                    background-color: #6b6766;
-                    color: #d9d4cf;
-                }
-            }
-        }
-        .disabled:hover {
-            cursor: default;
         }
     }
 </style>
