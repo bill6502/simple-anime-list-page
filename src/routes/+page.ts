@@ -59,9 +59,10 @@ export const load: PageLoad = async ({ url, fetch }) => {
   }
 
   if (store.lastPath != '') {
+    const lastPath = store.lastPath;
     store.lastPath = '';
     localStorage.removeItem('lastPath');
-    throw redirect(302, store.lastPath);
+    throw redirect(302, lastPath);
   }
 
   return {
