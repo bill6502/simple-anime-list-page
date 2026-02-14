@@ -29,13 +29,7 @@
             return;
         }
 
-        // if (page.params.id) {
-        //     localStorage.setItem('lastAnimeListId', page.params.id);
-        // }
-        localStorage.setItem(
-            'lastPath',
-            `${store.baseUrl}${page.url.pathname}`,
-        );
+        localStorage.setItem('lastPath', page.url.pathname);
 
         window.location.href = store.authUrl;
     }
