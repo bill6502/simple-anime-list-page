@@ -84,7 +84,7 @@
             </div>
             <form onsubmit={gotoId}>
                 <input bind:value={animeListId} placeholder="搜尋動畫清單" />
-                <img src="/search.svg" alt="Search Icon" />
+                <img src={`${store.baseUrl}/search.svg`} alt="Search Icon" />
             </form>
             {#if innerWidth.current! > 720 || expanding}
                 <div class="user-info">

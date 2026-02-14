@@ -140,7 +140,7 @@
     <div class="buttons">
         {#if innerWidth.current! <= 720}
             <button class="button" onclick={toggleSourceSelection}>
-                <img src="/line.svg" alt="Line" />
+                <img src={`${store.baseUrl}/line.svg`} alt="Line" />
             </button>
         {/if}
         {#each websites as url (url)}
