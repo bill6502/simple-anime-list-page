@@ -2,7 +2,6 @@ import { PUBLIC_DB, PUBLIC_API_KEY } from '$env/static/public';
 import { store } from './store.svelte.ts';
 
 async function getAllAnimes() {
-  console.log(PUBLIC_API_KEY);
   return await store.fetch!(`${PUBLIC_DB}/getAllAnimes`, {
     method: 'POST',
     headers: {
