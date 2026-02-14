@@ -15,13 +15,13 @@
     let { animes }: props = $props();
 
     async function addAnime(name: string, url: string) {
-        const response = await db.addAnimeCollection(name, url, store.user.id);
+        const response = await db.addAnimeCollection(name, url, store.user!.id);
 
         if (!response.ok) {
-            store.errorMessage = '加入收藏失敗';
+            store.message = '加入收藏失敗';
             return;
         }
-        store.successMessage = '已加入收藏';
+        store.message = '已加入收藏';
 
         await updateMyAnimeList();
     }
@@ -30,14 +30,14 @@
         const deleteAnimeCollection = await db.deleteAnimeCollection(
             name,
             url,
-            store.user.id,
+            store.user!.id,
         );
 
         if (!deleteAnimeCollection.ok) {
-            store.errorMessage = '取消收藏失敗';
+            store.message = '取消收藏失敗';
             return;
         }
-        store.successMessage = '已取消收藏';
+        store.message = '已取消收藏';
 
         await updateMyAnimeList();
     }

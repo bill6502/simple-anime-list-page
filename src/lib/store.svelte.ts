@@ -13,9 +13,7 @@ type storeType = {
   user: user | null;
   userAnimeList: Omit<Anime, 'from'>[];
   userAnimeListId: string;
-  successMessage: string;
-  notificationMessage: string;
-  errorMessage: string;
+  message: string;
   fetch: typeof fetch | undefined;
 };
 
@@ -34,8 +32,6 @@ export const store = $state<storeType>({
   userAnimeList: [],
   userAnimeListId: userAnimeListId ?? '',
   lastPath: lastPath ?? '',
-  successMessage: '',
-  notificationMessage: '',
-  errorMessage: '',
+  message: '',
   fetch: undefined,
 });

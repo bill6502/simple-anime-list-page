@@ -37,26 +37,25 @@
 
     async function addAnime() {
         if (!store.user) {
-            store.notificationMessage = '需取得Discord授權';
+            store.message = '需取得Discord授權';
             return;
         }
 
         if (addAnimeName == '' || addAnimeUrl == '') {
-            store.notificationMessage = '請輸入動畫名稱與網址';
+            store.message = '請輸入動畫名稱與網址';
             return;
         }
         if (
             animes.some((anime) => anime.name.trim() == addAnimeName.trim()) ||
             animes.some((anime) => anime.url.trim() == addAnimeUrl.trim())
         ) {
-            store.notificationMessage = '動畫已存在';
+            store.message = '動畫已存在';
             return;
         }
 
         const regex = urls.map((url) => `(${url})`).join('|');
         if (!addAnimeUrl.match(regex)) {
-            store.notificationMessage =
-                '可加入網址僅限 ani.gamer , anime1.me , hanime1.me';
+            store.message = '可加入網址僅限 ani.gamer , anime1.me , hanime1.me';
             return;
         }
 
@@ -66,7 +65,7 @@
             store.user.id,
         );
         if (response.ok) {
-            store.successMessage = '已加入收藏中';
+            store.message = '已加入收藏中';
 
             let from = '';
             for (const url of urls) {
@@ -77,13 +76,13 @@
             await updateMyAnimeList();
             animes.push({ name: addAnimeName, url: addAnimeUrl, from });
         } else {
-            store.errorMessage = '加入失敗';
+            store.message = '加入失敗';
         }
     }
 
     function toggleComparingToMyAnimeList() {
         if (!store.user) {
-            store.notificationMessage = '需取得Discord授權';
+            store.message = '需取得Discord授權';
             return;
         }
         isComparingToMyAnimeList = !isComparingToMyAnimeList;

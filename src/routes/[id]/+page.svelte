@@ -73,7 +73,7 @@
 
     async function updateAnimeList() {
         if (!(store.user && page.params.id == store.userAnimeListId)) {
-            store.notificationMessage = '需取得Discord授權';
+            store.message = '需取得Discord授權';
             return;
         }
         await updateMyAnimeList();
@@ -94,7 +94,7 @@
                     from: from,
                 };
             });
-        store.successMessage = '已更新';
+        store.message = '已更新';
     }
 
     function toggleSourceSelection() {
@@ -103,7 +103,7 @@
 
     function copyListId() {
         navigator.clipboard.writeText(page.params.id!);
-        store.successMessage = '已複製清單ID至剪貼簿';
+        store.message = '已複製清單ID至剪貼簿';
     }
 
     function searchAnime(

@@ -20,14 +20,18 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
 
   const error = url.searchParams.get('error');
   if (error && error in errorMessages) {
-    store.errorMessage = errorMessages[error];
+    store.message = errorMessages[error];
   }
+
+  store.message = '載入中...';
 
   const { id } = params;
   const host = url.searchParams.get('from') ?? url.pathname;
 
   if (store.user && store.userAnimeListId == id) {
     await updateMyAnimeList();
+    store.message = '';
+
     return {
       animes: store.userAnimeList,
       userName: store.user.username,
@@ -38,18 +42,21 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
   const checkResponse = await db.checkWebsiteInfoBy_Id(id);
 
   if (!checkResponse.ok) {
+    store.message = '';
     throw redirect(302, `${host}?error=not_response`);
   }
 
   const check = await checkResponse.json();
   const isExists = check as boolean;
   if (!isExists) {
+    store.message = '';
     throw redirect(302, `${host}?error=not_found`);
   }
 
   const response = await db.getWebsiteInfoBy_Id(id);
 
   if (!response.ok) {
+    store.message = '';
     throw redirect(302, `${host}?error=not_response`);
   }
 

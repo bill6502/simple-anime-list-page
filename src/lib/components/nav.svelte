@@ -25,7 +25,7 @@
 
     function setLastPath() {
         if (store.user) {
-            store.notificationMessage = '已取得授權';
+            store.message = '已取得授權';
             return;
         }
 
@@ -94,6 +94,7 @@
                         '收藏',
                         'mylist',
                         `${store.baseUrl}/${store.userAnimeListId}`,
+                        // @ts-ignore
                         store.user && store.userAnimeListId,
                     )}
                 {/if}

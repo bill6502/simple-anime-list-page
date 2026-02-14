@@ -16,7 +16,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
 
   const error = url.searchParams.get('error');
   if (error && error in errorMessages) {
-    store.errorMessage = errorMessages[error];
+    store.message = errorMessages[error];
   }
 
   const token_type = url.searchParams.get('token_type') ?? '';
@@ -35,6 +35,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
       store.user = { id, username, avatar };
     }
   }
+
+  store.message = '載入中...';
 
   const getAllAnimes = await db.getAllAnimes();
   let animes: Anime[] = [];
@@ -60,8 +62,11 @@ export const load: PageLoad = async ({ url, fetch }) => {
 
   if (store.lastPath != '') {
     const lastPath = store.lastPath;
+
     store.lastPath = '';
     localStorage.removeItem('lastPath');
+    store.message = '';
+
     throw redirect(302, lastPath);
   }
 

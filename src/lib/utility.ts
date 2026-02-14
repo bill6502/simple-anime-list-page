@@ -17,7 +17,7 @@ export async function updateMyAnimeList() {
   );
 
   if (!updateWebsiteInfo.ok) {
-    store.errorMessage = '更新失敗';
+    store.message = '更新失敗';
     return;
   }
 
@@ -26,7 +26,7 @@ export async function updateMyAnimeList() {
   const getUserAnimeList = await db.getWebsiteInfoBy_Id(store.userAnimeListId);
 
   if (!getUserAnimeList.ok) {
-    store.notificationMessage = '此動畫清單不存在';
+    store.message = '此動畫清單不存在';
     return;
   }
 
