@@ -12,4 +12,5 @@ export const urlMap = {
   'hanime1.me': 'Hanime1',
 } as const;
 
+export type user = { id: string; username: string; avatar: string };
 export type Anime = { name: string; url: string; from: string };

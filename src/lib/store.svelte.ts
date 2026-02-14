@@ -3,16 +3,16 @@ import {
   PUBLIC_DISCORD_AUTH_LOCAL,
 } from '$env/static/public';
 import { base } from '$app/paths';
-import type { Anime, path } from './type.ts';
+import type { Anime, path, user } from './type.ts';
 
 type storeType = {
   baseUrl: string;
   authUrl: string;
   currentPath: path;
-  user: any;
+  lastPath: string;
+  user: user | null;
   userAnimeList: Omit<Anime, 'from'>[];
   userAnimeListId: string;
-  lastAnimeListId: string;
   successMessage: string;
   notificationMessage: string;
   errorMessage: string;
@@ -24,7 +24,7 @@ const authUrl = base == '' ? PUBLIC_DISCORD_AUTH_LOCAL : PUBLIC_DISCORD_AUTH;
 
 const user = localStorage.getItem('user');
 const userAnimeListId = localStorage.getItem('userAnimeListId');
-const lastAnimeListId = localStorage.getItem('lastAnimeListId');
+const lastPath = localStorage.getItem('lastPath');
 
 export const store = $state<storeType>({
   baseUrl,
@@ -33,7 +33,7 @@ export const store = $state<storeType>({
   user: user ? JSON.parse(user) : null,
   userAnimeList: [],
   userAnimeListId: userAnimeListId ?? '',
-  lastAnimeListId: lastAnimeListId ?? '',
+  lastPath: lastPath ?? '',
   successMessage: '',
   notificationMessage: '',
   errorMessage: '',

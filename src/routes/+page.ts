@@ -31,7 +31,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
 
     const userJson = await response.json();
     if (userJson) {
-      store.user = userJson;
+      const { id, username, avatar } = userJson;
+      store.user = { id, username, avatar };
     }
   }
 
@@ -57,8 +58,10 @@ export const load: PageLoad = async ({ url, fetch }) => {
     await updateMyAnimeList();
   }
 
-  if (store.lastAnimeListId != '') {
-    throw redirect(302, `${store.baseUrl}/${store.lastAnimeListId}`);
+  if (store.lastPath != '') {
+    store.lastPath = '';
+    localStorage.removeItem('lastPath');
+    throw redirect(302, store.lastPath);
   }
 
   return {

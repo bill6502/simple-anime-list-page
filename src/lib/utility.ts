@@ -9,14 +9,14 @@ export function setLocalStorage() {
     localStorage.setItem('userAnimeListId', store.userAnimeListId);
   }
 
-  store.lastAnimeListId = '';
-  localStorage.removeItem('lastAnimeListId');
+  store.lastPath = '';
+  localStorage.removeItem('lastPath');
 }
 
 export async function updateMyAnimeList() {
   const updateWebsiteInfo = await db.updateWebsiteInfo(
-    store.user.id,
-    store.user.username,
+    store.user!.id,
+    store.user!.username,
   );
 
   if (!updateWebsiteInfo.ok) {

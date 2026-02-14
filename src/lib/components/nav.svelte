@@ -23,15 +23,19 @@
         }
     });
 
-    function setLastAnimeListId() {
+    function setLastPath() {
         if (store.user) {
             store.successMessage = '已取得授權';
             return;
         }
 
-        if (page.params.id) {
-            localStorage.setItem('lastAnimeListId', page.params.id);
-        }
+        // if (page.params.id) {
+        //     localStorage.setItem('lastAnimeListId', page.params.id);
+        // }
+        localStorage.setItem(
+            'lastPath',
+            `${store.baseUrl}${page.url.pathname}`,
+        );
 
         window.location.href = store.authUrl;
     }
@@ -102,7 +106,7 @@
                                 out:slide={{ duration: 100 }}
                                 class="button"
                                 data-type="getID"
-                                onclick={setLastAnimeListId}>取得授權</button
+                                onclick={setLastPath}>取得授權</button
                             >
                             <button
                                 in:slide={{ duration: 300 }}
