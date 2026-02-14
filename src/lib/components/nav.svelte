@@ -84,21 +84,7 @@
             </div>
             <form onsubmit={gotoId}>
                 <input bind:value={animeListId} placeholder="搜尋動畫清單" />
-                <svg
-                    width="800px"
-                    height="800px"
-                    viewBox="0 0 16 16"
-                    xmlns="http://www.w3.org/2000/svg"
-                    version="1.1"
-                    fill="none"
-                    stroke="#ffffff"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.5"
-                >
-                    <path d="m11.25 11.25 3 3" />
-                    <circle cx="7.5" cy="7.5" r="4.75" />
-                </svg>
+                <img src="/search.svg" alt="Search Icon" />
             </form>
             {#if innerWidth.current! > 720 || expanding}
                 <div class="user-info">
@@ -192,9 +178,11 @@
             border-radius: 0.5rem;
             overflow: hidden;
 
-            & > svg {
+            & > img {
+                object-fit: contain;
                 height: 2.5rem;
                 width: min-content;
+                padding: 0.2em;
                 background-color: #d9d4cf;
                 fill: #d9d4cf;
                 transition: fill 0.3s ease;

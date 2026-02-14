@@ -6,7 +6,6 @@
     import { innerWidth } from 'svelte/reactivity/window';
     import { setLocalStorage, updateMyAnimeList } from '$lib/utility';
     import AnimeList from '$lib/components/animeList.svelte';
-    import Line from '$lib/components/line.svelte';
 
     let { data } = $props();
 
@@ -141,7 +140,7 @@
     <div class="buttons">
         {#if innerWidth.current! <= 720}
             <button class="button" onclick={toggleSourceSelection}>
-                <Line />
+                <img src="/line.svg" alt="Line" />
             </button>
         {/if}
         {#each websites as url (url)}
@@ -267,6 +266,12 @@
         background-color: #7c7877;
         border-radius: 0.5rem;
         z-index: 10;
+    }
+
+    .button img {
+        width: 3rem;
+        height: 3rem;
+        object-fit: contain;
     }
 
     @media screen and (width <= 720px) {
