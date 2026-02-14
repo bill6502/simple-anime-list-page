@@ -1,6 +1,6 @@
 <script lang="ts">
     import { innerWidth } from 'svelte/reactivity/window';
-    import MessageBlock from '$lib/components/messageBlock.svelte';
+    import Tip from '$lib/components/tip.svelte';
     import Nav from '$lib/components/nav.svelte';
     import Totop from '$lib/components/totop.svelte';
     import './layout.css';
@@ -23,7 +23,7 @@
         {@render children()}
     </main>
 
-    <MessageBlock />
+    <Tip />
     <Totop />
     <footer>
         <p>Just a simple anime-list page</p>

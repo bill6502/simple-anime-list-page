@@ -2,9 +2,12 @@
     import { store } from '$lib/store.svelte';
     import { fly } from 'svelte/transition';
 
+    let timeOut = 0;
+
     let message = $derived.by(() => {
         if (store.message != '') {
-            setTimeout(() => {
+            clearTimeout(timeOut);
+            timeOut = setTimeout(() => {
                 store.message = '';
             }, 3000);
         }
