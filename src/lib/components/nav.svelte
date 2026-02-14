@@ -1,6 +1,6 @@
 <script lang="ts">
     import { store } from '$lib/store.svelte';
-    import { slide } from 'svelte/transition';
+    import { slide, scale } from 'svelte/transition';
     import { page } from '$app/state';
     import { innerWidth } from 'svelte/reactivity/window';
     import { goto } from '$app/navigation';
@@ -25,7 +25,7 @@
 
     function setLastPath() {
         if (store.user) {
-            store.successMessage = '已取得授權';
+            store.notificationMessage = '已取得授權';
             return;
         }
 
@@ -58,6 +58,21 @@
         class:disabled={!enabled}
         href={enabled ? href : undefined}>{title}</a
     >
+{/snippet}
+{#snippet userButton(title: string, onclick: () => void, delayTimes: number)}
+    {@const duration = 200}
+    {@const delay = Math.floor(duration / 5)}
+    <div class="user-button">
+        <button
+            in:scale={{
+                duration: duration,
+                delay: delay * delayTimes,
+            }}
+            out:scale={{ duration: 0 }}
+            class="button"
+            {onclick}>{title}</button
+        >
+    </div>
 {/snippet}
 <div class="container">
     <div class="main">
@@ -101,23 +116,8 @@
                             {#if store.user}
                                 <p>{store.user.username}</p>
                             {/if}
-                            <button
-                                in:slide={{ duration: 300 }}
-                                out:slide={{ duration: 100 }}
-                                class="button"
-                                data-type="getID"
-                                onclick={setLastPath}>取得授權</button
-                            >
-                            <button
-                                in:slide={{ duration: 300 }}
-                                out:slide={{ duration: 100 }}
-                                class="button"
-                                type="button"
-                                data-type="clear"
-                                onclick={clear}
-                            >
-                                清除授權</button
-                            >
+                            {@render userButton('取得授權', setLastPath, 1)}
+                            {@render userButton('清除授權', clear, 2)}
                         </div>
                     {/if}
                 </div>
