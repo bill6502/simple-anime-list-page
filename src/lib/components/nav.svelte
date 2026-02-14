@@ -98,6 +98,9 @@
                     </div>
                     {#if showAuth}
                         <div class="drop-down-list">
+                            {#if store.user}
+                                <p>{store.user.username}</p>
+                            {/if}
                             <button
                                 in:slide={{ duration: 300 }}
                                 out:slide={{ duration: 100 }}
@@ -259,6 +262,13 @@
             width: 10rem !important;
             border-radius: 0.3rem !important;
         }
+
+        p {
+            color: aliceblue;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
     }
 
     .user-avatar {
@@ -280,8 +290,6 @@
             object-fit: contain;
         }
         p {
-            max-width: 100%;
-            box-sizing: border-box;
             font-size: 2rem;
             font-weight: bold;
             text-align: center;
@@ -352,13 +360,7 @@
 
         .user-info {
             .drop-down-list {
-                /*width: 22.5rem;*/
                 transform: translateX(-50%);
-                /*flex-direction: row;
-                flex-wrap: wrap;
-                align-items: center;
-                justify-content: space-around;*/
-
                 width: 70vw;
                 min-width: 300px;
                 display: grid;
@@ -369,6 +371,10 @@
                 button {
                     width: 100% !important;
                     margin: 0 auto;
+                }
+                p {
+                    grid-column: 1 / -1;
+                    font-size: 2rem;
                 }
             }
         }
