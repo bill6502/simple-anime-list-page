@@ -61,7 +61,10 @@
 {/snippet}
 <div class="container">
     <div class="main">
-        <p class="title">動畫清單</p>
+        <div class="title">
+            <img src={`${store.baseUrl}/video.svg`} alt="Video Icon" />
+            <p>動畫清單</p>
+        </div>
         <div class="nav">
             <div class="nav-item">
                 {#if innerWidth.current! <= 720}
@@ -267,14 +270,25 @@
     }
 
     .title {
-        max-width: 100%;
-        box-sizing: border-box;
-        font-size: 2rem;
-        font-weight: bold;
-        text-align: center;
-        overflow-wrap: break-word;
-        word-break: break-all;
-        color: aliceblue;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        img {
+            height: 2.5rem;
+            object-fit: contain;
+        }
+        p {
+            max-width: 100%;
+            box-sizing: border-box;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            color: aliceblue;
+        }
     }
 
     .button {
