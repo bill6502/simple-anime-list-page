@@ -1,7 +1,7 @@
 <script lang="ts">
     import { innerWidth } from 'svelte/reactivity/window';
     import Tip from '$lib/components/tip.svelte';
-    import Nav from '$lib/components/nav.svelte';
+    import Navbar from '$lib/components/navbar.svelte';
     import Totop from '$lib/components/totop.svelte';
     import './layout.css';
 
@@ -18,11 +18,10 @@
 </script>
 
 <div class="app">
-    <Nav />
+    <Navbar />
     <main>
         {@render children()}
     </main>
-
     <Tip />
     <Totop />
     <footer>

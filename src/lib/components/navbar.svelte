@@ -116,6 +116,8 @@
                         <div class="drop-down-list">
                             {#if store.user}
                                 <p>{store.user.username}</p>
+                            {:else}
+                                <p>未取得授權</p>
                             {/if}
                             {@render userButton('取得授權', setLastPath, 1)}
                             {@render userButton('清除授權', clear, 2)}

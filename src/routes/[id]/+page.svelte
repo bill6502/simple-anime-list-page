@@ -127,7 +127,7 @@
 </script>
 
 <svelte:head>
-    <title>收藏 - 動畫清單</title>
+    <title>{data.userName} - 動畫清單</title>
 </svelte:head>
 
 <div class="container">
