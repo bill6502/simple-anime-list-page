@@ -1,9 +1,8 @@
 import db from './db.ts';
 import { store } from './store.svelte.ts';
-import { errorMessages } from './type.ts';
 
 export async function discordAuth(access_token: string) {
-  const response = await fetch('https://discord.com/api/v10/users/@me', {
+  const response = await store.fetch!('https://discord.com/api/v10/users/@me', {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
@@ -13,7 +12,7 @@ export async function discordAuth(access_token: string) {
     localStorage.removeItem('access_token');
     localStorage.removeItem('userAnimeListId');
     store.access_token = '';
-    store.message = errorMessages.authorization_expired;
+    store.message = '授權已過期';
   } else {
     const userJson = await response.json();
     if (userJson) {
@@ -41,7 +40,7 @@ export async function updateMyAnimeList() {
   );
 
   if (!updateWebsiteInfo.ok) {
-    store.message = '更新失敗';
+    store.message = '動畫清單更新失敗';
     return;
   }
 

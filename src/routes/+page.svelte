@@ -76,7 +76,7 @@
             await updateMyAnimeList();
             animes.push({ name: addAnimeName, url: addAnimeUrl, from });
         } else {
-            store.message = '加入失敗';
+            store.message = '加入收藏失敗';
         }
     }
 
