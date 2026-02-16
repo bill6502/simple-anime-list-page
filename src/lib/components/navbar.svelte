@@ -35,10 +35,10 @@
     }
 
     function clear() {
-        localStorage.removeItem('user');
+        localStorage.removeItem('access_token');
         localStorage.removeItem('userAnimeListId');
 
-        store.user = null;
+        store.access_token = '';
         store.userAnimeListId = '';
     }
 

@@ -6,7 +6,7 @@ import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import { errorMessages } from '$lib/type.ts';
-import { updateMyAnimeList } from '../../lib/utility.ts';
+import { discordAuth, updateMyAnimeList } from '../../lib/utility.ts';
 import db from '$lib/db';
 
 export const load: PageLoad = async ({ url, params, fetch }) => {
@@ -21,6 +21,10 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
   const error = url.searchParams.get('error');
   if (error && error in errorMessages) {
     store.message = errorMessages[error];
+  }
+
+  if (!store.user && store.access_token) {
+    await discordAuth(store.access_token);
   }
 
   store.message = '載入中...';

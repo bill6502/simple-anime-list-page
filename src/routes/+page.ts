@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import { urls, errorMessages, type Anime } from '$lib/type.ts';
-import { updateMyAnimeList } from '../lib/utility.ts';
+import { discordAuth, updateMyAnimeList } from '../lib/utility.ts';
 import db from '$lib/db.ts';
 
 export const load: PageLoad = async ({ url, fetch }) => {
@@ -19,21 +19,13 @@ export const load: PageLoad = async ({ url, fetch }) => {
     store.message = errorMessages[error];
   }
 
-  const token_type = url.searchParams.get('token_type') ?? '';
   const access_token = url.searchParams.get('access_token') ?? '';
+  if (access_token) {
+    await discordAuth(access_token);
+  }
 
-  if (!store.user && token_type && access_token) {
-    const response = await fetch('https://discord.com/api/v10/users/@me', {
-      headers: {
-        Authorization: `${token_type} ${access_token}`,
-      },
-    });
-
-    const userJson = await response.json();
-    if (userJson) {
-      const { id, username, avatar } = userJson;
-      store.user = { id, username, avatar };
-    }
+  if (!store.user && !access_token && store.access_token) {
+    await discordAuth(store.access_token);
   }
 
   store.message = '載入中...';
