@@ -196,6 +196,8 @@
         transition: color 0.2s ease-in-out;
     }
     .container {
+        max-width: 64rem;
+        margin: 0 auto;
         position: relative;
         display: flex;
         flex-direction: column;

@@ -171,6 +171,8 @@
     .container {
         position: relative;
         display: flex;
+        max-width: 64rem;
+        margin: 0 auto;
         flex-direction: column;
         justify-content: center;
         align-items: center;
