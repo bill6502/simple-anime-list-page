@@ -29,7 +29,7 @@
             return;
         }
 
-        localStorage.setItem('lastPath', page.url.pathname);
+        sessionStorage.setItem('lastPath', page.url.pathname);
 
         window.location.href = store.authUrl;
     }

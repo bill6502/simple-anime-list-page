@@ -23,7 +23,7 @@ const authUrl = base == '' ? PUBLIC_DISCORD_AUTH_LOCAL : PUBLIC_DISCORD_AUTH;
 
 const access_token = localStorage.getItem('access_token');
 const userAnimeListId = localStorage.getItem('userAnimeListId');
-const lastPath = localStorage.getItem('lastPath');
+const lastPath = sessionStorage.getItem('lastPath');
 
 export const store = $state<storeType>({
   baseUrl,

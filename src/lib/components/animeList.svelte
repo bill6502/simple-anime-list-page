@@ -44,6 +44,12 @@
 </script>
 
 <table>
+    <thead>
+        <tr class="title">
+            <th class="name">名稱</th>
+            <th class="url">連結</th>
+        </tr>
+    </thead>
     <tbody>
         {#each animes as anime (anime.name)}
             <tr
@@ -101,9 +107,32 @@
         word-break: break-all;
     }
 
+    .title {
+        display: flex;
+        padding: 1.5rem 0;
+        background-color: #7c7877;
+
+        .name,
+        .url {
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #7c7877;
+            color: #d9d4cf;
+            text-align: center;
+        }
+
+        .name {
+            width: 40%;
+        }
+        .url {
+            width: 60%;
+        }
+    }
+
     .row {
         display: flex;
-        flex-direction: row;
 
         & * {
             text-align: center;
