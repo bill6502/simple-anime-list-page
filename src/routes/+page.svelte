@@ -32,6 +32,7 @@
 
     $effect(() => {
         store.currentPath = 'home';
+        store.message = '';
         setLocalStorage();
     });
 

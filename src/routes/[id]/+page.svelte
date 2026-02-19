@@ -68,6 +68,7 @@
 
     $effect(() => {
         store.currentPath = 'mylist';
+        store.message = '';
         setLocalStorage();
     });
 
