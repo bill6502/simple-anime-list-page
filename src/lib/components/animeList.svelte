@@ -148,28 +148,28 @@
         }
     }
 
-    .tdName {
-        width: 40%;
-
-        &:hover {
-            + .tdURL {
-                transition: box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.4s !important;
-                a {
-                    color: aliceblue !important;
-                }
-            }
-            + .tdURL[data-from='anigamer'] {
-                box-shadow: inset -100rem 0 0 0 #009bad;
-            }
-
-            + .tdURL[data-from='anime1me'] {
-                box-shadow: inset -100rem 0 0 0 #b92d72;
-            }
-
-            + .tdURL[data-from='hanime1me'] {
-                box-shadow: inset -100rem 0 0 0 #b20710;
+    .row:has(*:hover) {
+        .tdURL {
+            transition: box-shadow 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.4s !important;
+            a {
+                color: #f5fffa !important;
             }
         }
+        .tdURL[data-from='anigamer'] {
+            box-shadow: inset -100rem 0 0 0 #009bad;
+        }
+
+        .tdURL[data-from='anime1me'] {
+            box-shadow: inset -100rem 0 0 0 #b92d72;
+        }
+
+        .tdURL[data-from='hanime1me'] {
+            box-shadow: inset -100rem 0 0 0 #b20710;
+        }
+    }
+
+    .tdName {
+        width: 40%;
     }
 
     .tdURL {
@@ -180,6 +180,7 @@
 
         a {
             flex: 1;
+            text-align: left;
             background-color: transparent !important;
         }
 
@@ -194,7 +195,7 @@
 
             &:hover {
                 background-color: #7c7877;
-                color: #d9d4cf;
+                color: #f5fffa;
             }
         }
 
@@ -223,6 +224,14 @@
             box-shadow: inset -0.3rem 0 0 0 #b20710;
             &:hover {
                 box-shadow: inset -100rem 0 0 0 #b20710;
+            }
+        }
+    }
+
+    @media screen and (width <= 820px) {
+        .tdURL {
+            a {
+                text-align: center;
             }
         }
     }
