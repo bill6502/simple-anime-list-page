@@ -22,8 +22,8 @@
                 animes.some((anime) => anime.url.includes('https://' + url)),
         ),
     );
-    let selectedAnime = $derived.by<Anime[]>(() =>
-        animes
+    let filteredAnimes = $derived.by<Anime[]>(() =>
+        [...animes]
             .filter(
                 (anime) =>
                     page.params.id != store.userAnimeListId ||
@@ -107,23 +107,10 @@
         store.message = '已複製清單ID至剪貼簿';
     }
 
-    function searchAnime(
-        event: KeyboardEvent & {
-            currentTarget: EventTarget & HTMLInputElement;
-        },
-    ) {
-        if (event.key === 'Enter') {
-            const input = event.target as HTMLInputElement;
-            const query = input.value.toLowerCase();
-            searchQuery = query;
-        }
-    }
-
-    function clearSearch(event: Event) {
+    function searchAnime(event: Event) {
         const input = event.target as HTMLInputElement;
-        if (input.value === '') {
-            searchQuery = '';
-        }
+        const query = input.value.toLowerCase();
+        searchQuery = query;
     }
 </script>
 
@@ -174,9 +161,9 @@
             >
         {/if}
     </div>
-    <input oninput={clearSearch} onkeyup={searchAnime} placeholder="搜尋動畫" />
+    <input oninput={searchAnime} placeholder="搜尋動畫" />
     <div class="list">
-        <AnimeList animes={selectedAnime} />
+        <AnimeList animes={filteredAnimes} />
     </div>
 </div>
 

@@ -17,7 +17,7 @@
 
     let animes = $state<Anime[]>(data.animes);
     let filteredAnimes = $derived.by<Anime[]>(() =>
-        animes
+        [...animes]
             .filter(
                 (anime) =>
                     searchQuery == '' ||
@@ -93,23 +93,10 @@
         isAddingAnime = !isAddingAnime;
     }
 
-    function search(
-        event: KeyboardEvent & {
-            currentTarget: EventTarget & HTMLInputElement;
-        },
-    ) {
-        if (event.key === 'Enter') {
-            const input = event.target as HTMLInputElement;
-            const query = input.value.toLowerCase().trim();
-            searchQuery = query;
-        }
-    }
-
-    function clearSearch(event: Event) {
+    function search(event: Event) {
         const input = event.target as HTMLInputElement;
-        if (input.value === '') {
-            searchQuery = '';
-        }
+        const query = input.value.toLowerCase().trim();
+        searchQuery = query;
     }
 </script>
 
@@ -123,11 +110,7 @@
     </div>
     <div class="panel">
         <div class="search">
-            <input
-                oninput={clearSearch}
-                onkeyup={search}
-                placeholder="搜尋動畫"
-            />
+            <input oninput={search} placeholder="搜尋動畫" />
             <div class="buttons">
                 <button
                     class:enabled={isAddingAnime}
