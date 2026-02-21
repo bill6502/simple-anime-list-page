@@ -1,3 +1,5 @@
+// deno-lint-ignore-file  no-sloppy-imports
+
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
