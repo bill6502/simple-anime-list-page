@@ -145,10 +145,6 @@ button:focus:not(:focus-visible) {
         background-color: #63605f;
         color: #d9d4cf;
     }
-    &:active {
-        background-color: #d9d4cf;
-        color: #7c7877;
-    }
 }
 
 @media (hover: hover) and (pointer: fine) {
