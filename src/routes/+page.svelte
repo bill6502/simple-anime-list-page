@@ -1,6 +1,7 @@
 <script lang="ts">
+    import { innerWidth } from 'svelte/reactivity/window';
     import { store } from '$lib/store.svelte';
-    import { urls, type Anime } from '$lib/type';
+    import { urls, urlMap, type Anime } from '$lib/type';
     import AnimeList from '$lib/components/animeList.svelte';
     import { setLocalStorage, updateMyAnimeList } from '$lib/utility.js';
     import { slide } from 'svelte/transition';
@@ -8,16 +9,23 @@
 
     let { data } = $props();
 
+    let selectedUrl = $state<string>('all');
     let searchQuery = $state<string>('');
     let addAnimeName = $state<string>('');
     let addAnimeUrl = $state<string>('');
 
+    let expanding = $state<boolean>(false);
     let isAddingAnime = $state<boolean>(false);
     let isComparingToMyAnimeList = $state<boolean>(false);
 
     let animes = $state<Anime[]>(data.animes);
     let filteredAnimes = $derived.by<Anime[]>(() =>
         [...animes]
+            .filter(
+                (anime) =>
+                    selectedUrl == 'all' ||
+                    anime.url.includes('https://' + selectedUrl),
+            )
             .filter(
                 (anime) =>
                     searchQuery == '' ||
@@ -93,6 +101,10 @@
         isAddingAnime = !isAddingAnime;
     }
 
+    function toggleSourceSelection() {
+        expanding = !expanding;
+    }
+
     function search(event: Event) {
         const input = event.target as HTMLInputElement;
         const query = input.value.toLowerCase().trim();
@@ -107,6 +119,28 @@
     <div class="title">
         <p>資料庫內所有動畫</p>
         <p>{animes.length}部動畫</p>
+    </div>
+    <div class="categore_buttons">
+        {#if innerWidth.current! <= 720}
+            <button class="button" onclick={toggleSourceSelection}>
+                <img src={`${store.baseUrl}/line.svg`} alt="Line" />
+            </button>
+        {/if}
+        {#each urls as url (url)}
+            {#if innerWidth.current! > 720 || expanding || url == selectedUrl}
+                <button
+                    in:slide={{ duration: 300 }}
+                    out:slide={{ duration: 100 }}
+                    class="button"
+                    class:selected={selectedUrl == url}
+                    onclick={(e) => {
+                        selectedUrl = selectedUrl != url ? url : 'all';
+                        expanding = selectedUrl == 'all';
+                    }}
+                    >{`${urlMap[url as keyof typeof urlMap]}(${animes.filter((anime) => anime.url.includes('https://' + url)).length})`}</button
+                >
+            {/if}
+        {/each}
     </div>
     <div class="panel">
         <div class="search">
@@ -304,7 +338,28 @@
         color: #7c7877;
     }
 
-    @media (width <= 720px) {
+    .categore_buttons {
+        position: sticky;
+        top: 0;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.7rem;
+        background-color: #7c7877;
+        border-radius: 0.5rem;
+        z-index: 10;
+    }
+
+    .button img {
+        width: 3rem;
+        height: 3rem;
+        object-fit: contain;
+    }
+
+    @media screen and (width <= 720px) {
         .title {
             flex-direction: column;
             align-items: center;
@@ -334,6 +389,10 @@
                 background-color: #7c7877 !important;
                 border-radius: 0.5rem;
             }
+        }
+
+        .categore_buttons {
+            flex-direction: column;
         }
     }
 </style>
