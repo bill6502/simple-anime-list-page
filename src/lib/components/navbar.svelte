@@ -4,6 +4,7 @@
     import { page } from '$app/state';
     import { innerWidth } from 'svelte/reactivity/window';
     import { goto } from '$app/navigation';
+    import { type path } from '$lib/type';
 
     let pictureUrl = $derived.by<string>(() =>
         store.user
@@ -50,7 +51,7 @@
     }
 </script>
 
-{#snippet nav(title: string, path: string, href: string, enabled: boolean)}
+{#snippet nav(title: string, path: path, href: string, enabled: boolean)}
     <a
         in:slide={{ duration: 300 }}
         out:slide={{ duration: 100 }}
@@ -106,13 +107,13 @@
             </form>
             {#if innerWidth.current! > 720 || expanding}
                 <div class="user-info">
-                    <div
+                    <button
                         class="user-avatar"
                         onclick={() => (showAuth = !showAuth)}
                         title="點擊以顯示/隱藏"
                     >
-                        <img src={pictureUrl} />
-                    </div>
+                        <img src={pictureUrl} alt="User Avatar" />
+                    </button>
                     {#if showAuth}
                         <div class="drop-down-list">
                             {#if store.user}
@@ -276,6 +277,9 @@
     }
 
     .user-avatar {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
         & img {
             width: 4rem;
             border-radius: 50%;
