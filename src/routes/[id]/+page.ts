@@ -6,7 +6,7 @@ import { browser } from '$app/environment';
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
-import { errorMessages } from '$lib/type.ts';
+import { errorMessage, errorString } from '$lib/type.ts';
 import { discordAuth, updateMyAnimeList } from '../../lib/utility.ts';
 import db from '$lib/db';
 
@@ -20,8 +20,8 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
   }
 
   const error = url.searchParams.get('error');
-  if (error && error in errorMessages) {
-    store.message = errorMessages[error];
+  if (error && error in errorString) {
+    store.message = errorString[error];
   }
 
   if (!store.user && store.access_token) {
@@ -48,21 +48,21 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
 
   if (!checkResponse.ok) {
     store.message = '';
-    throw redirect(302, `${host}?error=not_response`);
+    throw redirect(302, `${host}?error=${errorMessage.not_response}`);
   }
 
   const check = await checkResponse.json();
   const isExists = check as boolean;
   if (!isExists) {
     store.message = '';
-    throw redirect(302, `${host}?error=not_found`);
+    throw redirect(302, `${host}?error=${errorMessage.not_found}`);
   }
 
   const response = await db.getWebsiteInfoBy_Id(id);
 
   if (!response.ok) {
     store.message = '';
-    throw redirect(302, `${host}?error=not_response`);
+    throw redirect(302, `${host}?error=${errorMessage.not_response}`);
   }
 
   const data = await response.json();

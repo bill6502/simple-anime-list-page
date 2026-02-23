@@ -11,16 +11,18 @@ export async function discordAuth(access_token: string) {
   if (!response.ok) {
     localStorage.removeItem('access_token');
     localStorage.removeItem('userAnimeListId');
+    store.user = null;
     store.access_token = '';
     store.message = '授權已過期';
-  } else {
-    const userJson = await response.json();
-    if (userJson) {
-      const { id, username, avatar } = userJson;
 
-      store.user = { id, username, avatar };
-      store.access_token = access_token;
-    }
+    return;
+  }
+  const userJson = await response.json();
+  if (userJson) {
+    const { id, username, avatar } = userJson;
+
+    store.user = { id, username, avatar };
+    store.access_token = access_token;
   }
 }
 
