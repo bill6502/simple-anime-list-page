@@ -42,6 +42,7 @@
     );
 
     $effect(() => {
+        console.log(data.animes[0]);
         animes = [...data.animes]
             .sort((a, b) => a.url.localeCompare(b.url))
             .map((anime) => {
