@@ -2,16 +2,11 @@
     import { store } from '$lib/store.svelte';
     import { fly } from 'svelte/transition';
 
-    const stayMessage = ['載入中...'];
-
     let timeOut = 0;
 
     let message = $derived.by(() => {
         clearTimeout(timeOut);
 
-        if (stayMessage.includes(store.message)) {
-            return store.message;
-        }
         if (store.message != '') {
             timeOut = setTimeout(() => {
                 store.message = '';
