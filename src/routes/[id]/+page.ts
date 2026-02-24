@@ -37,6 +37,7 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
     await updateMyAnimeList();
     store.message = '';
 
+    store.message = '載入完成!';
     return {
       animes: store.userAnimeList,
       userName: store.user.username,
