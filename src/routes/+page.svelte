@@ -40,7 +40,7 @@
 
     $effect(() => {
         store.currentPath = 'home';
-        store.message = '';
+        store.message = '載入完成!';
         setLocalStorage();
     });
 
