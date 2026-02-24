@@ -63,7 +63,6 @@
 
     $effect(() => {
         store.currentPath = 'mylist';
-        store.message = '載入完成!';
         setLocalStorage();
     });
 

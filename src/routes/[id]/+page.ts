@@ -66,6 +66,7 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
 
   const data = await response.json();
 
+  store.message = '載入完成!';
   return {
     animes: data.animes,
     userName: data.userName,

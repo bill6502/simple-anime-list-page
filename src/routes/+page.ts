@@ -63,6 +63,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
     throw redirect(302, lastPath);
   }
 
+  store.message = '載入完成!';
   return {
     animes,
   };
