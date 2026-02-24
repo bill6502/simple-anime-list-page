@@ -17,7 +17,6 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                class="feather feather-arrow-up-circle"
             >
                 <polyline points="18 13 12 7 6 13"></polyline>
                 <line x1="12" y1="17" x2="12" y2="7"></line>
