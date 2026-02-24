@@ -40,7 +40,6 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
     return {
       animes: store.userAnimeList,
       userName: store.user.username,
-      isMyAnimeList: true,
     };
   }
 
@@ -70,6 +69,5 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
   return {
     animes: data.animes,
     userName: data.userName,
-    isMyAnimeList: false,
   };
 };

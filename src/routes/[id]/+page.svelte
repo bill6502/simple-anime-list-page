@@ -26,11 +26,6 @@
         [...animes]
             .filter(
                 (anime) =>
-                    page.params.id != store.userAnimeListId ||
-                    store.userAnimeList.some((a) => a.name == anime.name),
-            )
-            .filter(
-                (anime) =>
                     selectedUrl == 'all' ||
                     anime.url.includes('https://' + selectedUrl),
             )
