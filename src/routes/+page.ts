@@ -3,7 +3,7 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
-import { urls, errorString, type Anime } from '$lib/type.ts';
+import { urls, type Anime } from '$lib/type.ts';
 import { discordAuth, updateMyAnimeList } from '../lib/utility.ts';
 import db from '$lib/db.ts';
 
@@ -14,11 +14,6 @@ export const load: PageLoad = async ({ url, fetch }) => {
 
   if (url.href.includes('#')) {
     throw redirect(302, url.href.replace('#', '?'));
-  }
-
-  const error = url.searchParams.get('error');
-  if (error && error in errorString) {
-    store.message = errorString[error];
   }
 
   const access_token = url.searchParams.get('access_token') ?? '';

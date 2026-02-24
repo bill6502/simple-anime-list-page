@@ -1,9 +1,5 @@
 export type path = 'home' | 'mylist';
-export enum errorMessage {
-  not_found = 'not_found',
-  not_response = 'not_response',
-}
-export const errorString: Record<string, string> = {
+export const errorMessage: Record<string, string> = {
   not_found: '找不到符合搜尋',
   not_response: '伺服器回應錯誤',
 } as const;
