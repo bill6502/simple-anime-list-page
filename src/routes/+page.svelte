@@ -84,6 +84,21 @@
             await updateMyAnimeList();
             animes.push({ name: addAnimeName, url: addAnimeUrl, from });
         } else {
+            if (response.status == 401) {
+                const { error } = await response.json();
+                if (error == 'unauthorized') {
+                    store.message = 'Discord授權過期';
+
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('userAnimeListId');
+
+                    store.user = null;
+                    store.access_token = '';
+                    store.userAnimeListId = '';
+
+                    return;
+                }
+            }
             store.message = '加入收藏失敗';
         }
     }

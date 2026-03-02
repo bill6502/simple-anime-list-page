@@ -71,7 +71,11 @@
             store.message = '需取得Discord授權';
             return;
         }
-        await updateMyAnimeList();
+
+        const success = await updateMyAnimeList();
+        if (!success) {
+            return;
+        }
 
         animes = store.userAnimeList
             .sort((a, b) => a.url.localeCompare(b.url))

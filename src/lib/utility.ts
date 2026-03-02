@@ -9,11 +9,14 @@ export async function discordAuth(access_token: string) {
   });
 
   if (!response.ok) {
+    store.message = '授權過期';
+
     localStorage.removeItem('access_token');
     localStorage.removeItem('userAnimeListId');
+
     store.user = null;
     store.access_token = '';
-    store.message = '授權已過期';
+    store.userAnimeListId = '';
 
     return;
   }
@@ -42,8 +45,24 @@ export async function updateMyAnimeList() {
   );
 
   if (!updateWebsiteInfo.ok) {
+    if (updateWebsiteInfo.status == 401) {
+      const { error } = await updateWebsiteInfo.json();
+      if (error == 'unauthorized') {
+        store.message = 'Discord授權過期';
+
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('userAnimeListId');
+
+        store.user = null;
+        store.access_token = '';
+        store.userAnimeListId = '';
+
+        return false;
+      }
+    }
+
     store.message = '動畫清單更新失敗';
-    return;
+    return false;
   }
 
   store.userAnimeListId = await updateWebsiteInfo.json();
@@ -52,9 +71,11 @@ export async function updateMyAnimeList() {
 
   if (!getUserAnimeList.ok) {
     store.message = '此動畫清單不存在';
-    return;
+    return false;
   }
 
   const userAnimeListJson = await getUserAnimeList.json();
   store.userAnimeList = userAnimeListJson.animes;
+
+  return true;
 }
