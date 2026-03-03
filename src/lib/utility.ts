@@ -9,15 +9,7 @@ export async function discordAuth(access_token: string) {
   });
 
   if (!response.ok) {
-    store.message = '授權過期';
-
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('userAnimeListId');
-
-    store.user = null;
-    store.access_token = '';
-    store.userAnimeListId = '';
-
+    showMessageAndAction('unauthorized');
     return;
   }
   const userJson = await response.json();
@@ -48,20 +40,12 @@ export async function updateMyAnimeList() {
     if (updateWebsiteInfo.status == 401) {
       const { error } = await updateWebsiteInfo.json();
       if (error == 'unauthorized') {
-        store.message = 'Discord授權過期';
-
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('userAnimeListId');
-
-        store.user = null;
-        store.access_token = '';
-        store.userAnimeListId = '';
-
+        showMessageAndAction('unauthorized');
         return false;
       }
     }
 
-    store.message = '動畫清單更新失敗';
+    showMessageAndAction('動畫清單更新失敗');
     return false;
   }
 
@@ -70,7 +54,7 @@ export async function updateMyAnimeList() {
   const getUserAnimeList = await db.getWebsiteInfoBy_Id(store.userAnimeListId);
 
   if (!getUserAnimeList.ok) {
-    store.message = '此動畫清單不存在';
+    showMessageAndAction('此動畫清單不存在');
     return false;
   }
 
@@ -78,4 +62,23 @@ export async function updateMyAnimeList() {
   store.userAnimeList = userAnimeListJson.animes;
 
   return true;
+}
+
+export function showMessageAndAction(message: string) {
+  store.message = '';
+
+  switch (message) {
+    case 'unauthorized':
+      store.message = 'Discord授權過期';
+
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('userAnimeListId');
+
+      store.user = null;
+      store.access_token = '';
+      store.userAnimeListId = '';
+      break;
+    default:
+      store.message = message;
+  }
 }

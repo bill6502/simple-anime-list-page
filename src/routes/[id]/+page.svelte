@@ -4,7 +4,11 @@
     import { slide } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';
-    import { setLocalStorage, updateMyAnimeList } from '$lib/utility';
+    import {
+        setLocalStorage,
+        showMessageAndAction,
+        updateMyAnimeList,
+    } from '$lib/utility';
     import AnimeList from '$lib/components/animeList.svelte';
 
     let { data } = $props();
@@ -68,7 +72,7 @@
 
     async function updateAnimeList() {
         if (!(store.user && page.params.id == store.userAnimeListId)) {
-            store.message = '需取得Discord授權';
+            showMessageAndAction('需取得Discord授權');
             return;
         }
 
@@ -93,7 +97,8 @@
                     from: from,
                 };
             });
-        store.message = '已更新';
+
+        showMessageAndAction('已更新');
     }
 
     function toggleSourceSelection() {
@@ -102,7 +107,7 @@
 
     function copyListId() {
         navigator.clipboard.writeText(page.params.id!);
-        store.message = '已複製清單ID至剪貼簿';
+        showMessageAndAction('已複製清單ID至剪貼簿');
     }
 
     function searchAnime(event: Event) {

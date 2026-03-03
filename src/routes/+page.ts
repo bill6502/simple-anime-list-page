@@ -4,7 +4,11 @@ import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { store } from '$lib/store.svelte';
 import { urls, type Anime } from '$lib/type.ts';
-import { discordAuth, updateMyAnimeList } from '../lib/utility.ts';
+import {
+  discordAuth,
+  showMessageAndAction,
+  updateMyAnimeList,
+} from '../lib/utility.ts';
 import db from '$lib/db.ts';
 
 export const load: PageLoad = async ({ url, fetch }) => {
@@ -25,7 +29,7 @@ export const load: PageLoad = async ({ url, fetch }) => {
     await discordAuth(store.access_token);
   }
 
-  store.message = '載入中...';
+  showMessageAndAction('載入中...');
 
   const getAllAnimes = await db.getAllAnimes();
   let animes: Anime[] = [];
@@ -53,12 +57,11 @@ export const load: PageLoad = async ({ url, fetch }) => {
     const lastPath = store.lastPath;
 
     store.lastPath = '';
-    store.message = '';
 
     throw redirect(302, lastPath);
   }
 
-  store.message = '載入完成!';
+  showMessageAndAction('載入完成!');
   return {
     animes,
   };

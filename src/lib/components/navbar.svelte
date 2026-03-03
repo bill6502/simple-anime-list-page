@@ -5,6 +5,7 @@
     import { innerWidth } from 'svelte/reactivity/window';
     import { goto } from '$app/navigation';
     import { type path } from '$lib/type';
+    import { showMessageAndAction } from '$lib/utility';
 
     let pictureUrl = $derived.by<string>(() =>
         store.user
@@ -26,7 +27,7 @@
 
     function setLastPath() {
         if (store.user) {
-            store.message = '已取得授權';
+            showMessageAndAction('已取得授權');
             return;
         }
 

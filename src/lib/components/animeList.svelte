@@ -5,7 +5,7 @@
     import { fly } from 'svelte/transition';
     import { store } from '$lib/store.svelte';
     import { innerWidth } from 'svelte/reactivity/window';
-    import { updateMyAnimeList } from '$lib/utility';
+    import { showMessageAndAction, updateMyAnimeList } from '$lib/utility';
     import db from '$lib/db';
 
     type props = {
@@ -18,10 +18,10 @@
         const response = await db.addAnimeCollection(name, url, store.user!.id);
 
         if (!response.ok) {
-            store.message = '加入收藏失敗';
+            showMessageAndAction('加入收藏失敗');
             return;
         }
-        store.message = '已加入收藏';
+        showMessageAndAction('已加入收藏');
 
         await updateMyAnimeList();
     }
@@ -34,10 +34,10 @@
         );
 
         if (!deleteAnimeCollection.ok) {
-            store.message = '取消收藏失敗';
+            showMessageAndAction('取消收藏失敗');
             return;
         }
-        store.message = '已取消收藏';
+        showMessageAndAction('已取消收藏');
 
         await updateMyAnimeList();
     }
