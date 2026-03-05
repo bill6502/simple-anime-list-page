@@ -20,6 +20,8 @@ export const load: PageLoad = async ({ url, fetch }) => {
     throw redirect(302, url.href.replace('#', '?'));
   }
 
+  const error = url.searchParams.get('error');
+
   const access_token = url.searchParams.get('access_token') ?? '';
   if (access_token) {
     await discordAuth(access_token);
@@ -29,7 +31,9 @@ export const load: PageLoad = async ({ url, fetch }) => {
     await discordAuth(store.access_token);
   }
 
-  showMessageAndAction('載入中...');
+  if (!error) {
+    showMessageAndAction('載入中...');
+  }
 
   const getAllAnimes = await db.getAllAnimes();
   let animes: Anime[] = [];
@@ -61,7 +65,10 @@ export const load: PageLoad = async ({ url, fetch }) => {
     throw redirect(302, lastPath);
   }
 
-  showMessageAndAction('載入完成!');
+  if (!error) {
+    showMessageAndAction('載入完成!');
+  }
+
   return {
     animes,
   };

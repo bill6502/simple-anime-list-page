@@ -1,5 +1,6 @@
 import db from './db.ts';
 import { store } from './store.svelte.ts';
+import { messageType } from './type.ts';
 
 export async function discordAuth(access_token: string) {
   const response = await store.fetch!('https://discord.com/api/v10/users/@me', {
@@ -9,7 +10,7 @@ export async function discordAuth(access_token: string) {
   });
 
   if (!response.ok) {
-    showMessageAndAction('unauthorized');
+    showMessageAndAction(messageType.unauthorized);
     return;
   }
   const userJson = await response.json();
@@ -40,7 +41,7 @@ export async function updateMyAnimeList() {
     if (updateWebsiteInfo.status == 401) {
       const { error } = await updateWebsiteInfo.json();
       if (error == 'unauthorized') {
-        showMessageAndAction('unauthorized');
+        showMessageAndAction(messageType.unauthorized);
         return false;
       }
     }
@@ -64,11 +65,11 @@ export async function updateMyAnimeList() {
   return true;
 }
 
-export function showMessageAndAction(message: string) {
+export function showMessageAndAction(message: messageType | string) {
   store.message = '';
 
   switch (message) {
-    case 'unauthorized':
+    case messageType.unauthorized:
       store.message = 'Discord授權過期';
 
       localStorage.removeItem('access_token');
@@ -77,6 +78,12 @@ export function showMessageAndAction(message: string) {
       store.user = null;
       store.access_token = '';
       store.userAnimeListId = '';
+      break;
+    case messageType.not_found:
+      store.message = '搜尋無效';
+      break;
+    case messageType.not_response:
+      store.message = '請求無回應';
       break;
     default:
       store.message = message;
