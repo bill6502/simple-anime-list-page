@@ -27,7 +27,6 @@ export const load: PageLoad = async ({ url, params, fetch }) => {
     await discordAuth(store.access_token);
   }
 
-  console.log(url);
   const { id } = params;
   const from = url.searchParams.get('from');
   const error = url.searchParams.get('error');
