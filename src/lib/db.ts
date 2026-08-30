@@ -6,7 +6,7 @@ async function getAllAnimes() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      api_key: PUBLIC_API_KEY,
+      'x-apikey': PUBLIC_API_KEY,
     },
     body: JSON.stringify({}),
   });
@@ -17,7 +17,7 @@ async function addAnimeCollection(name: string, url: string, userId: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      api_key: PUBLIC_API_KEY,
+      'x-apikey': PUBLIC_API_KEY,
       dc_token: store.access_token,
     },
     body: JSON.stringify({
@@ -37,7 +37,7 @@ async function deleteAnimeCollection(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      api_key: PUBLIC_API_KEY,
+      'x-apikey': PUBLIC_API_KEY,
       dc_token: store.access_token,
     },
     body: JSON.stringify({
@@ -53,7 +53,7 @@ async function updateWebsiteInfo(userId: string, userName: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      api_key: PUBLIC_API_KEY,
+      'x-apikey': PUBLIC_API_KEY,
       dc_token: store.access_token,
     },
     body: JSON.stringify({
@@ -68,7 +68,7 @@ async function getWebsiteInfoBy_Id(id: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      api_key: PUBLIC_API_KEY,
+      'x-apikey': PUBLIC_API_KEY,
     },
     body: JSON.stringify({ id }),
   });
@@ -79,7 +79,7 @@ async function checkWebsiteInfoBy_Id(id: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      api_key: PUBLIC_API_KEY,
+      'x-apikey': PUBLIC_API_KEY,
     },
     body: JSON.stringify({ id }),
   });
