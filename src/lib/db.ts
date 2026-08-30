@@ -18,7 +18,7 @@ async function addAnimeCollection(name: string, url: string, userId: string) {
     headers: {
       'Content-Type': 'application/json',
       'x-apikey': PUBLIC_API_KEY,
-      dc_token: store.access_token,
+      'x-dctoken': store.access_token,
     },
     body: JSON.stringify({
       name,
@@ -38,7 +38,7 @@ async function deleteAnimeCollection(
     headers: {
       'Content-Type': 'application/json',
       'x-apikey': PUBLIC_API_KEY,
-      dc_token: store.access_token,
+      'x-dctoken': store.access_token,
     },
     body: JSON.stringify({
       name,
@@ -54,7 +54,7 @@ async function updateWebsiteInfo(userId: string, userName: string) {
     headers: {
       'Content-Type': 'application/json',
       'x-apikey': PUBLIC_API_KEY,
-      dc_token: store.access_token,
+      'x-dctoken': store.access_token,
     },
     body: JSON.stringify({
       userId,

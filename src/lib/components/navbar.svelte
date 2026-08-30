@@ -17,8 +17,6 @@
     let showAuth = $state<boolean>(false);
     let expanding = $state<boolean>(false);
 
-    let collectNav = $state<HTMLElement | undefined>(undefined);
-
     $effect(() => {
         if (innerWidth.current! > 720) {
             expanding = false;
